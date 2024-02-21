@@ -7,7 +7,7 @@ export const ENERGY_STATS_ROUTES: Routes = [
   },
   {
     path: 'my-cup',
-    loadComponent: () => import('./my-cup-page/my-cup-page.component').then(m => m.MyCupPageComponent)
+    loadComponent: () => import('./my-community-page/my-community-page.component').then(m => m.MyCommunityPageComponent)
   },
   {
     path: '**',
