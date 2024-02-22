@@ -1,11 +1,15 @@
 <app-navbar/>
 
 <div class="container">
+  <div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-dark">Afegir</button>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Usuari</th>
         <th>Preu</th>
+        <th>Accions</th>
       </tr>
     </thead>
     <tbody>
@@ -19,6 +23,9 @@
               <option [selected]="user.price === EnergyPrice.FREE" [value]="EnergyPrice.FREE">Free</option>
               <option [selected]="user.price === EnergyPrice.COMMUNITY" [value]="EnergyPrice.COMMUNITY">Community</option>
             </select>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="removeUser(user.id)">Eliminar</button>
           </td>
         </tr>
       }

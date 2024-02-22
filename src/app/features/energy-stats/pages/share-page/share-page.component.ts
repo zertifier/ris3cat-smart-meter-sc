@@ -32,10 +32,14 @@ export class SharePageComponent {
     },
     {
       price: EnergyPrice.COMMUNITY,
-      email: 'jdavid@zertifier.com',
-      name: 'jose david',
+      email: 'josep@zertifier.com',
+      name: 'josep jou',
       id: 'aasldjf;aslkdj'
     }
   ];
   protected readonly EnergyPrice = EnergyPrice;
+
+  removeUser(id: string) {
+    this.sharingUsers = this.sharingUsers.filter(u => u.id !== id);
+  }
 }
