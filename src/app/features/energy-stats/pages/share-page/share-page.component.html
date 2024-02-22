@@ -1,0 +1,27 @@
+<app-navbar/>
+
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Usuari</th>
+        <th>Preu</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of sharingUsers; track user.id) {
+        <tr>
+          <td>
+              {{user.email}}
+          </td>
+          <td>
+            <select class="form-select" [value]="user.price">
+              <option [selected]="user.price === EnergyPrice.FREE" [value]="EnergyPrice.FREE">Free</option>
+              <option [selected]="user.price === EnergyPrice.COMMUNITY" [value]="EnergyPrice.COMMUNITY">Community</option>
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

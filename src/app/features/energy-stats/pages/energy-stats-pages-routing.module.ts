@@ -10,6 +10,10 @@ export const ENERGY_STATS_ROUTES: Routes = [
     loadComponent: () => import('./my-community-page/my-community-page.component').then(m => m.MyCommunityPageComponent)
   },
   {
+    path: 'share',
+    loadComponent: () => import('./share-page/share-page.component').then(m => m.SharePageComponent)
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'community'
