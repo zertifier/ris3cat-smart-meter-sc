@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
+import {v4} from 'uuid';
 
 export enum EnergyPrice {
   COMMUNITY = "COMMUNITY",
