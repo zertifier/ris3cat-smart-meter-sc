@@ -8,6 +8,7 @@
     <thead>
       <tr>
         <th>Usuari</th>
+        <th>Email</th>
         <th>Preu</th>
         <th>Accions</th>
       </tr>
@@ -15,6 +16,9 @@
     <tbody>
       @for (user of sharingUsers.sharingUsers; track user.id) {
         <tr>
+          <td>
+            {{user.name}}
+          </td>
           <td>
               {{user.email}}
           </td>

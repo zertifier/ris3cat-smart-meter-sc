@@ -108,6 +108,11 @@ export class SharingUsersService {
   }
 
   removeUser(id: string) {
+    const user = this.sharingUsers.find(u => u.id === id);
+    if (!user) {
+      return;
+    }
     this.sharingUsers = this.sharingUsers.filter(u => u.id !== id);
+    this.users.push(user);
   }
 }
