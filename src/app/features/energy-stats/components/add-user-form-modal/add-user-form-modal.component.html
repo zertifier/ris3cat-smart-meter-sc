@@ -1,0 +1,25 @@
+<div class="modal-body">
+  <form (ngSubmit)="addUser(selectedUserId)">
+    <div>
+      <label>Usuari: </label>
+      <select class="form-select" [value]="selectedUserId" (change)="setSelectedUser($event)">
+        @for (user of sharingUsersService.users; track user.id) {
+          <option [value]="user.id">{{user.name}}</option>
+        }
+      </select>
+    </div>
+
+
+    <div>
+      <label>Preu energia: </label>
+      <select class="form-select">
+        <option [value]="EnergyPrice.FREE">Gratuït</option>
+        <option [value]="EnergyPrice.COMMUNITY">Comunitat</option>
+      </select>
+    </div>
+
+    <div class="d-flex mt-3 justify-content-end">
+      <button class="btn btn-dark" type="submit">Afegir</button>
+    </div>
+  </form>
+</div>
