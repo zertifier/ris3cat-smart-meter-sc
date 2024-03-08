@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'community_power' title`, () => {
+  it(`should have the 'smart-meter-frontend' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('community_power');
+    expect(app.title).toEqual('smart-meter-frontend');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, community_power');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, smart-meter-frontend');
   });
 });
