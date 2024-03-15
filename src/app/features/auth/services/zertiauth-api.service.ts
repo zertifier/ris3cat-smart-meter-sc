@@ -2,13 +2,13 @@ import {afterRender, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {SHA256} from 'crypto-js'
 
-export interface HttpResponse {
+export interface HttpResponse<T> {
   message: string,
   success: boolean,
-  data: object
+  data: T
 }
 
-export interface PrivateKeyHttpResponse extends HttpResponse {
+export interface PrivateKeyHttpResponse extends HttpResponse<any> {
   data: privateKeyObject;
 }
 

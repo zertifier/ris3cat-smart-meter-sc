@@ -2,6 +2,7 @@
 <div class="container py-4">
   <h1 class="text-center">Producció</h1>
   <hr>
-
   <p-chart type="bar" [data]="data" [options]="options"/>
+  <h2>Producció actual</h2>
+  {{currentProduction() | json}}
 </div>
