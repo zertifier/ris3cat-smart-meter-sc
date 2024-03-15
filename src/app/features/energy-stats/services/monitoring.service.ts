@@ -1,7 +1,15 @@
 import {Injectable} from '@angular/core';
 import {firstValueFrom, map, Subject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {HttpResponse} from "../../auth/services/zertiauth-api.service";
+import {environment} from "../../../../environments/environment";
+
+export interface EnergyStat {
+  inHouseConsumption: number;
+  sell: number;
+  buy: number;
+  date: Date;
+}
 
 export interface PowerStats {
   production: number;
@@ -27,7 +35,7 @@ export class MonitoringService {
       production: number,
       consumption: number,
       grid: number
-    }>>("http://localhost:3000/monitoring/powerflow/").pipe(map(r => r.data)))
+    }>>(`${environment.api_url}/monitoring/powerflow/`).pipe(map(r => r.data)))
       .then(data => this.powerFlow.next(data));
 
     this.interval = setInterval(async () => {
@@ -35,7 +43,7 @@ export class MonitoringService {
         production: number,
         consumption: number,
         grid: number
-      }>>("http://localhost:3000/monitoring/powerflow/")
+      }>>(`${environment.api_url}/monitoring/powerflow/`)
         .pipe(map(r => r.data)));
 
       this.powerFlow.next(data);
@@ -45,6 +53,13 @@ export class MonitoringService {
 
   getPowerFlow() {
     return this.powerFlow.asObservable();
+  }
+
+  async getEnergyStats(date: string, dateRange: number) {
+    const params = new HttpParams().set('date', date).set('daterange', dateRange)
+    return await firstValueFrom(this.httpClient.get<EnergyStat[]>(`${environment.api_url}/monitoring/energystats`, {
+      params
+    }));
   }
 
   stop() {

@@ -1,9 +1,11 @@
 import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
-import {MonitoringService, PowerStats} from "../../services/monitoring.service";
+import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {JsonPipe} from "@angular/common";
+import dayjs from "dayjs";
+import {producerAccessed} from "@angular/core/primitives/signals";
 
 @Component({
   selector: 'app-my-community-page',
@@ -19,7 +21,7 @@ import {JsonPipe} from "@angular/common";
 export class MyCommunityPageComponent implements OnInit, OnDestroy {
   data: any
   options: any
-  readonly currentProduction = signal<PowerStats>({production: 0, grid: 0, consumption: 0})
+  readonly powerFlow = signal<PowerStats>({production: 0, grid: 0, consumption: 0})
 
   readonly solarPanels = 10;
   readonly kwhMonth460wp = [20, 25, 35, 45, 55, 65, 75, 75, 60, 45, 35, 25]
@@ -30,10 +32,17 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     this.monitoringService.start(5000);
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     let subscription = this.monitoringService
       .getPowerFlow()
-      .subscribe(value => this.currentProduction.set(value))
+      .subscribe(value => {
+        const {production, grid, consumption} = value;
+        this.powerFlow.set({
+          production: Math.round(production / 10) / 100,
+          consumption: Math.round(consumption / 10) / 100,
+          grid: Math.round(grid / 10) / 100
+        })
+      })
 
     this.subscriptions.push(subscription);
 
@@ -42,15 +51,39 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     const textColorSecondary = 'rgba(0, 0, 0, 0.54)';
     const surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
+    const data: EnergyStat[] = await this.monitoringService.getEnergyStats('2023-12-01', 3);
+
     this.data = {
-      labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+      labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
+      // labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
       datasets: [
         {
-          label: 'Contadors',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          label: 'Produccio',
+          // backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          // borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
-          data: this.kwhMonth460wp.map((item) => item * this.solarPanels)
+          data: data.map(d => d.sell + d.inHouseConsumption),
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Consum de la xarxa electrica',
+          borderWidth: 1,
+          data: data.map(d => d.buy),
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Consum propi',
+          // backgroundColor: 'rgba(54,235,93,0.2)',
+          // borderColor: 'rgb(54,235,57)',
+          borderWidth: 1,
+          data: data.map(d => d.inHouseConsumption),
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Venta energetica',
+          borderWidth: 1,
+          data: data.map(d => d.sell),
+          stack: 'Stack 2'
         }
       ]
     }
@@ -67,6 +100,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       },
       scales: {
         x: {
+          stacked: true,
           ticks: {
             color: textColorSecondary,
             font: {
@@ -79,6 +113,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
           }
         },
         y: {
+          stacked: true,
           ticks: {
             callback: function (value: any, index: any, values: any) {
               return value + ' kWh'
@@ -99,4 +134,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       s.unsubscribe();
     })
   }
+
+  protected readonly producerAccessed = producerAccessed;
 }

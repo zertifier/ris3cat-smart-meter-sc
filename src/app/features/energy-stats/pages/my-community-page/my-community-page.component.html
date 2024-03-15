@@ -3,6 +3,29 @@
   <h1 class="text-center">Producció</h1>
   <hr>
   <p-chart type="bar" [data]="data" [options]="options"/>
-  <h2>Producció actual</h2>
-  {{currentProduction() | json}}
+  <h2 class="d-flex align-items-center gap-2">Producció actual <span style="font-size: 1rem;"><i class="fa-solid fa-circle fa-fade text-success"></i></span></h2>
+  <div class="d-flex gap-4">
+    <div>
+      <label>Consum</label>
+      <input type="text" class="form-control" [value]="powerFlow().consumption + ' KW'">
+    </div>
+
+
+    <div>
+      @if (powerFlow().consumption > powerFlow().production) {
+
+        <label>Consum de la xarxa electrica</label>
+      } @else {
+        <label>Venta d'energia</label>
+      }
+      <input type="text" class="form-control" [value]="powerFlow().grid + ' KW'">
+    </div>
+
+
+    <div>
+      <label>Produccio</label>
+      <input type="text" class="form-control" [value]="powerFlow().production + ' KW'">
+    </div>
+
+  </div>
 </div>
