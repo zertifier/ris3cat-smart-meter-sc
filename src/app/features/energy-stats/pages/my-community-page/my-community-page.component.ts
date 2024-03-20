@@ -3,10 +3,12 @@ import {NavbarComponent} from "../../../../shared/components/navbar/navbar.compo
 import {ChartModule} from "primeng/chart";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
-import {JsonPipe} from "@angular/common";
+import {JsonPipe, NgStyle} from "@angular/common";
 import dayjs from "dayjs";
 import {producerAccessed} from "@angular/core/primitives/signals";
 import {StatsColors} from "../../models/StatsColors";
+import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
+import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-my-community-page',
@@ -14,15 +16,23 @@ import {StatsColors} from "../../models/StatsColors";
   imports: [
     NavbarComponent,
     ChartModule,
-    JsonPipe
+    JsonPipe,
+    NgStyle,
+    StatDisplayComponent,
+    NgbNavOutlet,
+    NgbNav,
+    NgbNavItem,
+    NgbNavLinkButton,
+    NgbNavContent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
 })
 export class MyCommunityPageComponent implements OnInit, OnDestroy {
+  activeId = 2;
   data: any
   options: any
-  readonly powerFlow = signal<PowerStats>({production: 0, grid: 0, consumption: 0})
+  readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   fetchingData = false;
 
   readonly solarPanels = 10;
@@ -38,11 +48,12 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     let subscription = this.monitoringService
       .getPowerFlow()
       .subscribe(value => {
-        const {production, grid, consumption} = value;
+        const {production, buy, inHouse, sell} = value;
         this.powerFlow.set({
           production: Math.round(production / 10) / 100,
-          consumption: Math.round(consumption / 10) / 100,
-          grid: Math.round(grid / 10) / 100
+          inHouse: Math.round(inHouse / 10) / 100,
+          buy: Math.round(buy / 10) / 100,
+          sell: Math.round(sell / 10) / 100,
         })
       })
 
@@ -149,4 +160,5 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   }
 
   protected readonly producerAccessed = producerAccessed;
+  protected readonly StatsColors = StatsColors;
 }

@@ -19,7 +19,7 @@ import {Subscription} from "rxjs";
 export class MyCupPageComponent {
   data: any
   options: any
-  readonly currentProduction = signal<PowerStats>({production: 0, grid: 0, consumption: 0})
+  readonly currentProduction = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
 
   readonly solarPanels = 10;
   readonly kwhMonth460wp = [20, 25, 35, 45, 55, 65, 75, 75, 60, 45, 35, 25]

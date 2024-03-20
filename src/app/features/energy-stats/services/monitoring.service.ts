@@ -3,6 +3,7 @@ import {firstValueFrom, map, Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {HttpResponse} from "../../auth/services/zertiauth-api.service";
 import {environment} from "../../../../environments/environment";
+import {producerAccessed} from "@angular/core/primitives/signals";
 
 export interface EnergyStat {
   inHouseConsumption: number;
@@ -13,8 +14,9 @@ export interface EnergyStat {
 
 export interface PowerStats {
   production: number;
-  consumption: number;
-  grid: number;
+  inHouse: number;
+  buy: number;
+  sell: number;
 }
 
 @Injectable({
@@ -36,7 +38,18 @@ export class MonitoringService {
       consumption: number,
       grid: number
     }>>(`${environment.api_url}/monitoring/powerflow/`).pipe(map(r => r.data)))
-      .then(data => this.powerFlow.next(data));
+      .then(data => {
+        const stats: PowerStats = {buy: 0,sell: 0,inHouse: 0, production: 0}
+        stats.production = data.production
+        if (data.consumption > data.production) {
+          stats.inHouse = data.production;
+          stats.buy = data.consumption - data.production
+        } else {
+          stats.inHouse = data.consumption;
+          stats.sell = data.production - data.consumption
+        }
+        this.powerFlow.next(stats)
+      });
 
     this.interval = setInterval(async () => {
       const data = await firstValueFrom(this.httpClient.get<HttpResponse<{
@@ -46,7 +59,16 @@ export class MonitoringService {
       }>>(`${environment.api_url}/monitoring/powerflow/`)
         .pipe(map(r => r.data)));
 
-      this.powerFlow.next(data);
+      const stats: PowerStats = {buy: 0,sell: 0,inHouse: 0, production: 0}
+      stats.production = data.production
+      if (data.consumption > data.production) {
+        stats.inHouse = data.production;
+        stats.buy = data.consumption - data.production
+      } else {
+        stats.inHouse = data.consumption;
+        stats.sell = data.production - data.consumption
+      }
+      this.powerFlow.next(stats)
     }, interval);
   }
 
