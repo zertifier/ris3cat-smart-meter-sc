@@ -1,5 +1,7 @@
 <app-navbar/>
 <div class="container py-4">
+  <button class="btn btn-primary">Primary</button>
+  <button class="btn btn-secondary">Secondary</button>
   <h1 class="text-center">Producció</h1>
   <hr>
   <p-chart type="bar" [data]="data" [options]="options"/>
@@ -13,7 +15,6 @@
 
     <div>
       @if (powerFlow().consumption > powerFlow().production) {
-
         <label>Consum de la xarxa electrica</label>
       } @else {
         <label>Venta d'energia</label>
