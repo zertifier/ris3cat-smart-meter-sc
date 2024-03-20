@@ -1,0 +1,6 @@
+export enum StatsColors {
+  PRODUCTION = '#229954',
+  BUY_CONSUMPTION = '#D35400',
+  IN_HOUSE_CONSUMPTION = '#F0A64E',
+  SELL = '#3498DB'
+}

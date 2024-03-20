@@ -6,6 +6,7 @@ import {Subscription} from "rxjs";
 import {JsonPipe} from "@angular/common";
 import dayjs from "dayjs";
 import {producerAccessed} from "@angular/core/primitives/signals";
+import {StatsColors} from "../../models/StatsColors";
 
 @Component({
   selector: 'app-my-community-page',
@@ -22,6 +23,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   data: any
   options: any
   readonly powerFlow = signal<PowerStats>({production: 0, grid: 0, consumption: 0})
+  fetchingData = false;
 
   readonly solarPanels = 10;
   readonly kwhMonth460wp = [20, 25, 35, 45, 55, 65, 75, 75, 60, 45, 35, 25]
@@ -51,7 +53,14 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     const textColorSecondary = 'rgba(0, 0, 0, 0.54)';
     const surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
-    const data: EnergyStat[] = await this.monitoringService.getEnergyStats('2023-12-01', 3);
+    this.fetchingData = true;
+    let data: EnergyStat[];
+    try {
+      data = await this.monitoringService.getEnergyStats('2023-12-01', 3);
+    } finally {
+      this.fetchingData = false;
+    }
+
 
     this.data = {
       labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
@@ -59,28 +68,32 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       datasets: [
         {
           label: 'Produccio',
-          // backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          // borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: StatsColors.PRODUCTION,
+          borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.sell + d.inHouseConsumption),
           stack: 'Stack 0'
         },
         {
           label: 'Consum de la xarxa electrica',
+          backgroundColor: StatsColors.BUY_CONSUMPTION,
+          borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.buy),
           stack: 'Stack 1'
         },
         {
           label: 'Consum propi',
-          // backgroundColor: 'rgba(54,235,93,0.2)',
-          // borderColor: 'rgb(54,235,57)',
+          backgroundColor: StatsColors.IN_HOUSE_CONSUMPTION,
+          borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.inHouseConsumption),
           stack: 'Stack 1'
         },
         {
           label: 'Venta energetica',
+          backgroundColor: StatsColors.SELL,
+          borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.sell),
           stack: 'Stack 2'

@@ -2,33 +2,8 @@
 @import '../assets/fonts/Tungsten/font-face.css';
 
 @import "colors";
+@import "font-face";
 
 /* Importing Bootstrap SCSS file. */
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
-:root {
-  font-size: 20px;
-}
-
-* {
-  font-family: "Tungsten Book", sans-serif;
-  letter-spacing: .1rem;
-  font-weight: normal;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Tungsten Bold", sans-serif;
-}
-
-h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  letter-spacing: .2rem;
-}
-
-h2 {
-  font-family: "Tungsten Semibold", sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: .1rem;
-}
