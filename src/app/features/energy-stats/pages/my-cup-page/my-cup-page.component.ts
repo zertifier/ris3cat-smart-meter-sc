@@ -34,32 +34,32 @@ import {FooterComponent} from "../../../../shared/components/footer/footer.compo
 export class MyCupPageComponent {
   consumptionItems: ConsumptionItem[] = [
     {
-      consumption: 15,
+      consumption: 0.015,
       label: 'LED',
       icon: 'fa-solid fa-lightbulb',
     },
     {
-      consumption: 600,
+      consumption: 0.6,
       label: 'Nevera',
       icon: 'fa-solid fa-temperature-low',
     },
     {
-      consumption: 250,
+      consumption: 0.25,
       label: 'TV',
       icon: 'fa-solid fa-tv',
     },
     {
-      consumption: 500,
+      consumption: 0.5,
       label: 'Rentadora',
       icon: 'fa-solid fa-shirt',
     },
     {
-      consumption: 200,
+      consumption: 2,
       label: 'Estufa',
       icon: 'fa-solid fa-fire-burner',
     },
     {
-      consumption: 7000,
+      consumption: 7,
       label: 'Cotxe elèctric',
       icon: 'fa-solid fa-car',
     },

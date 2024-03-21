@@ -1,5 +1,5 @@
 <app-navbar/>
-<div class="container py-4">
+<div class="container my-5">
   <div class="mt-5 d-flex align-items-center justify-content-between">
     <p><span><i class="fa-solid fa-angle-right"></i></span> El meu CUPS <span class="text-secondary">(Cost Unitari de la Potència)</span></p>
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
@@ -42,16 +42,25 @@
   <hr>
 
   <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric de consum</h5>
-  <div class="d-flex justify-content-evenly" style="margin-bottom: 10rem">
+  <div class="d-flex justify-content-evenly mb-3">
     <button class="btn btn-inactive rounded-4 py-3 px-5">
       Veure consum diari
     </button>
-    <button class="btn btn-active rounded-4 py-3 px-5">
+    <button class="btn btn-inactive rounded-4 py-3 px-5">
       Veure consum mensual
     </button>
-    <button class="btn btn-inactive rounded-4 py-3 px-5">
+    <button class="btn btn-active rounded-4 py-3 px-5">
       Veure consum anual
     </button>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-3 mb-4">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">Any</span>
+        <input class="form-control  form-control-lg text-center" type="number" min="1900" max="2099" step="1"
+               value="2023" readonly/>
+      </div>
+    </div>
   </div>
 
   @if (!fetchingData) {
