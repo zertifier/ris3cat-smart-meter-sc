@@ -158,7 +158,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
           stack: 'Stack 1'
         },
         {
-          label: 'Venta energetica',
+          label: 'Excedent',
           backgroundColor: StatsColors.SELL,
           borderRadius: 10,
           borderWidth: 1,

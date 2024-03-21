@@ -151,7 +151,7 @@ export class MyCupPageComponent {
           stack: 'Stack 1'
         },
         {
-          label: 'Venta energetica',
+          label: 'Excedent',
           backgroundColor: StatsColors.SELL,
           borderRadius: 10,
           borderWidth: 1,
