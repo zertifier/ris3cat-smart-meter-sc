@@ -74,8 +74,8 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
 
 
     this.data = {
-      labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
-      // labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+      // labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
+      labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
       datasets: [
         {
           label: 'Produccio',

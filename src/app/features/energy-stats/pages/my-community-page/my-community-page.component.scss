@@ -1,0 +1,17 @@
+@import 'styles/colors.scss';
+
+hr {
+  color: $primary !important;
+  border-width: 0.1rem;
+}
+
+
+.btn-active {
+  color: white !important;
+  background-color: $primary !important;
+}
+
+.btn-inactive {
+  color: white !important;
+  background-color: $inactive !important;
+}

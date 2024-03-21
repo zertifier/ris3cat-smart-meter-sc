@@ -1,0 +1,13 @@
+@import 'styles/colors';
+
+.active {
+  text-decoration: $active-hover underline !important;
+  color: $active-hover !important;
+  font-weight: normal !important;
+}
+
+.nav-link {
+  font-weight: bold;
+}
+
+

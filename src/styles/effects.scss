@@ -1,0 +1,16 @@
+// Defines style effects for hover, active, focus, etc.
+// It requires that colors is imported
+
+
+// Setting active colors
+.btn:active {
+  color: $active-hover !important;
+}
+
+.btn:hover {
+  color: $active-hover !important;
+}
+
+.nav-link:hover {
+  color: $active-hover !important;
+}
