@@ -9,6 +9,8 @@ import {producerAccessed} from "@angular/core/primitives/signals";
 import {StatsColors} from "../../models/StatsColors";
 import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
+import {ChartLegendComponent, DataLabel} from "../../components/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../components/data-chart/data-chart.component";
 
 @Component({
   selector: 'app-my-community-page',
@@ -23,20 +25,39 @@ import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from 
     NgbNav,
     NgbNavItem,
     NgbNavLinkButton,
-    NgbNavContent
+    NgbNavContent,
+    ChartLegendComponent,
+    DataChartComponent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
 })
 export class MyCommunityPageComponent implements OnInit, OnDestroy {
-  activeId = 2;
   data: any
-  options: any
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   fetchingData = false;
-
-  readonly solarPanels = 10;
-  readonly kwhMonth460wp = [20, 25, 35, 45, 55, 65, 75, 75, 60, 45, 35, 25]
+  chartLabels: DataLabel[] = [
+    {
+      color: StatsColors.BUY_CONSUMPTION,
+      label: 'Consum',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.IN_HOUSE_CONSUMPTION,
+      label: 'Autoconsum',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.PRODUCTION,
+      label: 'Producció',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.SELL,
+      label: 'Excedent',
+      radius: '2.5rem',
+    }
+  ];
 
   subscriptions: Subscription[] = [];
 
@@ -59,10 +80,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(subscription);
 
-
-    const textColor = 'rgba(0, 0, 0, 0.87)';
-    const textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-    const surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
     this.fetchingData = true;
     let data: EnergyStat[];
@@ -111,47 +128,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
         }
       ]
     }
-
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        legend: {
-          display: false,
-          // labels: {
-          //   color: textColor
-          // }
-        },
-      },
-      scales: {
-        x: {
-          stacked: true,
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500
-            }
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            callback: function (value: any, index: any, values: any) {
-              return value + ' kWh'
-            },
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        }
-      }
-    };
   }
 
   ngOnDestroy(): void {
@@ -160,7 +136,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     })
   }
 
-  protected readonly producerAccessed = producerAccessed;
   protected readonly StatsColors = StatsColors;
   protected readonly Component = Component;
 }
