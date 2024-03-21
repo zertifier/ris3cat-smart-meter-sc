@@ -4,13 +4,16 @@ import {ChartModule} from "primeng/chart";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {JsonPipe, NgStyle} from "@angular/common";
-import dayjs from "dayjs";
-import {producerAccessed} from "@angular/core/primitives/signals";
 import {StatsColors} from "../../models/StatsColors";
 import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 import {ChartLegendComponent, DataLabel} from "../../components/chart-legend/chart-legend.component";
 import {DataChartComponent} from "../../components/data-chart/data-chart.component";
+import {
+  ConsumptionItem,
+  ConsumptionItemsComponent
+} from "../../components/consumption-items/consumption-items.component";
+import {FooterComponent} from "../../../../shared/components/footer/footer.component";
 
 @Component({
   selector: 'app-my-community-page',
@@ -27,12 +30,46 @@ import {DataChartComponent} from "../../components/data-chart/data-chart.compone
     NgbNavLinkButton,
     NgbNavContent,
     ChartLegendComponent,
-    DataChartComponent
+    DataChartComponent,
+    ConsumptionItemsComponent,
+    FooterComponent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
 })
 export class MyCommunityPageComponent implements OnInit, OnDestroy {
+  consumptionItems: ConsumptionItem[] = [
+    {
+      consumption: 15,
+      label: 'LED',
+      icon: 'fa-solid fa-lightbulb',
+    },
+    {
+      consumption: 600,
+      label: 'Nevera',
+      icon: 'fa-solid fa-temperature-low',
+    },
+    {
+      consumption: 250,
+      label: 'TV',
+      icon: 'fa-solid fa-tv',
+    },
+    {
+      consumption: 500,
+      label: 'Rentadora',
+      icon: 'fa-solid fa-shirt',
+    },
+    {
+      consumption: 200,
+      label: 'Estufa',
+      icon: 'fa-solid fa-fire-burner',
+    },
+    {
+      consumption: 7000,
+      label: 'Cotxe elèctric',
+      icon: 'fa-solid fa-car',
+    },
+  ];
   data: any
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   fetchingData = false;
@@ -60,6 +97,8 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   ];
 
   subscriptions: Subscription[] = [];
+  protected readonly StatsColors = StatsColors;
+  protected readonly Component = Component;
 
   constructor(private readonly monitoringService: MonitoringService) {
     this.monitoringService.start(5000);
@@ -135,7 +174,4 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       s.unsubscribe();
     })
   }
-
-  protected readonly StatsColors = StatsColors;
-  protected readonly Component = Component;
 }

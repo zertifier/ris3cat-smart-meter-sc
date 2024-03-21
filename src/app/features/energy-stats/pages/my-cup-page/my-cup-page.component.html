@@ -1,6 +1,70 @@
 <app-navbar/>
 <div class="container py-4">
-  <h1 class="text-center">Producció</h1>
+  <div class="mt-5 d-flex align-items-center justify-content-between">
+    <p><span><i class="fa-solid fa-angle-right"></i></span> El meu CUPS <span class="text-secondary">(Cost Unitari de la Potència)</span></p>
+    <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
+  </div>
+  <div class="w-100">
+    <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span> CUPS: ES0031446430838001WP0F</p>
+  </div>
+  <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el consum</h5>
+  <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
+
+    <app-stat-display
+      width="20%"
+      [color]="StatsColors.BUY_CONSUMPTION"
+      label="Consum"
+      [text]="powerFlow().buy + ' KW'"/>
+
+    <app-stat-display
+      width="20%"
+      [color]="StatsColors.IN_HOUSE_CONSUMPTION"
+      label="Autoconsum"
+      [text]="powerFlow().inHouse + ' KW'"/>
+
+    <app-stat-display
+      width="20%"
+      [color]="StatsColors.PRODUCTION"
+      label="Energia generada"
+      [text]="powerFlow().production + ' KW'"/>
+
+    <app-stat-display
+      width="20%"
+      [color]="StatsColors.SELL"
+      label="Excedent"
+      [text]="powerFlow().sell + ' KW'"/>
+  </div>
+
+  <div class="w-100" style="margin-bottom: 10rem;">
+    <app-consumption-items [items]="consumptionItems"/>
+  </div>
+
   <hr>
-  <p-chart type="bar" [data]="data" [options]="options"/>
+
+  <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric de consum</h5>
+  <div class="d-flex justify-content-evenly" style="margin-bottom: 10rem">
+    <button class="btn btn-inactive rounded-4 py-3 px-5">
+      Veure consum diari
+    </button>
+    <button class="btn btn-active rounded-4 py-3 px-5">
+      Veure consum mensual
+    </button>
+    <button class="btn btn-inactive rounded-4 py-3 px-5">
+      Veure consum anual
+    </button>
+  </div>
+
+  @if (!fetchingData) {
+    <app-data-chart [data]="data"/>
+    <app-chart-legend [labels]="chartLabels"/>
+  } @else {
+    <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
+      <h4>Carregant dades</h4>
+      <div>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+      </div>
+    </div>
+  }
 </div>
+
+<app-footer/>

@@ -2,8 +2,18 @@ import {Component, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
 import {JsonPipe} from "@angular/common";
-import {MonitoringService, PowerStats} from "../../services/monitoring.service";
+import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
+import {ChartLegendComponent, DataLabel} from "../../components/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../components/data-chart/data-chart.component";
+import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
+import {StatsColors} from "../../models/StatsColors";
+import {
+  ConsumptionItem,
+  ConsumptionItemsComponent
+} from "../../components/consumption-items/consumption-items.component";
+import {FooterComponent} from "../../../../shared/components/footer/footer.component";
+
 
 @Component({
   selector: 'app-my-cup-page',
@@ -11,80 +21,145 @@ import {Subscription} from "rxjs";
   imports: [
     NavbarComponent,
     ChartModule,
-    JsonPipe
+    JsonPipe,
+    ChartLegendComponent,
+    DataChartComponent,
+    StatDisplayComponent,
+    ConsumptionItemsComponent,
+    FooterComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
 })
 export class MyCupPageComponent {
+  consumptionItems: ConsumptionItem[] = [
+    {
+      consumption: 15,
+      label: 'LED',
+      icon: 'fa-solid fa-lightbulb',
+    },
+    {
+      consumption: 600,
+      label: 'Nevera',
+      icon: 'fa-solid fa-temperature-low',
+    },
+    {
+      consumption: 250,
+      label: 'TV',
+      icon: 'fa-solid fa-tv',
+    },
+    {
+      consumption: 500,
+      label: 'Rentadora',
+      icon: 'fa-solid fa-shirt',
+    },
+    {
+      consumption: 200,
+      label: 'Estufa',
+      icon: 'fa-solid fa-fire-burner',
+    },
+    {
+      consumption: 7000,
+      label: 'Cotxe elèctric',
+      icon: 'fa-solid fa-car',
+    },
+  ];
+  coeficient = 0.08;
   data: any
-  options: any
-  readonly currentProduction = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
-
-  readonly solarPanels = 10;
-  readonly kwhMonth460wp = [20, 25, 35, 45, 55, 65, 75, 75, 60, 45, 35, 25]
+  readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
+  fetchingData = false;
+  chartLabels: DataLabel[] = [
+    {
+      color: StatsColors.BUY_CONSUMPTION,
+      label: 'Consum',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.IN_HOUSE_CONSUMPTION,
+      label: 'Autoconsum',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.PRODUCTION,
+      label: 'Producció',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.SELL,
+      label: 'Excedent',
+      radius: '2.5rem',
+    }
+  ];
 
   subscriptions: Subscription[] = [];
 
-  constructor() {
+  constructor(private readonly monitoringService: MonitoringService) {
+    this.monitoringService.start(5000);
   }
 
-  ngOnInit(): void {
-    const textColor = 'rgba(0, 0, 0, 0.87)';
-    const textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-    const surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+  async ngOnInit(): Promise<void> {
+    let subscription = this.monitoringService
+      .getPowerFlow()
+      .subscribe(value => {
+        const {production, buy, inHouse, sell} = value;
+        this.powerFlow.set({
+          production: Math.round(production * this.coeficient / 10) / 100,
+          inHouse: Math.round(inHouse * this.coeficient / 10) / 100,
+          buy: Math.round(buy * this.coeficient / 10) / 100,
+          sell: Math.round(sell * this.coeficient / 10) / 100,
+        })
+      })
+
+    this.subscriptions.push(subscription);
+
+
+    this.fetchingData = true;
+    let data: EnergyStat[];
+    try {
+      data = await this.monitoringService.getEnergyStats('2023-12-01', 3);
+    } finally {
+      this.fetchingData = false;
+    }
+
 
     this.data = {
+      // labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
       labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
       datasets: [
         {
-          label: 'Contadors',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          label: 'Produccio',
+          backgroundColor: StatsColors.PRODUCTION,
+          borderRadius: 10,
           borderWidth: 1,
-          data: this.kwhMonth460wp.map((item) => item * this.solarPanels)
+          data: data.map(d => (d.sell + d.inHouseConsumption) * this.coeficient),
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Consum de la xarxa electrica',
+          backgroundColor: StatsColors.BUY_CONSUMPTION,
+          borderRadius: 10,
+          borderWidth: 1,
+          data: data.map(d => d.buy * this.coeficient),
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Consum propi',
+          backgroundColor: StatsColors.IN_HOUSE_CONSUMPTION,
+          borderRadius: 10,
+          borderWidth: 1,
+          data: data.map(d => d.inHouseConsumption * this.coeficient),
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Venta energetica',
+          backgroundColor: StatsColors.SELL,
+          borderRadius: 10,
+          borderWidth: 1,
+          data: data.map(d => d.sell * this.coeficient),
+          stack: 'Stack 2'
         }
       ]
     }
-
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor
-          }
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500
-            }
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        },
-        y: {
-          ticks: {
-            callback: function (value: any, index: any, values: any) {
-              return value + ' kWh'
-            },
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        }
-
-      }
-    };
   }
 
   ngOnDestroy(): void {
@@ -92,4 +167,7 @@ export class MyCupPageComponent {
       s.unsubscribe();
     })
   }
+
+  protected readonly StatsColors = StatsColors;
+  protected readonly Component = Component;
 }
