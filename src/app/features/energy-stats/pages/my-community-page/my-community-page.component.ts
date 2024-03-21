@@ -117,9 +117,10 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       aspectRatio: 0.8,
       plugins: {
         legend: {
-          labels: {
-            color: textColor
-          }
+          display: false,
+          // labels: {
+          //   color: textColor
+          // }
         },
       },
       scales: {
@@ -161,4 +162,5 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
 
   protected readonly producerAccessed = producerAccessed;
   protected readonly StatsColors = StatsColors;
+  protected readonly Component = Component;
 }
