@@ -123,7 +123,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     this.fetchingData = true;
     let data: EnergyStat[];
     try {
-      data = await this.monitoringService.getEnergyStats('2023-12-01', 3);
+      data = await this.monitoringService.getEnergyStats('2023-12-01', 4);
     } finally {
       this.fetchingData = false;
     }
