@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
-import {JsonPipe, NgStyle} from "@angular/common";
+import {JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../models/StatsColors";
 import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
@@ -14,6 +14,13 @@ import {
   ConsumptionItemsComponent
 } from "../../components/consumption-items/consumption-items.component";
 import {FooterComponent} from "../../../../shared/components/footer/footer.component";
+import {DateRange} from "../../models/DateRange";
+import {CalendarModule} from "primeng/calendar";
+import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 @Component({
   selector: 'app-my-community-page',
@@ -32,12 +39,38 @@ import {FooterComponent} from "../../../../shared/components/footer/footer.compo
     ChartLegendComponent,
     DataChartComponent,
     ConsumptionItemsComponent,
-    FooterComponent
+    FooterComponent,
+    NgClass,
+    CalendarModule,
+    ReactiveFormsModule
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
 })
 export class MyCommunityPageComponent implements OnInit, OnDestroy {
+  maxDate = new Date();
+  dateRange = signal(DateRange.MONTH);
+  calendarView = computed(() => {
+    switch (this.dateRange()) {
+      case DateRange.MONTH:
+        return 'month'
+      case DateRange.YEAR:
+        return 'year'
+      case DateRange.DAY:
+        return 'date'
+    }
+  });
+  dateFormat = computed(() => {
+    switch (this.dateRange()) {
+      case DateRange.MONTH:
+        return 'yy-mm'
+      case DateRange.YEAR:
+        return 'yy'
+      case DateRange.DAY:
+        return 'dd-mm-yy'
+    }
+  })
+  selectedDateFormControl = new FormControl(new Date(), [Validators.required])
   consumptionItems: ConsumptionItem[] = [
     {
       consumption: 0.015,
@@ -95,16 +128,29 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       radius: '2.5rem',
     }
   ];
-
   subscriptions: Subscription[] = [];
   protected readonly StatsColors = StatsColors;
   protected readonly Component = Component;
+  protected readonly DateRange = DateRange;
 
   constructor(private readonly monitoringService: MonitoringService) {
-    this.monitoringService.start(5000);
+    this.monitoringService.start(60000);
+  }
+
+  setDateRange(range: DateRange) {
+    this.dateRange.set(range)
   }
 
   async ngOnInit(): Promise<void> {
+    this.selectedDateFormControl.valueChanges.subscribe(async () => {
+      if (this.selectedDateFormControl.invalid) {
+        return;
+      }
+      const date = dayjs(this.selectedDateFormControl.value!).format('YYYY-MM-DD');
+      const data = await this.fetchEnergyStats(date, this.dateRange())
+      this.setDataChart(data, this.dateRange());
+    });
+
     let subscription = this.monitoringService
       .getPowerFlow()
       .subscribe(value => {
@@ -120,18 +166,37 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     this.subscriptions.push(subscription);
 
 
+    const data = await this.fetchEnergyStats(dayjs().format('YYYY-MM-DD'), this.dateRange())
+    this.setDataChart(data, this.dateRange())
+
+  }
+
+  async fetchEnergyStats(date: string, range: DateRange) {
     this.fetchingData = true;
     let data: EnergyStat[];
     try {
-      data = await this.monitoringService.getEnergyStats('2023-12-01', 4);
+      data = await this.monitoringService.getEnergyStats(date, range);
+      return data;
     } finally {
       this.fetchingData = false;
     }
+  }
 
+  setDataChart(data: EnergyStat[], range: DateRange) {
+    // TODO get labels
+    let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
+    if (range === DateRange.MONTH) {
+      labels = data.map(d => {
+        return dayjs(d.date).format('DD-MM-YYYY');
+      });
+    } else if (range === DateRange.DAY) {
+      labels = data.map(d => {
+        return dayjs(d.date).format('HH:mm');
+      })
+    }
 
     this.data = {
-      // labels: data.map(d => dayjs(d.date).format("YYYY-MM")),
-      labels: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+      labels,
       datasets: [
         {
           label: 'Produccio',

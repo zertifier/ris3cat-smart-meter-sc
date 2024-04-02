@@ -1,15 +1,14 @@
 import {Injectable} from '@angular/core';
 import {firstValueFrom, map, Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {HttpResponse} from "../../auth/services/zertiauth-api.service";
 import {environment} from "../../../../environments/environment";
-import {producerAccessed} from "@angular/core/primitives/signals";
+import {HttpResponse} from "../../../shared/services/HttpResponse";
 
 export interface EnergyStat {
   inHouseConsumption: number;
   sell: number;
   buy: number;
-  date: Date;
+  date: string;
 }
 
 export interface PowerStats {
@@ -24,7 +23,7 @@ export interface PowerStats {
 })
 export class MonitoringService {
   private powerFlow = new Subject<PowerStats>();
-  private interval?: number;
+  private interval: any;
 
   constructor(private httpClient: HttpClient) {
   }

@@ -18,11 +18,11 @@ export class OauthLoginComponent {
   }
 
   loginWithGoogle() {
-    window.location.href = this.zertiAuthServ.getCode('google');
+    window.location.href = this.zertiAuthServ.getAuthUrl('google');
   }
 
   loginWithTwitter() {
-    window.location.href = this.zertiAuthServ.getCode('twitter');
+    window.location.href = this.zertiAuthServ.getAuthUrl('twitter');
   }
 
   connectWithWebWallet() {

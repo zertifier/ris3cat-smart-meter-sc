@@ -41,36 +41,36 @@
 
   <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric de consum</h5>
   <div class="d-flex justify-content-evenly mb-3">
-    <button class="btn btn-inactive rounded-4 py-3 px-5">
+    <button (click)="setDateRange(DateRange.DAY)" class="btn rounded-4 py-3 px-5"
+            [ngClass]="dateRange() === DateRange.DAY ? 'btn-active' : 'btn-inactive'">
       Veure consum diari
     </button>
-    <button class="btn btn-inactive rounded-4 py-3 px-5">
+    <button (click)="setDateRange(DateRange.MONTH)" class="btn rounded-4 py-3 px-5"
+            [ngClass]="dateRange() === DateRange.MONTH ? 'btn-active' : 'btn-inactive'">
       Veure consum mensual
     </button>
-    <button class="btn btn-active rounded-4 py-3 px-5">
+    <button (click)="setDateRange(DateRange.YEAR)" class="btn rounded-4 py-3 px-5"
+            [ngClass]="dateRange() === DateRange.YEAR ? 'btn-active' : 'btn-inactive'">
       Veure consum anual
     </button>
   </div>
   <div class="row justify-content-center">
     <div class="col-md-3 mb-4">
-      <div class="input-group">
-        <span class="input-group-text" id="basic-addon1">Any</span>
-        <input class="form-control  form-control-lg text-center" type="number" min="1900" max="2099" step="1"
-               value="2023" readonly/>
-      </div>
+      <p-calendar [maxDate]="maxDate" [formControl]="selectedDateFormControl" iconDisplay="input"
+                  [dateFormat]="dateFormat()" [showIcon]="true" styleClass="w-100" [view]="calendarView()"/>
     </div>
   </div>
 
   @if (!fetchingData) {
-  <app-data-chart [data]="data"/>
-  <app-chart-legend [labels]="chartLabels"/>
+    <app-data-chart [data]="data"/>
+    <app-chart-legend [labels]="chartLabels"/>
   } @else {
-  <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
-    <h4>Carregant dades</h4>
-    <div>
-      <i class="fa-solid fa-spinner fa-spin"></i>
+    <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
+      <h4>Carregant dades</h4>
+      <div>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+      </div>
     </div>
-  </div>
   }
 
 </div>

@@ -25,6 +25,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "environments": "1.2.7",
+    "ethers": "^6.11.1",
     "primeng": "^17.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

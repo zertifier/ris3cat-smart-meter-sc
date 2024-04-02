@@ -1,63 +1,38 @@
-import {afterRender, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {SHA256} from 'crypto-js'
+import {App} from '@zertifier/zertiauthjs';
+import {from} from "rxjs";
 
-export interface HttpResponse<T> {
-  message: string,
-  success: boolean,
-  data: T
-}
 
-export interface PrivateKeyHttpResponse extends HttpResponse<any> {
-  data: privateKeyObject;
-}
-
-export interface privateKeyObject{
-  privateKey: string
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZertiauthApiService {
-  baseUrl: string = "https://auth.zertifier.com"
-  appId: string = "ca6e1e8e-4bcf-42d3-9bf3-f6d3c21dd0d9" //CHANGE IT TO YOUR APP ID
-  redirectUrl: string = ''
+  baseUrl: string = "https://auth.zertifier.com";
+  app = new App("0ba3f4b3-55fa-499f-8782-23c81a2b4652");
+  redirectUrl: string = `${window.location.origin}/auth/oauth-callback`;
   constructor(
     private http: HttpClient,
   ) {
-    afterRender(() => {
-      this.redirectUrl = window.location.origin;
-    })
   }
 
 
-  getCode(platform: 'google' | 'twitter' | 'facebook' | 'linkedin' | 'github') {
-    const baseCode = this.generateRandomString(32)
+  getAuthUrl(platform: 'google' | 'twitter' | 'github') {
+    const {baseCode, codeChallenge} = this.app.generateCodeChallenge();
     localStorage.setItem('baseCodeChallenge', baseCode);
 
-    const codeChallenge = SHA256(baseCode).toString();
-
-    const url =
-      `${this.baseUrl}/zauth/oauth/${platform}?app-id=${this.appId}&redirect-url=${this.redirectUrl}&code-challenge=${codeChallenge}&code-challenge-method=S256`
+    const url = this.app.getAuthUrl(this.redirectUrl, platform, codeChallenge);
 
     return url
   }
 
   getPrivateKey(code: string) {
-    const url = `${this.baseUrl}/zauth/web3/credentials/`
-    const body = {
-      code,
-      codeVerifier: localStorage.getItem('baseCodeChallenge')
+    const baseCode = localStorage.getItem('baseCodeChallenge');
+    if (!baseCode) {
+      throw new Error('Base code not saved on local storage')
     }
-    return this.http.post<PrivateKeyHttpResponse>(url, body)
-
-  }
-
-  generateRandomString(length: number): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const randomChars = Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length)));
-
-    return randomChars.join('');;
+    const response: Promise<{privateKey: string, email: string}> = this.app.getCredentials(code, baseCode);
+    return from(response)
   }
 }

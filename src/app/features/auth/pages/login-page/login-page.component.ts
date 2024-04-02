@@ -6,6 +6,7 @@ import {LoginImagesService} from "../../services/login-images.service";
 import {NgClass, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {BreakPoints, ScreenService} from "../../../../shared/services/screen.service";
+import {ZertiauthApiService} from "../../services/zertiauth-api.service";
 
 @Component({
   selector: 'app-login-page',
@@ -32,7 +33,8 @@ export class LoginPageComponent {
   constructor(
     private router: Router,
     public loginImagesService: LoginImagesService,
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private zertiauthApiService: ZertiauthApiService,
   ) {
     this.onResize()
   }
@@ -45,7 +47,8 @@ export class LoginPageComponent {
   }
 
   public googleLogin() {
-    this.router.navigate(['energy-stats'])
+    const authUrl = this.zertiauthApiService.getAuthUrl('google');
+    window.location.replace(authUrl);
   }
 
   public webWalletLogin() {
