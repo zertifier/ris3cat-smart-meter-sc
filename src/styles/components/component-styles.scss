@@ -1,0 +1,17 @@
+.btn-outline-white {
+  border-color: $white !important;
+  color: white;
+}
+
+.btn-outline-white:hover {
+  border-color: $active-hover !important;
+  color: $active-hover !important;
+}
+
+.btn-outline-white::after {
+  color: white;
+}
+
+.btn-outline-white::after:hover {
+  color: $active-hover !important;
+}

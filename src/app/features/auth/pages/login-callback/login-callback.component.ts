@@ -5,6 +5,7 @@ import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
 import {HttpClient} from "@angular/common/http";
 import {ApiService} from "../../../../shared/services/api.service";
+import {AuthStoreService} from "../../services/auth-store.service";
 
 @Component({
   selector: 'app-login-callback',
@@ -17,9 +18,9 @@ export class LoginCallbackComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private zertiauthApiService: ZertiauthApiService,
-    private httpClient: HttpClient,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private authStore: AuthStoreService,
   ) {
   }
 
@@ -40,7 +41,8 @@ export class LoginCallbackComponent implements OnInit {
     // login
     const signature = await wallet.signMessage(signCode);
     const tokens = await this.apiService.auth.login(wallet.address, signature);
-    console.log(tokens);
+
+    this.authStore.setTokens(tokens.refreshToken, tokens.accessToken);
     this.router.navigate(['/energy-stats']);
   }
 }

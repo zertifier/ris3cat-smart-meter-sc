@@ -9,7 +9,8 @@
 @import "colors";
 @import "font-face";
 @import "effects";
-@import "component-states";
+@import "components/component-states";
+@import "components/component-styles";
 
 /* Importing Bootstrap SCSS file. */
 @import '../../node_modules/bootstrap/scss/bootstrap';
