@@ -1,4 +1,4 @@
-import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, OnDestroy, OnInit, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
@@ -138,7 +138,10 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   }
 
   setDateRange(range: DateRange) {
-    this.dateRange.set(range)
+    this.dateRange.set(range);
+    const currentDate = this.selectedDateFormControl.value || new Date();
+    this.selectedDateFormControl.setValue(currentDate);
+    alert('date changed')
   }
 
   async ngOnInit(): Promise<void> {
