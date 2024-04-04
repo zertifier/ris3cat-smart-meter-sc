@@ -131,7 +131,6 @@ export class MyCupPageComponent {
     this.dateRange.set(range);
     const currentDate = this.selectedDateFormControl.value || new Date();
     this.selectedDateFormControl.setValue(currentDate);
-    alert('date changed')
   }
 
   async ngOnInit(): Promise<void> {
