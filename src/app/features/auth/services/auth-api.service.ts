@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../environments/environment.development";
+import {environment} from "../../../../environments/environment";
 import {HttpResponse} from "../../../shared/services/HttpResponse";
 import {firstValueFrom, map} from "rxjs";
 
