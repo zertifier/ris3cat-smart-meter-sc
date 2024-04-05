@@ -8,7 +8,8 @@
     <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span> Membres d'aquesta comunitat: 32
     </p>
   </div>
-  <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el teu consum i producció energètica de la teva comunitat</h5>
+  <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el teu consum i producció energètica de la teva
+    comunitat</h5>
   <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
 
     <app-stat-display
@@ -36,42 +37,14 @@
       [text]="powerFlow().sell + ' KW'"/>
   </div>
 
+  <div class="w-100" style="margin-bottom: 10rem;">
+    <app-consumption-items [items]="consumptionItems"/>
+  </div>
 
   <hr>
 
   <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric consum/producció</h5>
-  <div class="d-flex justify-content-evenly mb-3">
-    <button (click)="setDateRange(DateRange.DAY)" class="btn rounded-4 py-3 px-5"
-            [ngClass]="dateRange() === DateRange.DAY ? 'btn-active' : 'btn-inactive'">
-      Diari
-    </button>
-    <button (click)="setDateRange(DateRange.MONTH)" class="btn rounded-4 py-3 px-5"
-            [ngClass]="dateRange() === DateRange.MONTH ? 'btn-active' : 'btn-inactive'">
-      Mensual
-    </button>
-    <button (click)="setDateRange(DateRange.YEAR)" class="btn rounded-4 py-3 px-5"
-            [ngClass]="dateRange() === DateRange.YEAR ? 'btn-active' : 'btn-inactive'">
-      Anual
-    </button>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-md-3 mb-4">
-      <p-calendar [maxDate]="maxDate" [formControl]="selectedDateFormControl" iconDisplay="input"
-                  [dateFormat]="dateFormat()" [showIcon]="true" styleClass="w-100" [view]="calendarView()"/>
-    </div>
-  </div>
-
-  @if (!fetchingData) {
-    <app-data-chart [data]="data"/>
-    <app-chart-legend [labels]="chartLabels"/>
-  } @else {
-    <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
-      <h4>Carregant dades</h4>
-      <div>
-        <i class="fa-solid fa-spinner fa-spin"></i>
-      </div>
-    </div>
-  }
+  <app-historic-chart/>
 
 </div>
 
