@@ -42,7 +42,7 @@ export class HistoricChartComponent implements OnInit {
   dateFormat$ = this.chartStoreService.selectOnly(state => {
     switch (state.dateRange) {
       case DateRange.MONTH:
-        return 'yy-mm'
+        return 'mm-yy'
       case DateRange.YEAR:
         return 'yy'
       case DateRange.DAY:
