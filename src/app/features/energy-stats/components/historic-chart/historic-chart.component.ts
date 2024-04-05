@@ -84,7 +84,8 @@ export class HistoricChartComponent implements OnInit {
   ngOnInit(): void {
     this.date$.subscribe(async date => {
       const dateRange = this.chartStoreService.snapshotOnly(state => state.dateRange);
-      await this.fetchEnergyStats(dayjs.utc(date).format('YYYY-MM-DD'), dateRange);
+      const data = await this.fetchEnergyStats(dayjs.utc(date).format('YYYY-MM-DD'), dateRange);
+      this.setDataChart(data, dateRange);
     });
   }
 
