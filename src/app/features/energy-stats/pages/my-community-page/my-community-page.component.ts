@@ -189,11 +189,11 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
     if (range === DateRange.MONTH) {
       labels = data.map(d => {
-        return dayjs(d.date).format('DD-MM-YYYY');
+        return dayjs(d.date).format('DD');
       });
     } else if (range === DateRange.DAY) {
       labels = data.map(d => {
-        return dayjs(d.date).format('HH:mm');
+        return dayjs(d.date).format('HH');
       })
     }
 
