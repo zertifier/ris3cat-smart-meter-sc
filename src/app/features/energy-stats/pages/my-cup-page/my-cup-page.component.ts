@@ -17,6 +17,7 @@ import {CalendarModule} from "primeng/calendar";
 import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {DateRange} from "../../models/DateRange";
 import dayjs from "dayjs";
+import {HistoricChartComponent} from "../../components/historic-chart/historic-chart.component";
 
 
 @Component({
@@ -32,7 +33,8 @@ import dayjs from "dayjs";
     ConsumptionItemsComponent,
     FooterComponent,
     CalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HistoricChartComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
