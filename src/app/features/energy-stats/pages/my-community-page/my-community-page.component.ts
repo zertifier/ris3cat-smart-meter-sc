@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
-import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
+import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../models/StatsColors";
@@ -14,13 +14,14 @@ import {
   ConsumptionItemsComponent
 } from "../../components/consumption-items/consumption-items.component";
 import {FooterComponent} from "../../../../shared/components/footer/footer.component";
-import {DateRange} from "../../models/DateRange";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import {HistoricChartComponent} from "../../components/historic-chart/historic-chart.component";
-import {ChartStoreService} from "../../services/chart-store.service";
+import {ZertipowerService} from "../../../../shared/services/zertipower.service";
+import {AuthStoreService} from "../../../auth/services/auth-store.service";
+import {jwtDecode} from 'jwt-decode';
 
 dayjs.extend(utc);
 
@@ -89,11 +90,22 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly monitoringService: MonitoringService,
+    private readonly zertipower: ZertipowerService,
+    private readonly authStore: AuthStoreService
   ) {
     this.monitoringService.start(60000);
   }
 
   async ngOnInit(): Promise<void> {
+    const authData = this.authStore.snapshotOnly(state => state.authData);
+    if (!authData) {
+      alert('no auth data')
+      return;
+    }
+    const cups = await this.zertipower.getCups(authData.id);
+
+    console.log({cups});
+
     this.subscriptions.push(
       this.monitoringService
         .getPowerFlow()

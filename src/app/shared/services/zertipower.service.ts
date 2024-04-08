@@ -13,23 +13,10 @@ export class ZertipowerService {
   constructor(private httpClient: HttpClient) {
   }
 
-  async getUsers(criteria: any): Promise<any[]> {
-    const params = new HttpParams().set('criteria', criteria);
-    const response = this.httpClient.get<HttpResponse<any[]>>(`${this.BASE_URL}/users`, {
-      params
-    }).pipe(map(r => r.data));
-
-    return firstValueFrom(response);
-
-  }
-
-  async getSignCode(walletAddress: string): Promise<string> {
-    const response = this.httpClient.post<HttpResponse<{
-      code: string
-    }>>(`${this.BASE_URL}/auth/request-code`, {wallet_address: walletAddress})
-      .pipe(map(r => r.data.code));
-
-    return firstValueFrom(response);
+  async getCups(id: number) {
+    const response = firstValueFrom(this.httpClient.get(`${this.BASE_URL}/users/${id}/cups`));
+    console.log({response});
+    return response;
   }
 
   async login(walletAddress: string, signature: string, email: string): Promise<{
@@ -43,9 +30,5 @@ export class ZertipowerService {
       .pipe(map(r => ({accessToken: r.data.access_token, refreshToken: r.data.refresh_token})));
 
     return firstValueFrom(response);
-  }
-
-  async createUser(wallet: string, email: string) {
-
   }
 }

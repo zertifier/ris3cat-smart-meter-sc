@@ -13,7 +13,6 @@ export class ZertiauthApiService {
   app = new App("0ba3f4b3-55fa-499f-8782-23c81a2b4652");
   redirectUrl: string = `${window.location.origin}/auth/oauth-callback`;
   constructor(
-    private http: HttpClient,
   ) {
   }
 

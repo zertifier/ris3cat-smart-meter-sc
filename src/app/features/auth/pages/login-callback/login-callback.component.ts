@@ -3,7 +3,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
 import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
-import {HttpClient} from "@angular/common/http";
 import {ApiService} from "../../../../shared/services/api.service";
 import {AuthStoreService} from "../../services/auth-store.service";
 
@@ -33,16 +32,12 @@ export class LoginCallbackComponent implements OnInit {
     }
 
     const response = await firstValueFrom(this.zertiauthApiService.getPrivateKey(code));
-    const email = response.email;
     const wallet = new ethers.Wallet(response.privateKey as string);
 
-    // request sign code
-    const signCode = await this.apiService.auth.getSignCode(wallet.address, email);
     // login
-    const signature = await wallet.signMessage(signCode);
-    const tokens = await this.apiService.auth.login(wallet.address, signature);
+    const tokens = await this.apiService.auth.login(wallet.address, wallet.privateKey, response.email);
 
-    this.authStore.setTokens(tokens.refreshToken, tokens.accessToken);
+    this.authStore.setTokens({refreshToken: tokens.refreshToken, accessToken: tokens.accessToken});
     this.router.navigate(['/energy-stats']);
   }
 }

@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {HttpResponse} from "../../../shared/services/HttpResponse";
 import {firstValueFrom, map} from "rxjs";
+import {SKIP_AUTH_INTERCEPTOR} from "../interceptors/auth-token.interceptor";
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +14,31 @@ export class AuthApiService {
   }
 
   public async getSignCode(walletAddress: string, email?: string): Promise<string> {
+    const headers = new HttpHeaders().set(SKIP_AUTH_INTERCEPTOR, '');
+
     const response = this.httpClient.post<HttpResponse<{
       signCode: string
-    }>>(`${environment.api_url}/auth/users/sign-code`, {walletAddress, email}).pipe(map(r => r.data.signCode));
+    }>>(`${environment.api_url}/auth/users/sign-code`, {
+      walletAddress,
+      email
+    }, {headers}).pipe(map(r => r.data.signCode));
     return firstValueFrom(response);
   }
 
-  public async login(walletAddress: string, signature: string): Promise<{ accessToken: string, refreshToken: string }> {
+  public async login(walletAddress: string, privateKey: string, email: string): Promise<{
+    accessToken: string,
+    refreshToken: string
+  }> {
+    const headers = new HttpHeaders().set(SKIP_AUTH_INTERCEPTOR, '');
+
     const response = this.httpClient.post<HttpResponse<{
       accessToken: string,
       refreshToken: string
     }>>(`${environment.api_url}/auth/users/w3-login`, {
       walletAddress,
-      signature
-    }).pipe(map(r => r.data))
+      privateKey,
+      email,
+    }, {headers}).pipe(map(r => r.data))
 
     return firstValueFrom(response);
   }
