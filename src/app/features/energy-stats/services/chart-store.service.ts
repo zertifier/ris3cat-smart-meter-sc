@@ -2,16 +2,24 @@ import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
 import {DateRange} from "../models/DateRange";
 
+export enum ChartOrigins {
+  DATADIS = 'DATADIS',
+  INVERSOR = 'INVERSOR',
+  SMART_METER = 'SMART_METER'
+}
+
 export interface ChartStore {
   dateRange: DateRange,
   date: Date,
   fetchingData: boolean,
+  origin: ChartOrigins,
 }
 
 const defaultValues: ChartStore = {
   dateRange: DateRange.MONTH,
   date: new Date(),
   fetchingData: false,
+  origin: ChartOrigins.DATADIS,
 }
 
 @Injectable({

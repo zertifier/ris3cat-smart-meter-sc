@@ -4,20 +4,20 @@ import {ChartModule} from "primeng/chart";
 import {JsonPipe} from "@angular/common";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
-import {ChartLegendComponent, DataLabel} from "../../components/chart-legend/chart-legend.component";
-import {DataChartComponent} from "../../components/data-chart/data-chart.component";
-import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
+import {ChartLegendComponent, DataLabel} from "../../components/historic/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
+import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
 import {StatsColors} from "../../models/StatsColors";
 import {
   ConsumptionItem,
   ConsumptionItemsComponent
-} from "../../components/consumption-items/consumption-items.component";
+} from "../../components/realtime/consumption-items/consumption-items.component";
 import {FooterComponent} from "../../../../shared/components/footer/footer.component";
 import {CalendarModule} from "primeng/calendar";
 import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {DateRange} from "../../models/DateRange";
 import dayjs from "dayjs";
-import {HistoricChartComponent} from "../../components/historic-chart/historic-chart.component";
+import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
 
 
 @Component({

@@ -5,23 +5,23 @@ import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../models/StatsColors";
-import {StatDisplayComponent} from "../../components/stat-display/stat-display.component";
+import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
-import {ChartLegendComponent} from "../../components/chart-legend/chart-legend.component";
-import {DataChartComponent} from "../../components/data-chart/data-chart.component";
+import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
 import {
   ConsumptionItem,
   ConsumptionItemsComponent
-} from "../../components/consumption-items/consumption-items.component";
+} from "../../components/realtime/consumption-items/consumption-items.component";
 import {FooterComponent} from "../../../../shared/components/footer/footer.component";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
-import {HistoricChartComponent} from "../../components/historic-chart/historic-chart.component";
-import {ZertipowerService} from "../../../../shared/services/zertipower.service";
+import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
+import {ZertipowerService} from "../../../../shared/services/zertipower/zertipower.service";
 import {AuthStoreService} from "../../../auth/services/auth-store.service";
-import {jwtDecode} from 'jwt-decode';
+import {GetMyDataAction} from "../../../auth/actions/get-my-data-action.service";
 
 dayjs.extend(utc);
 
@@ -91,7 +91,8 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly zertipower: ZertipowerService,
-    private readonly authStore: AuthStoreService
+    private readonly authStore: AuthStoreService,
+    private readonly getMyData: GetMyDataAction,
   ) {
     this.monitoringService.start(60000);
   }
@@ -102,9 +103,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       alert('no auth data')
       return;
     }
-    const cups = await this.zertipower.getCups(authData.id);
-
-    console.log({cups});
 
     this.subscriptions.push(
       this.monitoringService

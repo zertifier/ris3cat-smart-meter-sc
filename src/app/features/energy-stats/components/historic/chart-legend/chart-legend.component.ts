@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {StatsColors} from "../../models/StatsColors";
+import {StatsColors} from "../../../models/StatsColors";
 import {NgStyle} from "@angular/common";
 import {Data} from "@angular/router";
 

@@ -22,6 +22,7 @@
     "@popperjs/core": "^2.11.8",
     "@zertifier/rx-store": "1.0.0",
     "@zertifier/zertiauthjs": "1.0.0",
+    "axios": "1.6.8",
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.2",
     "crypto-js": "^4.2.0",

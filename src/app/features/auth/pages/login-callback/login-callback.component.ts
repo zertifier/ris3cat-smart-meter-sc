@@ -16,10 +16,10 @@ import {AuthStoreService} from "../../services/auth-store.service";
 export class LoginCallbackComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
-    private zertiauthApiService: ZertiauthApiService,
-    private apiService: ApiService,
-    private router: Router,
-    private authStore: AuthStoreService,
+    private readonly zertiauthApiService: ZertiauthApiService,
+    private readonly apiService: ApiService,
+    private readonly router: Router,
+    private readonly authStore: AuthStoreService,
   ) {
   }
 
