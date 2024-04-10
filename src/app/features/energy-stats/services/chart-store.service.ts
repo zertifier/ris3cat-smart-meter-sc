@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
 import {DateRange} from "../models/DateRange";
+import {ChartEntity} from "../domain/ChartEntity";
+import {ChartResource} from "../domain/ChartResource";
 
 export enum ChartOrigins {
   DATADIS = 'DATADIS',
@@ -13,6 +15,9 @@ export interface ChartStore {
   date: Date,
   fetchingData: boolean,
   origin: ChartOrigins,
+  selectedChartEntity: ChartEntity,
+  selectedChartResource: ChartResource
+  showPrice: boolean,
 }
 
 const defaultValues: ChartStore = {
@@ -20,6 +25,9 @@ const defaultValues: ChartStore = {
   date: new Date(),
   fetchingData: false,
   origin: ChartOrigins.DATADIS,
+  selectedChartEntity: ChartEntity.CUPS,
+  showPrice: false,
+  selectedChartResource: ChartResource.ENERGY,
 }
 
 @Injectable({

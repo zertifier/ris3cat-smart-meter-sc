@@ -12,12 +12,12 @@ import dayjs from "dayjs";
 import {environment} from "../../../../environments/environment";
 import {DateRange} from "../../../features/energy-stats/models/DateRange";
 import {CupsResponseDTO} from "./DTOs/CupsResponseDTO";
+import {ChartEntity} from "../../../features/energy-stats/domain/ChartEntity";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZertipowerService {
-
   private BASE_URL = environment.zertipower_url;
   private axiosClient = axios.create({
     baseURL: this.BASE_URL,
@@ -71,15 +71,15 @@ export class ZertipowerService {
   }
 
   async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
-    return this.getEnergyStats('cups', cupId, source, date, dateRange);
+    return this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
 
   }
 
   async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
-    return this.getEnergyStats('communities', communityId, source, date, dateRange);
+    return this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
   }
 
-  async getEnergyStats(resource: 'cups' | 'communities', resourceId: number, source: string, date: Date, dateRange: DateRange) {
+  async getEnergyStats(resource: ChartEntity, resourceId: number, source: string, date: Date, dateRange: DateRange) {
     let range: string;
     let desiredFormat: string
     switch (dateRange) {

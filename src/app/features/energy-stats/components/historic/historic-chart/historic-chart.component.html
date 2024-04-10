@@ -17,6 +17,13 @@
     <p-calendar [maxDate]="maxDate" (onSelect)="setDate($event)" [ngModel]="date$ | async" iconDisplay="input"
                 [dateFormat]="(dateFormat$ | async) || 'yy'" [showIcon]="true" styleClass="w-100"
                 [view]="(calendarView$ | async) || 'month'"/>
+
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" (change)="setChartResource($event)">
+      <option value="energy" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Kw/H</option>
+      <option value="price" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
+    </select>
   </div>
 </div>
 

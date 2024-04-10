@@ -9,6 +9,7 @@ import {DateRange} from "../../../models/DateRange";
 import dayjs from "dayjs";
 import {DatadisEnergyStat} from "../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
 import {UserStoreService} from "../../../../user/services/user-store.service";
+import {ChartEntity} from "../../../domain/ChartEntity";
 
 @Component({
   selector: 'app-datadis-chart',
@@ -68,7 +69,16 @@ export class DatadisChartComponent implements OnInit {
     let data: DatadisEnergyStat[];
     try {
       const [cupId] = this.userStore.snapshotOnly(state => state.cupIds);
-      data = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
+      const communityId = this.userStore.snapshotOnly(state => state.communityId);
+      const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
+      if (selectedChart === ChartEntity.CUPS) {
+        data = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
+      } else {
+        if (!communityId) {
+          return [];
+        }
+        data = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
+      }
       return data;
     } finally {
       this.chartStoreService.fetchingData(false);
