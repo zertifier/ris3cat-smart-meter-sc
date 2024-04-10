@@ -70,7 +70,16 @@ export class ZertipowerService {
     return response.data.data;
   }
 
-  async getEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
+  async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
+    return this.getEnergyStats('cups', cupId, source, date, dateRange);
+
+  }
+
+  async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
+    return this.getEnergyStats('communities', communityId, source, date, dateRange);
+  }
+
+  async getEnergyStats(resource: 'cups' | 'communities', resourceId: number, source: string, date: Date, dateRange: DateRange) {
     let range: string;
     let desiredFormat: string
     switch (dateRange) {
@@ -88,7 +97,7 @@ export class ZertipowerService {
         break;
     }
     const formattedDate = dayjs(date).format(desiredFormat); // TODO use dayjs to format date
-    const response = await this.axiosClient.get<HttpResponse<EnergyStatDTO[]>>(`/cups/${cupId}/stats/${source}/${range}/${formattedDate}`);
+    const response = await this.axiosClient.get<HttpResponse<EnergyStatDTO[]>>(`/${resource}/${resourceId}/stats/${source}/${range}/${formattedDate}`);
     return response.data.data.map(r => ({
       ...r,
       createdAt: new Date(r.createdAt),

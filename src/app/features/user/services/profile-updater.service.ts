@@ -26,7 +26,8 @@ export class ProfileUpdaterService {
         }
 
         const cups = await this.zertipower.getCups(user.id);
-        this.userStore.patchState({cupIds: cups.map((c: any) => c.id)})
+        const communityId = cups[0].community_id;
+        this.userStore.patchState({cupIds: cups.map((c: any) => c.id), communityId})
       });
   }
 }

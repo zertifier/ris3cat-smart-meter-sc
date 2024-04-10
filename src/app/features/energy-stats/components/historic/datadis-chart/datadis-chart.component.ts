@@ -8,7 +8,7 @@ import {ZertipowerService} from "../../../../../shared/services/zertipower/zerti
 import {DateRange} from "../../../models/DateRange";
 import dayjs from "dayjs";
 import {DatadisEnergyStat} from "../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
-import {UserStore, UserStoreService} from "../../../../user/services/user-store.service";
+import {UserStoreService} from "../../../../user/services/user-store.service";
 
 @Component({
   selector: 'app-datadis-chart',
@@ -24,6 +24,7 @@ import {UserStore, UserStoreService} from "../../../../user/services/user-store.
 export class DatadisChartComponent implements OnInit {
   date$ = this.chartStoreService.selectOnly(state => state.date);
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
+  cupIds$ = this.userStore.selectOnly(state => state.cupIds);
 
   chartLabels: DataLabel[] = [
     {
@@ -39,19 +40,26 @@ export class DatadisChartComponent implements OnInit {
   ];
   data: any;
 
-  async ngOnInit(): Promise<void> {
-    this.date$.subscribe(async date => {
-      const dateRange = this.chartStoreService.snapshotOnly(state => state.dateRange);
-      const data = await this.fetchEnergyStats(date, dateRange);
-      this.setDataChart(data, dateRange);
-    });
-  }
-
   constructor(
     private readonly chartStoreService: ChartStoreService,
     private readonly zertipower: ZertipowerService,
     private readonly userStore: UserStoreService,
   ) {
+    this.userStore.selectOnly(state => state.cupIds).subscribe(console.log)
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.cupIds$.subscribe(async cups => {
+      const [date, dateRange] = this.chartStoreService.snapshotOnly(state => [state.date, state.dateRange]);
+      const data = await this.fetchEnergyStats(date, dateRange);
+      this.setDataChart(data, dateRange);
+    });
+
+    this.date$.subscribe(async date => {
+      const dateRange = this.chartStoreService.snapshotOnly(state => state.dateRange);
+      const data = await this.fetchEnergyStats(date, dateRange);
+      this.setDataChart(data, dateRange);
+    });
   }
 
   async fetchEnergyStats(date: Date, range: DateRange) {
@@ -60,7 +68,7 @@ export class DatadisChartComponent implements OnInit {
     let data: DatadisEnergyStat[];
     try {
       const [cupId] = this.userStore.snapshotOnly(state => state.cupIds);
-      data = await this.zertipower.getEnergyStats(cupId, 'datadis', date, range);
+      data = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
       return data;
     } finally {
       this.chartStoreService.fetchingData(false);

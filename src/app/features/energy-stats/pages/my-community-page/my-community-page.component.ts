@@ -21,7 +21,6 @@ import utc from 'dayjs/plugin/utc';
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
 import {ZertipowerService} from "../../../../shared/services/zertipower/zertipower.service";
 import {AuthStoreService} from "../../../auth/services/auth-store.service";
-import {GetMyDataAction} from "../../../auth/actions/get-my-data-action.service";
 
 dayjs.extend(utc);
 
@@ -92,7 +91,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     private readonly monitoringService: MonitoringService,
     private readonly zertipower: ZertipowerService,
     private readonly authStore: AuthStoreService,
-    private readonly getMyData: GetMyDataAction,
   ) {
     this.monitoringService.start(60000);
   }

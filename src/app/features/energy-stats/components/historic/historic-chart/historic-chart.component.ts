@@ -25,7 +25,7 @@ import {DatadisChartComponent} from "../datadis-chart/datadis-chart.component";
   templateUrl: './historic-chart.component.html',
   styleUrl: './historic-chart.component.scss'
 })
-export class HistoricChartComponent {
+export class HistoricChartComponent  {
   date$ = this.chartStoreService.selectOnly(state => state.date);
   origin$ = this.chartStoreService.selectOnly(state => state.origin)
   maxDate = new Date();
