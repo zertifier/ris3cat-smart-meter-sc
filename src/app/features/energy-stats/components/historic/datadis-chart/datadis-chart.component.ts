@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AsyncPipe} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
@@ -10,6 +10,8 @@ import dayjs from "dayjs";
 import {DatadisEnergyStat} from "../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
 import {UserStoreService} from "../../../../user/services/user-store.service";
 import {ChartEntity} from "../../../domain/ChartEntity";
+import {ChartResource} from "../../../domain/ChartResource";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-datadis-chart',
@@ -22,10 +24,11 @@ import {ChartEntity} from "../../../domain/ChartEntity";
   templateUrl: './datadis-chart.component.html',
   styleUrl: './datadis-chart.component.scss'
 })
-export class DatadisChartComponent implements OnInit {
+export class DatadisChartComponent implements OnInit, OnDestroy {
   date$ = this.chartStoreService.selectOnly(state => state.date);
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   cupIds$ = this.userStore.selectOnly(state => state.cupIds);
+  subscription: Subscription[] = [];
 
   chartLabels: DataLabel[] = [
     {
@@ -50,17 +53,16 @@ export class DatadisChartComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.cupIds$.subscribe(async cups => {
-      const [date, dateRange] = this.chartStoreService.snapshotOnly(state => [state.date, state.dateRange]);
-      const data = await this.fetchEnergyStats(date, dateRange);
-      this.setDataChart(data, dateRange);
-    });
-
-    this.date$.subscribe(async date => {
-      const dateRange = this.chartStoreService.snapshotOnly(state => state.dateRange);
-      const data = await this.fetchEnergyStats(date, dateRange);
-      this.setDataChart(data, dateRange);
-    });
+    this.chartStoreService
+      .selectOnly(this.chartStoreService.$.justData)
+      .subscribe(async ({
+                          date,
+                          dateRange,
+                          selectedChartResource
+                        }) => {
+        const data = await this.fetchEnergyStats(date, dateRange);
+        this.setDataChart(data, dateRange, selectedChartResource);
+      });
   }
 
   async fetchEnergyStats(date: Date, range: DateRange) {
@@ -89,8 +91,9 @@ export class DatadisChartComponent implements OnInit {
    * It is responsible to format data to the corresponding objects for the chart and even changes the labels
    * @param data
    * @param range
+   * @param resource
    */
-  setDataChart(data: DatadisEnergyStat[], range: DateRange) {
+  setDataChart(data: DatadisEnergyStat[], range: DateRange, resource: ChartResource) {
     let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
     if (range === DateRange.MONTH) {
       labels = data.map(d => {
@@ -102,6 +105,7 @@ export class DatadisChartComponent implements OnInit {
       })
     }
 
+    const showEnergy = resource === ChartResource.ENERGY;
     this.data = {
       labels,
       datasets: [
@@ -110,7 +114,7 @@ export class DatadisChartComponent implements OnInit {
           backgroundColor: StatsColors.BUY_CONSUMPTION,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => d.kwhIn),
+          data: data.map(d => (showEnergy ? d.kwhIn : d.kwhInPrice)),
           stack: 'Stack 1'
         },
         {
@@ -118,10 +122,14 @@ export class DatadisChartComponent implements OnInit {
           backgroundColor: StatsColors.SELL,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => d.kwhOut),
+          data: data.map(d => (showEnergy ? d.kwhOut : d.kwhOutPrice)),
           stack: 'Stack 2'
         }
       ]
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(s => s.unsubscribe());
   }
 }

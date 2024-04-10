@@ -7,7 +7,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass} from "@angular/common";
 import {MonitoringService} from "../../../services/monitoring.service";
 import {ChartOrigins, ChartStoreService} from "../../../services/chart-store.service";
-import {DatadisChartComponent} from "../cups-datadis-chart/datadis-chart.component";
+import {DatadisChartComponent} from "../datadis-chart/datadis-chart.component";
 import {ChartResource} from "../../../domain/ChartResource";
 
 @Component({

@@ -17,7 +17,6 @@ export interface ChartStore {
   origin: ChartOrigins,
   selectedChartEntity: ChartEntity,
   selectedChartResource: ChartResource
-  showPrice: boolean,
 }
 
 const defaultValues: ChartStore = {
@@ -26,7 +25,6 @@ const defaultValues: ChartStore = {
   fetchingData: false,
   origin: ChartOrigins.DATADIS,
   selectedChartEntity: ChartEntity.CUPS,
-  showPrice: false,
   selectedChartResource: ChartResource.ENERGY,
 }
 
@@ -36,6 +34,15 @@ const defaultValues: ChartStore = {
 export class ChartStoreService extends RxStore<ChartStore>{
   constructor() {
     super(defaultValues);
+  }
+
+  $ = {
+    justData(state: ChartStore) {
+      const {dateRange, date, selectedChartResource, origin, selectedChartEntity} = state;
+      return {
+        dateRange, date, selectedChartResource, origin, selectedChartEntity
+      }
+    }
   }
 
   public setDate(date: Date) {
