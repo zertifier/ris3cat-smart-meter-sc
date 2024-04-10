@@ -6,6 +6,9 @@ import {
   NgbDropdownModule,
   NgbDropdownToggle
 } from "@ng-bootstrap/ng-bootstrap";
+import {LogoutActionService} from "../../../features/auth/actions/logout-action.service";
+import {Confirmable} from "../../decorators/Confirmable";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
   selector: 'app-user-profile-selector',
@@ -21,5 +24,14 @@ import {
   styleUrl: './user-profile-selector.component.scss'
 })
 export class UserProfileSelectorComponent {
+  constructor(
+    private readonly logoutAction: LogoutActionService,
+  ) {
+  }
+
+  @Confirmable("Are you sure?", {confirmButton: 'Logout'})
+  async logout() {
+    await this.logoutAction.run();
+  }
 
 }

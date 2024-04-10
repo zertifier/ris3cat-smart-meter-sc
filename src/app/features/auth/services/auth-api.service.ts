@@ -42,4 +42,10 @@ export class AuthApiService {
 
     return firstValueFrom(response);
   }
+
+  public async logout(token: string): Promise<void> {
+    const headers = new HttpHeaders().set(SKIP_AUTH_INTERCEPTOR, '');
+    const response = this.httpClient.delete(`${environment.api_url}/auth/users/logout`, {body: {token}, headers});
+    await firstValueFrom(response);
+  }
 }

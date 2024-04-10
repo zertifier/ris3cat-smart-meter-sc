@@ -67,4 +67,9 @@ export class AuthStoreService extends RxStore<AuthState> {
       role: string;
     };
   }
+
+  public override resetDefaults() {
+    super.resetDefaults();
+    this.removeTokens();
+  }
 }
