@@ -1,0 +1,11 @@
+@if (!(fetchingData$ | async)) {
+  <app-data-chart [data]="data"/>
+  <app-chart-legend [labels]="chartLabels"/>
+} @else {
+  <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
+    <h4>Carregant dades</h4>
+    <div>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+  </div>
+}

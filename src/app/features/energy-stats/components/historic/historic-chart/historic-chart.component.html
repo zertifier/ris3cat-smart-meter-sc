@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-evenly mb-3">
+  <select class="form-select w-25" (change)="setChartResource($event)">
+    <option value="energy" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Kw/H</option>
+    <option value="price" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
+  </select>
+  <select class="form-select w-25" (change)="setChartType($event)">
+    <option [selected]="(chartType$ | async) === ChartType.ACC">ACC</option>
+    <option [selected]="(chartType$ | async) === ChartType.CEC">CEC</option>
+  </select>
+  <select class="form-select w-25">
+    <option selected>Datadis</option>
+  </select>
+</div>
+
+<div class="d-flex justify-content-evenly mb-3">
+  <button (click)="setDateRange(DateRange.DAY)" class="btn rounded-4 py-3 px-5 w-25"
+          [ngClass]="(dateRange$ | async) === DateRange.DAY ? 'btn-active' : 'btn-inactive'">
+    Diari
+  </button>
+  <button (click)="setDateRange(DateRange.MONTH)" class="btn rounded-4 py-3 px-5 w-25"
+          [ngClass]="(dateRange$ | async) === DateRange.MONTH ? 'btn-active' : 'btn-inactive'">
+    Mensual
+  </button>
+  <button (click)="setDateRange(DateRange.YEAR)" class="btn rounded-4 py-3 px-5 w-25"
+          [ngClass]="(dateRange$ | async) === DateRange.YEAR ? 'btn-active' : 'btn-inactive'">
+    Anual
+  </button>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-3 mb-4">
+    <p-calendar [maxDate]="maxDate" (onSelect)="setDate($event)" [ngModel]="date$ | async" iconDisplay="input"
+                [dateFormat]="(dateFormat$ | async) || 'yy'" [showIcon]="true" styleClass="w-100"
+                [view]="(calendarView$ | async) || 'month'"/>
+
+  </div>
+</div>
+
+@switch (origin$ | async) {
+  @case (ChartOrigins.DATADIS) {
+    <app-datadis-chart/>
+  }
+  @default {
+    <h3>Nothing to display</h3>
+  }
+}

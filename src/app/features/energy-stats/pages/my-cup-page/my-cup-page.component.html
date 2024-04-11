@@ -24,13 +24,13 @@
 
     <app-stat-display
       width="20%"
-      [color]="StatsColors.PRODUCTION"
+      [color]="StatsColors.COMMUNITY_PRODUCTION"
       label="Energia generada"
       [text]="powerFlow().production + ' KW'"/>
 
     <app-stat-display
       width="20%"
-      [color]="StatsColors.SELL"
+      [color]="StatsColors.SURPLUS"
       label="Excedent"
       [text]="powerFlow().sell + ' KW'"/>
   </div>

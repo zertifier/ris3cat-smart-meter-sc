@@ -14,5 +14,6 @@ export class StatDisplayComponent {
   @Input() label: string = '';
   @Input() text: string = '';
   @Input() public color = 'light-gray';
+  @Input() disabled = false;
   @HostBinding('style.width') @Input() width = '100%';
 }
