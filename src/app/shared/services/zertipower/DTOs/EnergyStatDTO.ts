@@ -5,12 +5,12 @@ export interface EnergyStatDTO {
   origin: string;
   kwhIn: number;
   kwhOut: number;
-  kwhOutVirtual: number | null;
-  kwhInPrice: number | null;
-  kwhOutPrice: number | null;
-  kwhInPriceCommunity: number | null;
-  kwhOutPriceCommunity: number | null;
-  type: string | null;
+  kwhOutVirtual: number;
+  kwhInPrice: number;
+  kwhOutPrice: number;
+  kwhInPriceCommunity: number;
+  kwhOutPriceCommunity: number;
+  type: string;
   createdAt: string; // Date
   updatedAt: string; // Date
   communitySurplusActive: number,
@@ -25,12 +25,12 @@ export interface DatadisEnergyStat {
   origin: string;
   kwhIn: number;
   kwhOut: number;
-  kwhOutVirtual: number | null;
-  kwhInPrice: number | null;
-  kwhOutPrice: number | null;
-  kwhInPriceCommunity: number | null;
-  kwhOutPriceCommunity: number | null;
-  type: string | null;
+  kwhOutVirtual: number;
+  kwhInPrice: number;
+  kwhOutPrice: number;
+  kwhInPriceCommunity: number;
+  kwhOutPriceCommunity: number;
+  type: string;
   createdAt: Date;
   communitySurplusActive: number;
   communitySurplus: number;

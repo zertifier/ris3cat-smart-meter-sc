@@ -9,6 +9,7 @@ import {MonitoringService} from "../../../services/monitoring.service";
 import {ChartOrigins, ChartStoreService} from "../../../services/chart-store.service";
 import {DatadisChartComponent} from "../datadis-chart/datadis-chart.component";
 import {ChartResource} from "../../../domain/ChartResource";
+import {ChartType} from "../../../domain/ChartType";
 
 @Component({
   selector: 'app-historic-chart',
@@ -30,6 +31,7 @@ export class HistoricChartComponent {
   date$ = this.chartStoreService.selectOnly(state => state.date);
   origin$ = this.chartStoreService.selectOnly(state => state.origin)
   maxDate = new Date();
+  chartType$ = this.chartStoreService.selectOnly(state => state.chartType);
   calendarView$ = this.chartStoreService.selectOnly(state => {
     switch (state.dateRange) {
       case DateRange.MONTH:
@@ -56,11 +58,17 @@ export class HistoricChartComponent {
   protected readonly DateRange = DateRange;
   protected readonly ChartOrigins = ChartOrigins;
   protected readonly ChartResource = ChartResource;
+  protected readonly ChartType = ChartType;
 
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly chartStoreService: ChartStoreService
   ) {
+  }
+
+  setChartType(event: Event) {
+    const chartType = (event.target as any).value === 'ACC' ? ChartType.ACC : ChartType.CEC;
+    this.chartStoreService.setChartType(chartType);
   }
 
   setDateRange(range: DateRange) {

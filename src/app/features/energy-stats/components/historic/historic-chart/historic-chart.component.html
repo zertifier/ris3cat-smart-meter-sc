@@ -3,9 +3,9 @@
     <option value="energy" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Kw/H</option>
     <option value="price" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
   </select>
-  <select class="form-select w-25" disabled>
-    <option selected>ACC</option>
-    <option>CEC</option>
+  <select class="form-select w-25" (change)="setChartType($event)">
+    <option [selected]="(chartType$ | async) === ChartType.ACC">ACC</option>
+    <option [selected]="(chartType$ | async) === ChartType.CEC">CEC</option>
   </select>
   <select class="form-select w-25">
     <option selected>Datadis</option>

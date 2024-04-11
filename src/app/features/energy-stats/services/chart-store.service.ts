@@ -3,6 +3,7 @@ import {RxStore} from "@zertifier/rx-store";
 import {DateRange} from "../models/DateRange";
 import {ChartEntity} from "../domain/ChartEntity";
 import {ChartResource} from "../domain/ChartResource";
+import {ChartType} from "../domain/ChartType";
 
 export enum ChartOrigins {
   DATADIS = 'DATADIS',
@@ -16,7 +17,8 @@ export interface ChartStore {
   fetchingData: boolean,
   origin: ChartOrigins,
   selectedChartEntity: ChartEntity,
-  selectedChartResource: ChartResource
+  selectedChartResource: ChartResource,
+  chartType: ChartType
 }
 
 const defaultValues: ChartStore = {
@@ -26,23 +28,28 @@ const defaultValues: ChartStore = {
   origin: ChartOrigins.DATADIS,
   selectedChartEntity: ChartEntity.CUPS,
   selectedChartResource: ChartResource.ENERGY,
+  chartType: ChartType.ACC
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChartStoreService extends RxStore<ChartStore>{
+export class ChartStoreService extends RxStore<ChartStore> {
+  $ = {
+    justData(state: ChartStore) {
+      const {dateRange, date, selectedChartResource, origin, selectedChartEntity, chartType} = state;
+      return {
+        dateRange, date, selectedChartResource, origin, selectedChartEntity, chartType
+      }
+    }
+  }
+
   constructor() {
     super(defaultValues);
   }
 
-  $ = {
-    justData(state: ChartStore) {
-      const {dateRange, date, selectedChartResource, origin, selectedChartEntity} = state;
-      return {
-        dateRange, date, selectedChartResource, origin, selectedChartEntity
-      }
-    }
+  public setChartType(chartType: ChartType) {
+    this.patchState({chartType});
   }
 
   public setDate(date: Date) {

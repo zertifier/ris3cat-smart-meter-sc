@@ -12,6 +12,7 @@ import {UserStoreService} from "../../../../user/services/user-store.service";
 import {ChartEntity} from "../../../domain/ChartEntity";
 import {ChartResource} from "../../../domain/ChartResource";
 import {Subscription} from "rxjs";
+import {ChartType} from "../../../domain/ChartType";
 
 @Component({
   selector: 'app-datadis-chart',
@@ -149,14 +150,44 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     }
 
     const showEnergy = resource === ChartResource.ENERGY;
-    const addCommunityDataset = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity) === ChartEntity.COMMUNITIES;
+    const addCommunityDataset = this.chartStoreService.snapshotOnly(state => {
+      return state.selectedChartEntity === ChartEntity.COMMUNITIES && state.selectedChartResource === ChartResource.ENERGY
+    });
+    const cec = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CEC);
+    const mappedData = data.map(d => {
+      let consumption = showEnergy ? d.kwhIn : d.kwhInPrice;
+      let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice;
+      let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPrice;
+
+      if (!cec) {
+        return {
+          consumption,
+          surplus,
+          virtualSurplus
+        }
+      }
+
+      if (consumption >= virtualSurplus) {
+        consumption -= virtualSurplus;
+        virtualSurplus = 0;
+      } else {
+        consumption = 0;
+        virtualSurplus -= consumption;
+      }
+
+      return {
+        consumption,
+        surplus,
+        virtualSurplus
+      }
+    })
     const datasets: any[] = [
       {
         label: 'Consum',
         backgroundColor: StatsColors.BUY_CONSUMPTION,
         borderRadius: 10,
         borderWidth: 1,
-        data: data.map(d => (showEnergy ? d.kwhIn : d.kwhInPrice)),
+        data: mappedData.map(d => d.consumption),
         stack: 'Stack 1'
       },
       {
@@ -164,7 +195,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         backgroundColor: StatsColors.SURPLUS,
         borderRadius: 10,
         borderWidth: 1,
-        data: data.map(d => (showEnergy ? d.kwhOut : d.kwhOutPrice)),
+        data: mappedData.map(d => d.surplus),
         stack: 'Stack 2'
       },
       {
@@ -172,7 +203,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         backgroundColor: StatsColors.VIRTUAL_SURPLUS,
         borderRadius: 10,
         borderWidth: 1,
-        data: data.map(d => (showEnergy ? d.kwhOutVirtual : d.kwhOutPrice)),
+        data: mappedData.map(d => d.virtualSurplus),
       }
     ]
 
