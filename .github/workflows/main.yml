@@ -8,7 +8,7 @@ jobs:
   detect-changes:
     runs-on: self-hosted
     outputs:
-      smart-meter-dev-ris3cat_changed: ${{ setps.check_smart-meter-dev-ris3cat.outputs.changed }}
+      smart-meter-dev-ris3cat_changed: ${{ steps.check_smart-meter-dev-ris3cat.outputs.changed }}
     steps:
       - name: Pull changes
         run: |
