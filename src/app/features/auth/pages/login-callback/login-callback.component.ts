@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {firstValueFrom} from "rxjs";
+import {filter, firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
 import {ApiService} from "../../../../shared/services/api.service";
 import {AuthStoreService} from "../../services/auth-store.service";
+import {UserStoreService} from "../../../user/services/user-store.service";
 
 @Component({
   selector: 'app-login-callback',
@@ -20,6 +21,7 @@ export class LoginCallbackComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly authStore: AuthStoreService,
+    private readonly userStore: UserStoreService,
   ) {
   }
 
