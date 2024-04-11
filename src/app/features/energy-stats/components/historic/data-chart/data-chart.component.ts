@@ -33,9 +33,6 @@ export class DataChartComponent implements OnInit, OnDestroy {
         plugins: {
           legend: {
             display: false,
-            // labels: {
-            //   color: textColor
-            // }
           },
         },
         scales: {

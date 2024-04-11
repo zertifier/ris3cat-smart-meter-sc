@@ -150,7 +150,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
     const showEnergy = resource === ChartResource.ENERGY;
     const addCommunityDataset = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity) === ChartEntity.COMMUNITIES;
-    const datasets = [
+    const datasets: any[] = [
       {
         label: 'Consum',
         backgroundColor: StatsColors.BUY_CONSUMPTION,
@@ -179,20 +179,22 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     if (addCommunityDataset) {
       datasets.unshift(
         {
-          label: 'Excedent actiu comunitari',
-          backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
-          borderRadius: 10,
-          borderWidth: 1,
-          data: data.map(d => d.communitySurplusActive),
-          stack: 'Excedent'
-        },
-        {
           label: 'Excedent comunitari',
           backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.communitySurplus),
-          stack: 'Excedent'
+          stack: 'Excedent',
+          grouped: true,
+        },
+        {
+          label: 'Excedent actiu comunitari',
+          backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
+          borderRadius: 10,
+          borderWidth: 1,
+          data: data.map(d => d.communitySurplusActive),
+          stack: 'Excedent actiu',
+          grouped: true,
         },
       )
     }
