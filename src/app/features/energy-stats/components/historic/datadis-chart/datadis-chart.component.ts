@@ -28,20 +28,55 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   date$ = this.chartStoreService.selectOnly(state => state.date);
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   cupIds$ = this.userStore.selectOnly(state => state.cupIds);
-  subscription: Subscription[] = [];
+  subscriptions: Subscription[] = [];
 
-  chartLabels: DataLabel[] = [
+  cupsLabels: DataLabel[] = [
     {
       color: StatsColors.BUY_CONSUMPTION,
       label: 'Consum',
       radius: '2.5rem',
     },
     {
-      color: StatsColors.SELL,
+      color: StatsColors.SURPLUS,
       label: 'Excedent',
       radius: '2.5rem',
+    },
+    {
+      color: StatsColors.VIRTUAL_SURPLUS,
+      label: 'Excedent virtual',
+      radius: '2.5rem',
     }
-  ];
+  ]
+
+  communitiesLabels: DataLabel[] = [
+    {
+      color: StatsColors.COMMUNITY_PRODUCTION,
+      label: 'Excedent comunitari',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
+      label: 'Excedent actiu comunitari',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.BUY_CONSUMPTION,
+      label: 'Consum',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.SURPLUS,
+      label: 'Excedent',
+      radius: '2.5rem',
+    },
+    {
+      color: StatsColors.VIRTUAL_SURPLUS,
+      label: 'Excedent virtual',
+      radius: '2.5rem',
+    }
+  ]
+
+  chartLabels: DataLabel[] = [];
   data: any;
 
   constructor(
@@ -53,16 +88,24 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.chartStoreService
-      .selectOnly(this.chartStoreService.$.justData)
-      .subscribe(async ({
-                          date,
-                          dateRange,
-                          selectedChartResource
-                        }) => {
-        const data = await this.fetchEnergyStats(date, dateRange);
-        this.setDataChart(data, dateRange, selectedChartResource);
-      });
+    this.subscriptions.push(
+      this.chartStoreService
+        .selectOnly(this.chartStoreService.$.justData)
+        .subscribe(async ({
+                            date,
+                            dateRange,
+                            selectedChartResource,
+                            selectedChartEntity
+                          }) => {
+          const data = await this.fetchEnergyStats(date, dateRange);
+          this.setDataChart(data, dateRange, selectedChartResource);
+          if (selectedChartEntity === ChartEntity.CUPS) {
+            this.chartLabels = this.cupsLabels;
+          } else {
+            this.chartLabels = this.communitiesLabels;
+          }
+        }),
+    );
   }
 
   async fetchEnergyStats(date: Date, range: DateRange) {
@@ -106,30 +149,60 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     }
 
     const showEnergy = resource === ChartResource.ENERGY;
-    this.data = {
-      labels,
-      datasets: [
+    const addCommunityDataset = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity) === ChartEntity.COMMUNITIES;
+    const datasets = [
+      {
+        label: 'Consum',
+        backgroundColor: StatsColors.BUY_CONSUMPTION,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: data.map(d => (showEnergy ? d.kwhIn : d.kwhInPrice)),
+        stack: 'Stack 1'
+      },
+      {
+        label: 'Excedent',
+        backgroundColor: StatsColors.SURPLUS,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: data.map(d => (showEnergy ? d.kwhOut : d.kwhOutPrice)),
+        stack: 'Stack 2'
+      },
+      {
+        label: 'Excedent virtual',
+        backgroundColor: StatsColors.VIRTUAL_SURPLUS,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: data.map(d => (showEnergy ? d.kwhOutVirtual : d.kwhOutPrice)),
+      }
+    ]
+
+    if (addCommunityDataset) {
+      datasets.unshift(
         {
-          label: 'Consum',
-          backgroundColor: StatsColors.BUY_CONSUMPTION,
+          label: 'Excedent actiu comunitari',
+          backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => (showEnergy ? d.kwhIn : d.kwhInPrice)),
-          stack: 'Stack 1'
+          data: data.map(d => d.communitySurplusActive),
+          stack: 'Excedent'
         },
         {
-          label: 'Excedent',
-          backgroundColor: StatsColors.SELL,
+          label: 'Excedent comunitari',
+          backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => (showEnergy ? d.kwhOut : d.kwhOutPrice)),
-          stack: 'Stack 2'
-        }
-      ]
+          data: data.map(d => d.communitySurplus),
+          stack: 'Excedent'
+        },
+      )
+    }
+    this.data = {
+      labels,
+      datasets,
     }
   }
 
   ngOnDestroy(): void {
-    this.subscription.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

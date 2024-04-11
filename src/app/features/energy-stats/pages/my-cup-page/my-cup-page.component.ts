@@ -110,12 +110,12 @@ export class MyCupPageComponent {
       radius: '2.5rem',
     },
     {
-      color: StatsColors.PRODUCTION,
+      color: StatsColors.COMMUNITY_PRODUCTION,
       label: 'Producció',
       radius: '2.5rem',
     },
     {
-      color: StatsColors.SELL,
+      color: StatsColors.SURPLUS,
       label: 'Excedent',
       radius: '2.5rem',
     }
@@ -194,7 +194,7 @@ export class MyCupPageComponent {
       datasets: [
         {
           label: 'Produccio',
-          backgroundColor: StatsColors.PRODUCTION,
+          backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.sell + d.inHouseConsumption),
@@ -218,7 +218,7 @@ export class MyCupPageComponent {
         },
         {
           label: 'Excedent',
-          backgroundColor: StatsColors.SELL,
+          backgroundColor: StatsColors.SURPLUS,
           borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.sell),

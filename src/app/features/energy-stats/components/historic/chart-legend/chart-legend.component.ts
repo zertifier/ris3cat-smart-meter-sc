@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {StatsColors} from "../../../models/StatsColors";
 import {NgStyle} from "@angular/common";
-import {Data} from "@angular/router";
 
 export interface DataLabel {
   label: string;
@@ -19,7 +18,6 @@ export interface DataLabel {
   styleUrl: './chart-legend.component.scss'
 })
 export class ChartLegendComponent {
-    protected readonly StatsColors = StatsColors;
 
   @Input() labels: DataLabel[] = [];
 }
