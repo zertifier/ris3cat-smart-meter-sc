@@ -1,7 +1,7 @@
 import {Component, computed, signal} from '@angular/core';
 import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
-import {JsonPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe} from "@angular/common";
 import {EnergyStat, MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {ChartLegendComponent, DataLabel} from "../../components/historic/chart-legend/chart-legend.component";
@@ -18,6 +18,7 @@ import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {DateRange} from "../../models/DateRange";
 import dayjs from "dayjs";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
+import {UserStoreService} from "../../../user/services/user-store.service";
 
 
 @Component({
@@ -34,7 +35,8 @@ import {HistoricChartComponent} from "../../components/historic/historic-chart/h
     FooterComponent,
     CalendarModule,
     ReactiveFormsModule,
-    HistoricChartComponent
+    HistoricChartComponent,
+    AsyncPipe
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
@@ -124,8 +126,9 @@ export class MyCupPageComponent {
   protected readonly StatsColors = StatsColors;
   protected readonly Component = Component;
   protected readonly DateRange = DateRange;
+  cupsReference$ = this.userStore.selectOnly(state => state.cupsReference);
 
-  constructor(private readonly monitoringService: MonitoringService) {
+  constructor(private readonly monitoringService: MonitoringService, private readonly userStore: UserStoreService) {
     this.monitoringService.start(60000);
   }
 

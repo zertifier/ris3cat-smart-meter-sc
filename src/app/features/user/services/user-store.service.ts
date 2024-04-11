@@ -4,10 +4,12 @@ import {RxStore} from "@zertifier/rx-store";
 export interface UserStore {
   cupIds: number[],
   communityId?: number,
+  cupsReference: string,
 }
 
 const defaultValues: UserStore = {
-  cupIds: []
+  cupIds: [],
+  cupsReference: '',
 }
 
 @Injectable({
