@@ -11,24 +11,28 @@
   <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
 
     <app-stat-display
+      [disabled]="powerFlow().buy === 0"
       width="20%"
       [color]="StatsColors.BUY_CONSUMPTION"
       label="Consum"
       [text]="powerFlow().buy + ' KW'"/>
 
     <app-stat-display
+      [disabled]="powerFlow().inHouse === 0"
       width="20%"
       [color]="StatsColors.IN_HOUSE_CONSUMPTION"
       label="Autoconsum"
       [text]="powerFlow().inHouse + ' KW'"/>
 
     <app-stat-display
+      [disabled]="powerFlow().production === 0"
       width="20%"
       [color]="StatsColors.COMMUNITY_PRODUCTION"
       label="Energia generada"
       [text]="powerFlow().production + ' KW'"/>
 
     <app-stat-display
+      [disabled]="powerFlow().sell === 0"
       width="20%"
       [color]="StatsColors.SURPLUS"
       label="Excedent"
