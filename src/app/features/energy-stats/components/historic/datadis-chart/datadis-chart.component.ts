@@ -100,7 +100,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                           }) => {
           const data = await this.fetchEnergyStats(date, dateRange);
           this.setDataChart(data, dateRange, selectedChartResource);
-          if (selectedChartEntity === ChartEntity.CUPS) {
+          if (selectedChartEntity === ChartEntity.CUPS || selectedChartResource === ChartResource.PRICE) {
             this.chartLabels = this.cupsLabels;
           } else {
             this.chartLabels = this.communitiesLabels;
