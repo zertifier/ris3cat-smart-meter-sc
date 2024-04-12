@@ -153,10 +153,10 @@ export class MyCupPageComponent {
       .subscribe(value => {
         const {production, buy, inHouse, sell} = value;
         this.powerFlow.set({
-          production: Math.round(production / 10) / 100,
-          inHouse: Math.round(inHouse / 10) / 100,
-          buy: Math.round(buy / 10) / 100,
-          sell: Math.round(sell / 10) / 100,
+          production: (Math.round(production / 10) / 100) * 0.02,
+          inHouse: (Math.round(inHouse / 10) / 100) * 0.02,
+          buy: (Math.round(buy / 10) / 100) * 0.02,
+          sell: (Math.round(sell / 10) / 100) * 0.02,
         })
       })
 

@@ -165,7 +165,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     const addCommunityDataset = this.chartStoreService.snapshotOnly(state => {
       return state.selectedChartEntity === ChartEntity.COMMUNITIES && state.selectedChartResource === ChartResource.ENERGY
     });
-    const cec = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CEC);
+    const cec = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
     const mappedData = data.map(d => {
       let consumption = showEnergy ? d.kwhIn : d.kwhInPrice * d.kwhIn;
       let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice * d.kwhOut;

@@ -67,7 +67,7 @@ export class HistoricChartComponent {
   }
 
   setChartType(event: Event) {
-    const chartType = (event.target as any).value === 'ACC' ? ChartType.ACC : ChartType.CEC;
+    const chartType = (event.target as any).value === 'ACC' ? ChartType.ACC : ChartType.CCE;
     this.chartStoreService.setChartType(chartType);
   }
 
