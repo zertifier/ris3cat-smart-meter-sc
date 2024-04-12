@@ -26,7 +26,7 @@ export class ProfileUpdaterService {
         }
 
         const cups = await this.zertipower.getCups(user.id);
-       /* if (!cups.length) cups.push({
+        /*if (!cups.length) cups.push({
           cups: 'test',
           community_id: 7,
           id: 26
