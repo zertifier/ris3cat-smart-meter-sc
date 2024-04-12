@@ -1,8 +1,9 @@
-<div class="d-flex w-100 justify-content-evenly text-primary" style="font-size: 1.3rem">
+<div class="row w-100 justify-content-evenly text-primary" style="font-size: 1.3rem">
   @for (item of items; track $index) {
-    <div class="d-flex align-items-center gap-2">
+<!--    <div class="d-flex align-items-center gap-2">-->
+    <div class="col-auto my-2 gap-2">
       <i [class]="item.icon"></i>
-      <label><span class="fw-medium">{{ item.label }}:</span> {{ item.consumption }} KW</label>
+      <label><span class="ms-2 fw-medium">{{ item.label }}:</span> {{ item.consumption }} KW</label>
     </div>
   }
 </div>

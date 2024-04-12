@@ -8,7 +8,7 @@
         </div>
       </div>
 
-      <div [ngClass]="{'w-50': !hideImage, 'w-100': hideImage, 'p-2': hideImage}"
+      <div
            class="d-flex flex-column align-items-center">
         <h2 class="text-center">Iniciar Sessió</h2>
         <button (click)="googleLogin()" [ngClass]="{'w-75': !hideImage, 'w-100': hideImage}"
@@ -24,7 +24,10 @@
           }
           Iniciar sessió amb google
         </button>
-        <p>No guardem cap dada relacionada amb les teves credencials</p>
+        <div class="container">
+
+          <p>No guardem cap dada relacionada amb les teves credencials</p>
+        </div>
         <h2 class="text-center">Web wallet</h2>
         <button (click)="webWalletLogin()" [ngClass]="{'w-75': !hideImage, 'w-100': hideImage}" class="btn btn-dark rounded-pill my-3">Iniciar sessió amb web wallet
         </button>
