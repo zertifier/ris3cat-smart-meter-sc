@@ -15,28 +15,28 @@
       width="20%"
       [color]="StatsColors.BUY_CONSUMPTION"
       label="Consum"
-      [text]="powerFlow().buy + ' KW'"/>
+      [text]="powerFlow().buy.toFixed(2) + ' KW'"/>
 
     <app-stat-display
       [disabled]="powerFlow().inHouse === 0"
       width="20%"
       [color]="StatsColors.IN_HOUSE_CONSUMPTION"
       label="Autoconsum"
-      [text]="powerFlow().inHouse + ' KW'"/>
+      [text]="powerFlow().inHouse.toFixed(2) + ' KW'"/>
 
     <app-stat-display
       [disabled]="powerFlow().production === 0"
       width="20%"
       [color]="StatsColors.COMMUNITY_PRODUCTION"
       label="Energia generada"
-      [text]="powerFlow().production + ' KW'"/>
+      [text]="powerFlow().production.toFixed(2) + ' KW'"/>
 
     <app-stat-display
       [disabled]="powerFlow().sell === 0"
       width="20%"
       [color]="StatsColors.SURPLUS"
       label="Excedent"
-      [text]="powerFlow().sell + ' KW'"/>
+      [text]="powerFlow().sell.toFixed(2) + ' KW'"/>
   </div>
 
   <div class="w-100" style="margin-bottom: 10rem;">
