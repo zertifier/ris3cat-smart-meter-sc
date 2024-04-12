@@ -1,7 +1,9 @@
-<div class="w-100 d-flex justify-content-evenly mt-3">
+<!--<div class="w-100 d-flex justify-content-evenly mt-3">-->
+<div class="w-100 row justify-content-evenly mt-3">
   @for (label of labels; track $index) {
-    <div class="d-flex gap-2 align-items-center">
-      <div style="border-radius: 50%" [ngStyle]="{'background-color': label.color, width: label.radius, height: label.radius}"></div>
+<!--    <div class="d-flex gap-2 align-items-center">-->
+    <div class="col-12 col-md d-flex align-items-center my-2 px-md-0">
+      <div class="me-2" style="border-radius: 50%" [ngStyle]="{'background-color': label.color, width: label.radius, height: label.radius}"></div>
       <label>{{ label.label }}</label>
     </div>
   }

@@ -91,4 +91,10 @@ export class HistoricChartComponent {
   setDate(date: Date) {
     this.chartStoreService.setDate(date);
   }
+
+  setInputDate(date: Date){
+    if (date && date.getTime()){
+      this.chartStoreService.setDate(date);
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {ChartResource} from "../../../domain/ChartResource";
@@ -18,14 +18,32 @@ export class DataChartComponent implements OnInit, OnDestroy {
   options: any;
   subscriptions: Subscription[] = [];
 
+  textColor = 'rgba(0, 0, 0, 0.87)';
+  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
+  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+
+  mobileSet = false;
+
   constructor(private chartStoreService: ChartStoreService) {
   }
 
-  ngOnInit(): void {
-    const textColor = 'rgba(0, 0, 0, 0.87)';
-    const textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-    const surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (window.innerWidth <= 990 && !this.mobileSet) this.changeToMobile();
+    if (window.innerWidth >= 991 && this.mobileSet) this.changeToDesktop();
+  }
 
+  ngOnInit(): void {
+    if (window.innerWidth <= 990) {
+      this.changeToMobile();
+    }else{
+      this.changeToDesktop();
+    }
+  }
+
+
+  changeToDesktop(){
+    this.mobileSet = false
     this.chartStoreService.selectOnly(this.chartStoreService.$.justData).subscribe((state) => {
       this.options = {
         maintainAspectRatio: false,
@@ -39,13 +57,13 @@ export class DataChartComponent implements OnInit, OnDestroy {
           x: {
             stacked: true,
             ticks: {
-              color: textColorSecondary,
+              color: this.textColorSecondary,
               font: {
                 weight: 500
               }
             },
             grid: {
-              color: surfaceBorder,
+              color: this.surfaceBorder,
               drawBorder: false
             }
           },
@@ -56,10 +74,55 @@ export class DataChartComponent implements OnInit, OnDestroy {
                 const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
                 return `${value} ${label}`;
               },
-              color: textColorSecondary
+              color: this.textColorSecondary
             },
             grid: {
-              color: surfaceBorder,
+              color: this.surfaceBorder,
+              drawBorder: false
+            }
+          }
+        }
+      }
+    })
+  }
+  changeToMobile(){
+    this.mobileSet = true
+    this.chartStoreService.selectOnly(this.chartStoreService.$.justData).subscribe((state) => {
+      this.options = {
+        maintainAspectRatio: false,
+        aspectRatio: 0.1,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          y: {
+            stacked: true,
+            ticks: {
+              color: this.textColorSecondary,
+              font: {
+                weight: 500
+              },
+
+            },
+            grid: {
+              color: this.surfaceBorder,
+              drawBorder: false
+            }
+          },
+          x: {
+            stacked: true,
+            ticks: {
+              callback: function (value: any, index: any, values: any) {
+                const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+                return `${value} ${label}`;
+              },
+              color: this.textColorSecondary
+            },
+            grid: {
+              color: this.surfaceBorder,
               drawBorder: false
             }
           }
