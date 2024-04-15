@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'energy-stats',
-    loadChildren: () => import('./features/energy-stats/pages/energy-stats-pages-routing.module').then(m => m.ENERGY_STATS_ROUTES),
+    loadChildren: () => import('./features/energy-stats/infrastructure/pages/energy-stats-pages-routing.module').then(m => m.ENERGY_STATS_ROUTES),
     canActivate: [LoggedInGuard]
   },
   {

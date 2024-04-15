@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {EnergyPrice, SharingUsersService} from "../../services/sharing-users.service";
 import {FormsModule} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {EnergyPrice, SharingUsersService} from "../../services/sharing-users.service";
 
 @Component({
   selector: 'app-add-user-form-modal',

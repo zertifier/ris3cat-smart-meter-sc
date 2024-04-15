@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {NavbarComponent} from "../../../../shared/components/navbar/navbar.component";
+import {NavbarComponent} from "../../../../../shared/components/navbar/navbar.component";
 import {NgbModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {EnergyPrice, SharingUsersService} from "../../services/sharing-users.service";
-import {AddUserFormModalComponent} from "../../components/add-user-form-modal/add-user-form-modal.component";
 import {MonitoringService} from "../../services/monitoring.service";
+import {AddUserFormModalComponent} from "../../components/add-user-form-modal/add-user-form-modal.component";
 
 
 

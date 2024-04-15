@@ -2,17 +2,17 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AsyncPipe} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
-import {ChartStoreService} from "../../../services/chart-store.service";
-import {StatsColors} from "../../../models/StatsColors";
-import {ZertipowerService} from "../../../../../shared/services/zertipower/zertipower.service";
-import {DateRange} from "../../../models/DateRange";
 import dayjs from "dayjs";
-import {DatadisEnergyStat} from "../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
-import {UserStoreService} from "../../../../user/services/user-store.service";
-import {ChartEntity} from "../../../domain/ChartEntity";
-import {ChartResource} from "../../../domain/ChartResource";
 import {Subscription} from "rxjs";
-import {ChartType} from "../../../domain/ChartType";
+import {StatsColors} from "../../../../domain/models/StatsColors";
+import {ChartStoreService} from "../../../services/chart-store.service";
+import {ZertipowerService} from "../../../../../../shared/services/zertipower/zertipower.service";
+import {UserStoreService} from "../../../../../user/services/user-store.service";
+import {ChartResource} from "../../../../domain/ChartResource";
+import {ChartEntity} from "../../../../domain/ChartEntity";
+import {DateRange} from "../../../../domain/models/DateRange";
+import {DatadisEnergyStat} from "../../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
+import {ChartType} from "../../../../domain/ChartType";
 
 @Component({
   selector: 'app-datadis-chart',

@@ -10,7 +10,7 @@ import {UserResponseDTO} from "./DTOs/UserResponseDTO";
 import {DatadisEnergyStat, EnergyStatDTO} from "./DTOs/EnergyStatDTO";
 import dayjs from "dayjs";
 import {environment} from "../../../../environments/environment";
-import {DateRange} from "../../../features/energy-stats/models/DateRange";
+import {DateRange} from "../../../features/energy-stats/domain/models/DateRange";
 import {CupsResponseDTO} from "./DTOs/CupsResponseDTO";
 import {ChartEntity} from "../../../features/energy-stats/domain/ChartEntity";
 

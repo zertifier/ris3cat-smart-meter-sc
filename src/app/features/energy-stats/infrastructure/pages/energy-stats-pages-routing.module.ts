@@ -1,7 +1,7 @@
 import {Routes} from "@angular/router";
 import {switchChartEntityGuard} from "../guards/switch-chart-entity.guard";
-import {ChartEntity} from "../domain/ChartEntity";
-import {profileLoadedGuard} from "../../user/profile-loaded.guard";
+import {ChartEntity} from "../../domain/ChartEntity";
+import {profileLoadedGuard} from "../../../user/profile-loaded.guard";
 
 export const ENERGY_STATS_ROUTES: Routes = [
   {

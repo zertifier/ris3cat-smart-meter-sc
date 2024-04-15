@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {StatsColors} from "../../../models/StatsColors";
 import {NgStyle} from "@angular/common";
 
 export interface DataLabel {

@@ -1,8 +1,8 @@
 import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import {ChartModule} from "primeng/chart";
-import {ChartStoreService} from "../../../services/chart-store.service";
-import {ChartResource} from "../../../domain/ChartResource";
 import {Subscription} from "rxjs";
+import {ChartStoreService} from "../../../services/chart-store.service";
+import {ChartResource} from "../../../../domain/ChartResource";
 
 @Component({
   selector: 'app-data-chart',

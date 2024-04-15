@@ -1,15 +1,15 @@
 import {Component} from '@angular/core';
-import {DateRange} from "../../../models/DateRange";
 import {CalendarModule} from "primeng/calendar";
 import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass} from "@angular/common";
-import {MonitoringService} from "../../../services/monitoring.service";
-import {ChartOrigins, ChartStoreService} from "../../../services/chart-store.service";
 import {DatadisChartComponent} from "../datadis-chart/datadis-chart.component";
-import {ChartResource} from "../../../domain/ChartResource";
-import {ChartType} from "../../../domain/ChartType";
+import {DateRange} from '../../../../domain/models/DateRange';
+import {ChartOrigins, ChartStoreService} from '../../../services/chart-store.service';
+import {ChartResource } from '../../../../domain/ChartResource';
+import {MonitoringService} from "../../../services/monitoring.service";
+import { ChartType } from '../../../../domain/ChartType';
 
 @Component({
   selector: 'app-historic-chart',
