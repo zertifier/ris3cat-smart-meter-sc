@@ -15,7 +15,7 @@ import {ChartResource} from "../../../../domain/ChartResource";
 })
 export class DataChartComponent implements OnInit, OnDestroy {
   @Input() data: any;
-  options: any;
+  @Input() options: any;
   subscriptions: Subscription[] = [];
 
   textColor = 'rgba(0, 0, 0, 0.87)';
@@ -44,91 +44,81 @@ export class DataChartComponent implements OnInit, OnDestroy {
 
   changeToDesktop(){
     this.mobileSet = false
-    this.chartStoreService.selectOnly(this.chartStoreService.$.justData).subscribe((state) => {
-      this.options = {
-        maintainAspectRatio: false,
-        aspectRatio: 0.8,
-        plugins: {
-          legend: {
-            display: false,
+    const state = this.chartStoreService.snapshot();
+    this.options = {
+      ...this.options,
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      scales: {
+        x: {
+          stacked: true,
+          ticks: {
+            color: this.textColorSecondary,
+            font: {
+              weight: 500
+            }
           },
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
+          }
         },
-        scales: {
-          x: {
-            stacked: true,
-            ticks: {
-              color: this.textColorSecondary,
-              font: {
-                weight: 500
-              }
+        y: {
+          stacked: true,
+          ticks: {
+            callback: function (value: any, index: any, values: any) {
+              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+              return `${value} ${label}`;
             },
-            grid: {
-              color: this.surfaceBorder,
-              drawBorder: false
-            }
+            color: this.textColorSecondary
           },
-          y: {
-            stacked: true,
-            ticks: {
-              callback: function (value: any, index: any, values: any) {
-                const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
-                return `${value} ${label}`;
-              },
-              color: this.textColorSecondary
-            },
-            grid: {
-              color: this.surfaceBorder,
-              drawBorder: false
-            }
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
           }
         }
       }
-    })
+    }
   }
   changeToMobile(){
     this.mobileSet = true
-    this.chartStoreService.selectOnly(this.chartStoreService.$.justData).subscribe((state) => {
-      this.options = {
-        maintainAspectRatio: false,
-        aspectRatio: 0.1,
-        indexAxis: 'y',
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-        scales: {
-          y: {
-            stacked: true,
-            ticks: {
-              color: this.textColorSecondary,
-              font: {
-                weight: 500
-              },
+    const state = this.chartStoreService.snapshot();
+    this.options = {
+      ...this.options,
+      maintainAspectRatio: false,
+      aspectRatio: 0.1,
+      indexAxis: 'y',
+      scales: {
+        y: {
+          stacked: true,
+          ticks: {
+            color: this.textColorSecondary,
+            font: {
+              weight: 500
+            },
 
-            },
-            grid: {
-              color: this.surfaceBorder,
-              drawBorder: false
-            }
           },
-          x: {
-            stacked: true,
-            ticks: {
-              callback: function (value: any, index: any, values: any) {
-                const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
-                return `${value} ${label}`;
-              },
-              color: this.textColorSecondary
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
+          }
+        },
+        x: {
+          stacked: true,
+          ticks: {
+            callback: function (value: any, index: any, values: any) {
+              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+              return `${value} ${label}`;
             },
-            grid: {
-              color: this.surfaceBorder,
-              drawBorder: false
-            }
+            color: this.textColorSecondary
+          },
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
           }
         }
       }
-    })
+    }
   }
 
   ngOnDestroy() {
