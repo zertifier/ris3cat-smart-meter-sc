@@ -33,6 +33,11 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
   cupsLabels: DataLabel[] = [
     {
+      color: StatsColors.COMMUNITY_PRODUCTION,
+      label: 'Producció',
+      radius: '2.5rem',
+    },
+    {
       color: StatsColors.BUY_CONSUMPTION,
       label: 'Consum',
       radius: '2.5rem',
@@ -85,9 +90,18 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         callbacks: {
           label: (context: any) => {
+
             const {label} = context.dataset;
-            const stat = this.latestFetchedStats[context.dataIndex];
-            return [label, `Members actius: ${stat.activeMembers}`];
+            const {formattedValue} = context;
+            const labels: string[] = [`${label}: ${formattedValue}`];
+
+            const chartEntity = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
+            if (chartEntity === ChartEntity.COMMUNITIES) {
+              const stat = this.latestFetchedStats[context.dataIndex];
+              labels.push(`Members actius: ${stat.activeMembers}`)
+            }
+
+            return labels;
           }
         }
       }
@@ -267,6 +281,16 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           grouped: true,
         },
       )
+    } else {
+      datasets.unshift({
+        label: 'Producció',
+        backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: data.map(d => d.production),
+        stack: 'Production',
+        grouped: true,
+      })
     }
     this.data = {
       labels,

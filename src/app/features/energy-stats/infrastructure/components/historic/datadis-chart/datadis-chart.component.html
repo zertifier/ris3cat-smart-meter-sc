@@ -1,5 +1,8 @@
 @if (!(fetchingData$ | async)) {
   <app-data-chart [data]="data" [options]="chartOptions"/>
+  <p class="text-center">
+    Aquesta estadística indica les dades dels <b>insert active members</b> membres actius d'un total de 32 membres de la comunitat.
+  </p>
   <app-chart-legend [labels]="chartLabels"/>
 } @else {
   <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">

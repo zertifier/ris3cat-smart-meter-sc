@@ -22,15 +22,15 @@ export class DataChartComponent implements OnInit, OnDestroy {
   textColorSecondary = 'rgba(0, 0, 0, 0.54)';
   surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
-  mobileSet = false;
-
   constructor(private chartStoreService: ChartStoreService) {
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (window.innerWidth <= 990 && !this.mobileSet) this.changeToMobile();
-    if (window.innerWidth >= 991 && this.mobileSet) this.changeToDesktop();
+    if (window.innerWidth <= 990)
+      this.changeToMobile();
+    else
+      this.changeToDesktop()
   }
 
   ngOnInit(): void {
@@ -43,11 +43,11 @@ export class DataChartComponent implements OnInit, OnDestroy {
 
 
   changeToDesktop(){
-    this.mobileSet = false
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
       maintainAspectRatio: false,
+      indexAxis: 'x',
       aspectRatio: 0.8,
       scales: {
         x: {
@@ -81,7 +81,6 @@ export class DataChartComponent implements OnInit, OnDestroy {
     }
   }
   changeToMobile(){
-    this.mobileSet = true
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,

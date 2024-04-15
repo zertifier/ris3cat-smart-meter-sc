@@ -17,6 +17,7 @@ export interface EnergyStatDTO {
   communitySurplusActive: number,
   communitySurplus: number,
   communityId?: number
+  production: number,
 }
 
 export interface DatadisEnergyStat {
@@ -38,4 +39,5 @@ export interface DatadisEnergyStat {
   communitySurplus: number;
   updatedAt: Date;
   communityId?: number;
+  production: number
 }
