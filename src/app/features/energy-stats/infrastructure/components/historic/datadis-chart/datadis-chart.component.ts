@@ -4,13 +4,13 @@ import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.comp
 import {DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
 import {Subscription} from "rxjs";
-import {StatsColors} from "../../../../domain/models/StatsColors";
+import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {ZertipowerService} from "../../../../../../shared/services/zertipower/zertipower.service";
 import {UserStoreService} from "../../../../../user/services/user-store.service";
 import {ChartResource} from "../../../../domain/ChartResource";
 import {ChartEntity} from "../../../../domain/ChartEntity";
-import {DateRange} from "../../../../domain/models/DateRange";
+import {DateRange} from "../../../../domain/DateRange";
 import {DatadisEnergyStat} from "../../../../../../shared/services/zertipower/DTOs/EnergyStatDTO";
 import {ChartType} from "../../../../domain/ChartType";
 

@@ -1,4 +1,5 @@
 export interface EnergyStatDTO {
+  activeMembers: number,
   id: number;
   infoDt: string; // Date
   cupsId?: number;

@@ -10,7 +10,7 @@ import {UserResponseDTO} from "./DTOs/UserResponseDTO";
 import {DatadisEnergyStat, EnergyStatDTO} from "./DTOs/EnergyStatDTO";
 import dayjs from "dayjs";
 import {environment} from "../../../../environments/environment";
-import {DateRange} from "../../../features/energy-stats/domain/models/DateRange";
+import {DateRange} from "../../../features/energy-stats/domain/DateRange";
 import {CupsResponseDTO} from "./DTOs/CupsResponseDTO";
 import {ChartEntity} from "../../../features/energy-stats/domain/ChartEntity";
 
@@ -71,12 +71,13 @@ export class ZertipowerService {
   }
 
   async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
-    return this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
-
+    const response = await this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
+    return response.stats;
   }
 
   async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
-    return this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
+    const response = await this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
+    return response.stats;
   }
 
   async getEnergyStats(resource: ChartEntity, resourceId: number, source: string, date: Date, dateRange: DateRange) {
@@ -97,12 +98,19 @@ export class ZertipowerService {
         break;
     }
     const formattedDate = dayjs(date).format(desiredFormat); // TODO use dayjs to format date
-    const response = await this.axiosClient.get<HttpResponse<EnergyStatDTO[]>>(`/${resource}/${resourceId}/stats/${source}/${range}/${formattedDate}`);
-    return response.data.data.map(r => ({
-      ...r,
-      createdAt: new Date(r.createdAt),
-      updatedAt: new Date(r.updatedAt),
-      infoDt: new Date(r.infoDt),
-    }));
+    const response = await this.axiosClient.get<HttpResponse<{
+      totalActiveMembers: number,
+      stats: EnergyStatDTO[]
+    }>>(`/${resource}/${resourceId}/stats/${source}/${range}/${formattedDate}`);
+    return {
+      ...response.data.data,
+      stats: response.data.data.stats.map(r => ({
+          ...r,
+          createdAt: new Date(r.createdAt),
+          updatedAt: new Date(r.updatedAt),
+          infoDt: new Date(r.infoDt),
+        })
+      )
+    };
   }
 }

@@ -4,7 +4,7 @@ import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
 import {JsonPipe, NgClass, NgStyle} from "@angular/common";
-import {StatsColors} from "../../../domain/models/StatsColors";
+import {StatsColors} from "../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
 import {FooterComponent} from "../../../../../shared/components/footer/footer.component";

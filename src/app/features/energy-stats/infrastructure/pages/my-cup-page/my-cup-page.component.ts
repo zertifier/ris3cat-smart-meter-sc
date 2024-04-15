@@ -3,7 +3,7 @@ import {NavbarComponent} from "../../../../../shared/components/navbar/navbar.co
 import {ChartModule} from "primeng/chart";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
-import {StatsColors} from "../../../domain/models/StatsColors";
+import {StatsColors} from "../../../domain/StatsColors";
 import {FooterComponent} from "../../../../../shared/components/footer/footer.component";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";

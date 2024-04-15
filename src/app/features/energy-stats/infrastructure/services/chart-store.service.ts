@@ -1,15 +1,10 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
-import {DateRange} from "../../domain/models/DateRange";
+import {DateRange} from "../../domain/DateRange";
 import {ChartEntity} from "../../domain/ChartEntity";
 import {ChartResource} from "../../domain/ChartResource";
 import {ChartType} from "../../domain/ChartType";
-
-export enum ChartOrigins {
-  DATADIS = 'DATADIS',
-  INVERSOR = 'INVERSOR',
-  SMART_METER = 'SMART_METER'
-}
+import {ChartOrigins} from "../../domain/ChartOrigins";
 
 export interface ChartStore {
   dateRange: DateRange,
