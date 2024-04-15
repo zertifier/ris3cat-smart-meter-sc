@@ -67,7 +67,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     },
     {
       color: StatsColors.BUY_CONSUMPTION,
-      label: 'Consum',
+      label: 'Consum actius',
       radius: '2.5rem',
     },
     {
@@ -224,7 +224,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     })
     const datasets: any[] = [
       {
-        label: 'Consum',
+        label: addCommunityDataset ? 'Consum actius': 'Consum',
         backgroundColor: StatsColors.BUY_CONSUMPTION,
         borderRadius: 10,
         borderWidth: 1,
