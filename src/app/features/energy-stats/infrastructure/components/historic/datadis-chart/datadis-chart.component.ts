@@ -163,14 +163,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
       if (selectedChart === ChartEntity.CUPS) {
         const response = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
-        this.activeMembers = response.totalActiveMembers;
+        this.activeMembers = response.totalActiveMembers || 0;
         data = response.stats;
       } else {
         if (!communityId) {
           return [];
         }
         const response = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
-        this.activeMembers = response.totalActiveMembers;
+        this.activeMembers = response.totalActiveMembers || 0;
         data = response.stats;
       }
       this.latestFetchedStats = data;
