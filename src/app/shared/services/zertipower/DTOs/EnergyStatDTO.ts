@@ -21,6 +21,7 @@ export interface EnergyStatDTO {
 
 export interface DatadisEnergyStat {
   id: number;
+  activeMembers: number;
   infoDt: Date;
   cupsId?: number;
   origin: string;

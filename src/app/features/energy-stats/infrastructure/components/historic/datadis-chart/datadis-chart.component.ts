@@ -79,7 +79,20 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
   chartLabels: DataLabel[] = [];
   data: any;
-  chartOptions = {};
+  latestFetchedStats: DatadisEnergyStat[] = [];
+  chartOptions = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const {label} = context.dataset;
+            const stat = this.latestFetchedStats[context.dataIndex];
+            return [label, `Members actius: ${stat.activeMembers}`];
+          }
+        }
+      }
+    }
+  };
 
   constructor(
     private readonly chartStoreService: ChartStoreService,
@@ -138,6 +151,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         }
         data = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
       }
+      this.latestFetchedStats = data;
       return data;
     } finally {
       this.chartStoreService.fetchingData(false);
