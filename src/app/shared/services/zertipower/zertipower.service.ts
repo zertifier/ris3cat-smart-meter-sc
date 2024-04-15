@@ -70,14 +70,14 @@ export class ZertipowerService {
     return response.data.data;
   }
 
-  async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
+  async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange) {
     const response = await this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
-    return response.stats;
+    return response;
   }
 
-  async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange): Promise<DatadisEnergyStat[]> {
+  async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange) {
     const response = await this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
-    return response.stats;
+    return response;
   }
 
   async getEnergyStats(resource: ChartEntity, resourceId: number, source: string, date: Date, dateRange: DateRange) {

@@ -30,10 +30,11 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   cupIds$ = this.userStore.selectOnly(state => state.cupIds);
   subscriptions: Subscription[] = [];
+  activeMembers = 0;
 
   cupsLabels: DataLabel[] = [
     {
-      color: StatsColors.COMMUNITY_PRODUCTION,
+      color: StatsColors.CUPS_PRODUCTION,
       label: 'Producció',
       radius: '2.5rem',
     },
@@ -158,12 +159,16 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       const communityId = this.userStore.snapshotOnly(state => state.communityId);
       const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
       if (selectedChart === ChartEntity.CUPS) {
-        data = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
+        const response = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
+        this.activeMembers = response.totalActiveMembers;
+        data = response.stats;
       } else {
         if (!communityId) {
           return [];
         }
-        data = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
+        const response = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
+        this.activeMembers = response.totalActiveMembers;
+        data = response.stats;
       }
       this.latestFetchedStats = data;
       return data;
