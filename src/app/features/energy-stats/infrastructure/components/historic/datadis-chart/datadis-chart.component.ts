@@ -79,6 +79,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
   chartLabels: DataLabel[] = [];
   data: any;
+  chartOptions = {};
 
   constructor(
     private readonly chartStoreService: ChartStoreService,

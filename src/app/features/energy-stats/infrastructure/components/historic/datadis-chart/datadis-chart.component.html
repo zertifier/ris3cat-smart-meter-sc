@@ -1,5 +1,5 @@
 @if (!(fetchingData$ | async)) {
-  <app-data-chart [data]="data"/>
+  <app-data-chart [data]="data" [options]="chartOptions"/>
   <app-chart-legend [labels]="chartLabels"/>
 } @else {
   <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
