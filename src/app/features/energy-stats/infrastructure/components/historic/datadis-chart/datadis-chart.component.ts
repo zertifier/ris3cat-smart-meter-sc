@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
@@ -20,7 +20,8 @@ import {ChartType} from "../../../../domain/ChartType";
   imports: [
     AsyncPipe,
     ChartLegendComponent,
-    DataChartComponent
+    DataChartComponent,
+    NgIf
   ],
   templateUrl: './datadis-chart.component.html',
   styleUrl: './datadis-chart.component.scss'
@@ -31,6 +32,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   cupIds$ = this.userStore.selectOnly(state => state.cupIds);
   subscriptions: Subscription[] = [];
   activeMembers = 0;
+  showCommunity$ = this.chartStoreService
+    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
   cupsLabels: DataLabel[] = [
     {
