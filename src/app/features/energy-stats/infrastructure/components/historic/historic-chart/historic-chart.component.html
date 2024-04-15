@@ -38,7 +38,7 @@
     <button (click)="setDateRange(DateRange.DAY)" class="btn rounded-4 py-3 w-100 text-center"
             [ngClass]="(dateRange$ | async) === DateRange.DAY ? 'btn-active' : 'btn-inactive'">
       <span class="d-block d-md-none">Diari</span>
-      <span class="d-none d-md-block">Consum diari</span>
+      <span class="d-none d-md-block">Diari</span>
 
     </button>
   </div>
@@ -48,7 +48,7 @@
     <button (click)="setDateRange(DateRange.MONTH)" class="btn rounded-4 py-3 w-100 text-center"
             [ngClass]="(dateRange$ | async) === DateRange.MONTH ? 'btn-active' : 'btn-inactive'">
       <span class="d-block d-md-none">Mensual</span>
-      <span class="d-none d-md-block">Consum mensual</span>
+      <span class="d-none d-md-block">Mensual</span>
     </button>
   </div>
   <div class="col-4">
@@ -57,7 +57,7 @@
     <button (click)="setDateRange(DateRange.YEAR)" class="btn rounded-4 py-3 w-100 text-center"
             [ngClass]="(dateRange$ | async) === DateRange.YEAR ? 'btn-active' : 'btn-inactive'">
       <span class="d-block d-md-none">Anual</span>
-      <span class="d-none d-md-block">Consum anual</span>
+      <span class="d-none d-md-block">Anual</span>
     </button>
   </div>
 </div>

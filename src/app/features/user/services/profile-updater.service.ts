@@ -28,9 +28,9 @@ export class ProfileUpdaterService {
         const cups = await this.zertipower.getCups(user.id);
         // TODO remove this when the app is ready to handle users with no cups
         if (!cups.length) cups.push({
-          cups: 'test',
+          cups: 'ES0031446428360001HM0F',
           community_id: 7,
-          id: 26
+          id: 36
         })
         const communityId = cups[0].community_id;
         const cupsReference = cups[0].cups;
