@@ -6,7 +6,7 @@
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
   </div>
   <div class="w-100">
-    <p>Produccio assignada: 5% <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/></p>
+    <p>Produccio assignada: {{surplusDistribution$ | async}}% <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/></p>
     <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span>
       CUPS: {{ cupsReference$ | async }}</p>
   </div>
