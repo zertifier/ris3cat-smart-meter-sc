@@ -80,7 +80,7 @@ export class HistoricChartComponent {
   setChartResource(event: Event) {
     const selectedValue = (event.target as any).value as string;
     let newResource: ChartResource;
-    if (selectedValue === 'price') {
+    if (selectedValue === ChartResource.PRICE) {
       newResource = ChartResource.PRICE;
     } else {
       newResource = ChartResource.ENERGY;

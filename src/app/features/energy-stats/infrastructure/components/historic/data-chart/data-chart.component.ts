@@ -34,15 +34,17 @@ export class DataChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (window.innerWidth <= 990) {
-      this.changeToMobile();
-    }else{
-      this.changeToDesktop();
-    }
+    this.chartStoreService.selectOnly(this.chartStoreService.$.justData).subscribe(() => {
+      if (window.innerWidth <= 990) {
+        this.changeToMobile();
+      } else {
+        this.changeToDesktop();
+      }
+    });
   }
 
 
-  changeToDesktop(){
+  changeToDesktop() {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
@@ -80,7 +82,8 @@ export class DataChartComponent implements OnInit, OnDestroy {
       }
     }
   }
-  changeToMobile(){
+
+  changeToMobile() {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,

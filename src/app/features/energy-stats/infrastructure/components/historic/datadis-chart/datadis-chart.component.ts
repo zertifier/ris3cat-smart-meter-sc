@@ -32,6 +32,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   cupIds$ = this.userStore.selectOnly(state => state.cupIds);
   subscriptions: Subscription[] = [];
   activeMembers = 0;
+  totalMembers = 0;
   showCommunity$ = this.chartStoreService
     .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 

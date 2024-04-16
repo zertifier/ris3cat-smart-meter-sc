@@ -5,8 +5,8 @@
 <!--    <h5>Tria el tipus de dades</h5>-->
     <h5>Tipus de dades</h5>
     <select class="form-select w-100" (change)="setChartResource($event)">
-      <option value="energy" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Energia kwh</option>
-      <option value="price" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
+      <option [value]="ChartResource.ENERGY" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Energia kwh</option>
+      <option [value]="ChartResource.PRICE" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
     </select>
   </div>
 
