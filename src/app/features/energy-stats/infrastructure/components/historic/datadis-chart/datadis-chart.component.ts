@@ -94,7 +94,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       tooltip: {
         callbacks: {
           label: (context: any) => {
-
             const {label} = context.dataset;
             const {formattedValue} = context;
             const labels: string[] = [`${label}: ${formattedValue}`];
@@ -102,7 +101,11 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             const chartEntity = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
             if (chartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.latestFetchedStats[context.dataIndex];
-              labels.push(`Members actius: ${stat.activeMembers}`)
+              if (context.datasetIndex === 0) {
+                labels.push(`Total membres: 32`);
+              } else {
+                labels.push(`Members actius: ${stat.activeMembers}`);
+              }
             }
 
             return labels;
