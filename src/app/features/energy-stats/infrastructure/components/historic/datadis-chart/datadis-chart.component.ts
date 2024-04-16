@@ -27,9 +27,7 @@ import {ChartType} from "../../../../domain/ChartType";
   styleUrl: './datadis-chart.component.scss'
 })
 export class DatadisChartComponent implements OnInit, OnDestroy {
-  date$ = this.chartStoreService.selectOnly(state => state.date);
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
-  cupIds$ = this.userStore.selectOnly(state => state.cupIds);
   subscriptions: Subscription[] = [];
   activeMembers = 0;
   totalMembers = 0;
@@ -47,16 +45,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       label: 'Consum',
       radius: '2.5rem',
     },
-    {
-      color: StatsColors.SURPLUS,
-      label: 'Excedent',
-      radius: '2.5rem',
-    },
-    {
-      color: StatsColors.VIRTUAL_SURPLUS,
-      label: 'Excedent virtual',
-      radius: '2.5rem',
-    }
+
   ]
 
   communitiesLabels: DataLabel[] = [
@@ -75,16 +64,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       label: 'Consum actius',
       radius: '2.5rem',
     },
-    {
-      color: StatsColors.SURPLUS,
-      label: 'Excedent',
-      radius: '2.5rem',
-    },
-    {
-      color: StatsColors.VIRTUAL_SURPLUS,
-      label: 'Excedent virtual',
-      radius: '2.5rem',
-    }
   ]
 
   chartLabels: DataLabel[] = [];
@@ -131,19 +110,20 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                             date,
                             dateRange,
                             selectedChartResource,
-                            selectedChartEntity
+                            selectedChartEntity,
+                            chartType,
                           }) => {
           const data = await this.fetchEnergyStats(date, dateRange);
           this.setDataChart(data, dateRange, selectedChartResource);
           this.chartLabels = [];
 
-          if (selectedChartResource === ChartResource.PRICE) {
-            this.chartLabels.push({
-              label: 'Estalvi',
-              radius: '2.5rem',
-              color: StatsColors.COMMUNITY_PRODUCTION,
-            })
-          }
+          // if (selectedChartResource === ChartResource.PRICE) {
+          //   this.chartLabels.push({
+          //     label: 'Estalvi',
+          //     radius: '2.5rem',
+          //     color: StatsColors.COMMUNITY_PRODUCTION,
+          //   })
+          // }
 
           if (selectedChartEntity === ChartEntity.CUPS || selectedChartResource === ChartResource.PRICE) {
             this.chartLabels.push(...this.cupsLabels);
@@ -151,7 +131,19 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             this.chartLabels.push(...this.communitiesLabels);
           }
 
-
+          if (chartType === ChartType.CCE) {
+            this.chartLabels.push({
+              color: StatsColors.VIRTUAL_SURPLUS,
+              label: 'Excedent compartit',
+              radius: '2.5rem',
+            })
+          } else {
+            this.chartLabels.push({
+              color: StatsColors.SURPLUS,
+              label: 'Excedent',
+              radius: '2.5rem',
+            })
+          }
         }),
     );
   }
@@ -207,13 +199,13 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     const addCommunityDataset = this.chartStoreService.snapshotOnly(state => {
       return state.selectedChartEntity === ChartEntity.COMMUNITIES && state.selectedChartResource === ChartResource.ENERGY
     });
-    const cec = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
+    const cce = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
     const mappedData = data.map(d => {
       let consumption = showEnergy ? d.kwhIn : d.kwhInPrice * d.kwhIn;
       let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice * d.kwhOut;
       let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPrice * d.kwhOutVirtual;
 
-      if (!cec) {
+      if (!cce) {
         return {
           consumption,
           surplus,
@@ -221,13 +213,13 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (consumption >= virtualSurplus) {
-        consumption -= virtualSurplus;
-        virtualSurplus = 0;
-      } else {
-        consumption = 0;
-        virtualSurplus -= consumption;
-      }
+      // if (consumption >= virtualSurplus) {
+      //   consumption -= virtualSurplus;
+      //   virtualSurplus = 0;
+      // } else {
+      //   consumption = 0;
+      //   virtualSurplus -= consumption;
+      // }
 
       return {
         consumption,
@@ -237,41 +229,45 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     })
     const datasets: any[] = [
       {
-        label: addCommunityDataset ? 'Consum actius': 'Consum',
+        label: addCommunityDataset ? 'Consum actius' : 'Consum',
         backgroundColor: StatsColors.BUY_CONSUMPTION,
         borderRadius: 10,
         borderWidth: 1,
         data: mappedData.map(d => d.consumption),
         stack: 'Stack 1'
-      },
-      {
+      }
+    ]
+
+    if (cce) {
+      datasets.push({
+        label: 'Excedent compartit',
+        backgroundColor: StatsColors.VIRTUAL_SURPLUS,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: mappedData.map(d => d.virtualSurplus),
+      })
+    } else {
+      datasets.push({
         label: 'Excedent',
         backgroundColor: StatsColors.SURPLUS,
         borderRadius: 10,
         borderWidth: 1,
         data: mappedData.map(d => d.surplus),
         stack: 'Stack 2'
-      },
-      {
-        label: 'Excedent virtual',
-        backgroundColor: StatsColors.VIRTUAL_SURPLUS,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: mappedData.map(d => d.virtualSurplus),
-      }
-    ]
-
-    if (!showEnergy) {
-      datasets.unshift({
-        label: 'Estalvi',
-        backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: data.map(d => d.kwhOut),
-        stack: 'Estalvi',
-        grouped: true,
-      });
+      })
     }
+
+    // if (!showEnergy) {
+    //   datasets.unshift({
+    //     label: 'Estalvi',
+    //     backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
+    //     borderRadius: 10,
+    //     borderWidth: 1,
+    //     data: data.map(d => d.kwhOut),
+    //     stack: 'Estalvi',
+    //     grouped: true,
+    //   });
+    // }
 
     if (addCommunityDataset) {
       datasets.unshift(
