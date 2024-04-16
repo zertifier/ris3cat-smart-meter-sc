@@ -121,7 +121,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     private readonly zertipower: ZertipowerService,
     private readonly userStore: UserStoreService,
   ) {
-    this.userStore.selectOnly(state => state.cupIds).subscribe(console.log)
   }
 
   async ngOnInit(): Promise<void> {
@@ -168,6 +167,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       if (selectedChart === ChartEntity.CUPS) {
         const response = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
         this.activeMembers = response.totalActiveMembers || 0;
+        this.totalMembers = response.totalMembers || 0;
         data = response.stats;
       } else {
         if (!communityId) {
@@ -175,6 +175,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         }
         const response = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
         this.activeMembers = response.totalActiveMembers || 0;
+        this.totalMembers = response.totalMembers || 0;
         data = response.stats;
       }
       this.latestFetchedStats = data;

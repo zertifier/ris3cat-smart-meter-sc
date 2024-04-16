@@ -100,6 +100,7 @@ export class ZertipowerService {
     const formattedDate = dayjs(date).format(desiredFormat); // TODO use dayjs to format date
     const response = await this.axiosClient.get<HttpResponse<{
       totalActiveMembers: number,
+      totalMembers: number,
       stats: EnergyStatDTO[]
     }>>(`/${resource}/${resourceId}/stats/${source}/${range}/${formattedDate}`);
     return {
