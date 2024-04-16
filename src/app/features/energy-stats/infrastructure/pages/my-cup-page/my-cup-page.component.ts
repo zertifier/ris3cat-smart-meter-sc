@@ -16,6 +16,7 @@ import {
   ConsumptionItemsComponent
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
+import {QuestionBadgeComponent} from "../../../../../shared/components/question-badge/question-badge.component";
 
 
 @Component({
@@ -33,7 +34,8 @@ import {HistoricChartComponent} from "../../components/historic/historic-chart/h
     CalendarModule,
     ReactiveFormsModule,
     HistoricChartComponent,
-    AsyncPipe
+    AsyncPipe,
+    QuestionBadgeComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'

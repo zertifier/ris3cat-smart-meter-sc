@@ -1,11 +1,14 @@
 <app-navbar/>
 <div class="container my-5">
   <div class="mt-5 d-flex align-items-center justify-content-between">
-    <p><span><i class="fa-solid fa-angle-right"></i></span> El meu CUPS <span class="text-secondary">(Cost Unitari de la Potència)</span></p>
+    <p><span><i class="fa-solid fa-angle-right"></i></span> El meu CUPS <span class="text-secondary">(Cost Unitari de la Potència)</span>
+    </p>
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
   </div>
   <div class="w-100">
-    <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span> CUPS: {{ cupsReference$ | async }}</p>
+    <p>Produccio assignada: 5% <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/></p>
+    <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span>
+      CUPS: {{ cupsReference$ | async }}</p>
   </div>
   <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el consum producció</h5>
   <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
