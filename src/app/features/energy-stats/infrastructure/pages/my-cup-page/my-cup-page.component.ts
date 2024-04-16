@@ -75,7 +75,7 @@ export class MyCupPageComponent {
   ];
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   protected readonly StatsColors = StatsColors;
-  cupsReference$ = this.userStore.selectOnly(state => state.cupsReference);
+  cupsReference$ = this.userStore.selectOnly(this.userStore.$.cupsReference);
   surplusDistribution$ = this.userStore.selectOnly(state => state.surplusDistribution);
 
   constructor(private readonly monitoringService: MonitoringService, private readonly userStore: UserStoreService) {

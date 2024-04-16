@@ -29,8 +29,8 @@ import {ChartType} from "../../../../domain/ChartType";
 export class DatadisChartComponent implements OnInit, OnDestroy {
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   subscriptions: Subscription[] = [];
-  activeMembers = 0;
-  totalMembers = 0;
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
   showCommunity$ = this.chartStoreService
     .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
@@ -153,21 +153,21 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     this.chartStoreService.fetchingData(true);
     let data: DatadisEnergyStat[];
     try {
-      const [cupId] = this.userStore.snapshotOnly(state => state.cupIds);
-      const communityId = this.userStore.snapshotOnly(state => state.communityId);
+      const cupId = this.userStore.snapshotOnly(this.userStore.$.cupId);
+      const communityId = this.userStore.snapshotOnly(this.userStore.$.communityId);
       const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
       if (selectedChart === ChartEntity.CUPS) {
         const response = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
-        this.activeMembers = response.totalActiveMembers || 0;
-        this.totalMembers = response.totalMembers || 0;
+        this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
+        this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
       } else {
         if (!communityId) {
           return [];
         }
         const response = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
-        this.activeMembers = response.totalActiveMembers || 0;
-        this.totalMembers = response.totalMembers || 0;
+        this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
+        this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
       }
       this.latestFetchedStats = data;
