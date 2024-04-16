@@ -8,9 +8,6 @@ export interface UserStore {
     communityId: number;
     surplusDistribution: number;
   }[],
-  cupIds: number[];
-  communityId?: number;
-  cupsReference: string;
   selectedCupsIndex: number;
   activeMembers: number;
   totalMembers: number;
@@ -18,8 +15,6 @@ export interface UserStore {
 }
 
 const defaultValues: UserStore = {
-  cupIds: [],
-  cupsReference: '',
   cups: [],
   selectedCupsIndex: -1,
   activeMembers: 0,
@@ -31,6 +26,12 @@ const defaultValues: UserStore = {
   providedIn: 'root'
 })
 export class UserStoreService extends RxStore<UserStore> {
+  $ = {
+    cupId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
+    communityId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.communityId,
+    cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.reference,
+  }
+
   constructor() {
     super(defaultValues);
   }

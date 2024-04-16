@@ -3,7 +3,7 @@ import {NavbarComponent} from "../../../../../shared/components/navbar/navbar.co
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
-import {JsonPipe, NgClass, NgStyle} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
@@ -22,6 +22,7 @@ import {
   ConsumptionItemsComponent
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
+import {UserStoreService} from "../../../../user/services/user-store.service";
 
 dayjs.extend(utc);
 
@@ -46,7 +47,8 @@ dayjs.extend(utc);
     NgClass,
     CalendarModule,
     ReactiveFormsModule,
-    HistoricChartComponent
+    HistoricChartComponent,
+    AsyncPipe
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
@@ -86,12 +88,14 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   ];
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   subscriptions: Subscription[] = [];
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
   protected readonly StatsColors = StatsColors;
 
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly zertipower: ZertipowerService,
     private readonly authStore: AuthStoreService,
+    private readonly userStore: UserStoreService,
   ) {
     this.monitoringService.start(60000);
   }
@@ -109,10 +113,10 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
         .subscribe(value => {
           const {production, buy, inHouse, sell} = value;
           this.powerFlow.set({
-            production: Math.round(production / 10) / 100,
-            inHouse: Math.round(inHouse / 10) / 100,
-            buy: Math.round(buy / 10) / 100,
-            sell: Math.round(sell / 10) / 100,
+            production: production / 1000,
+            inHouse: inHouse / 1000,
+            buy: buy / 1000,
+            sell: sell / 1000,
           })
         })
     );

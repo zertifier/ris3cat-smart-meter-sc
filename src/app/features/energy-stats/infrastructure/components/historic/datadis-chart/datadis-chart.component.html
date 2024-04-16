@@ -1,7 +1,7 @@
 @if (!(fetchingData$ | async)) {
   <app-data-chart [data]="data" [options]="chartOptions"/>
   <p class="text-center mt-4 fw-bold" *ngIf="showCommunity$ | async">
-    Aquesta estadística indica les dades dels {{ activeMembers }} membres actius d'un total de {{ totalMembers }}
+    Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
     membres de la comunitat.
   </p>
   <app-chart-legend [labels]="chartLabels"/>
