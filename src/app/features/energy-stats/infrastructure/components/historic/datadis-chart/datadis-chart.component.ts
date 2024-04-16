@@ -295,7 +295,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     } else {
       datasets.unshift({
         label: 'Producció',
-        backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
+        backgroundColor: StatsColors.CUPS_PRODUCTION,
         borderRadius: 10,
         borderWidth: 1,
         data: data.map(d => d.production),
