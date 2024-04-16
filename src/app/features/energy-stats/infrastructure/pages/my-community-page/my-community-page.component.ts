@@ -88,8 +88,8 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   ];
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   subscriptions: Subscription[] = [];
-  protected readonly StatsColors = StatsColors;
   totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  protected readonly StatsColors = StatsColors;
 
   constructor(
     private readonly monitoringService: MonitoringService,
@@ -113,10 +113,10 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
         .subscribe(value => {
           const {production, buy, inHouse, sell} = value;
           this.powerFlow.set({
-            production: Math.round(production / 10) / 100,
-            inHouse: Math.round(inHouse / 10) / 100,
-            buy: Math.round(buy / 10) / 100,
-            sell: Math.round(sell / 10) / 100,
+            production: production / 1000,
+            inHouse: inHouse / 1000,
+            buy: buy / 1000,
+            sell: sell / 1000,
           })
         })
     );
