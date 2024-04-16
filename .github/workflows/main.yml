@@ -12,14 +12,13 @@ jobs:
     steps:
       - name: Pull changes
         run: |
-          cd /home/megatro/apps/dockers/
+          cd /home/megatro/apps/dockers/Ris3Cat/ris3cat-smart-meter
           echo "Pulling and rebasing changes from github"
           git pull --rebase
 
       - name: Detect changes in smart-meter-dev-ris3cat
         id: check_smart-meter-dev-ris3cat
         run: |
-          cd ./
           echo "Getting smart-meter-dev-ris3cat diff"
           CHANGED_FILES=$(git diff --name-only HEAD HEAD~1 | grep "^.//" || true)
           echo "Checking smart-meter-dev-ris3cat diff"
