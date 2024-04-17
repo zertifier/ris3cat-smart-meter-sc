@@ -203,7 +203,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     const mappedData = data.map(d => {
       let consumption = showEnergy ? d.kwhIn : d.kwhInPrice * d.kwhIn;
       let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice * d.kwhOut;
-      let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPrice * d.kwhOutVirtual;
+      let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPriceCommunity * d.kwhOutVirtual;
       let production = showEnergy ? d.production : d.kwhInPrice * d.production;
 
       if (!cce) {
