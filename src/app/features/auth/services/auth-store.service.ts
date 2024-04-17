@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
 import {jwtDecode, JwtPayload} from 'jwt-decode';
+import {EventBus} from "../../../shared/domain/EventBus";
+import {UserLoggedInEvent} from "../domain/UserLoggedInEvent";
 
 export interface AuthState {
   accessToken: string;
@@ -20,8 +22,8 @@ const defaultValues: AuthState = {
   refreshToken: '',
 }
 
-const ACCESS_TOKEN = 'accessToken';
-const REFRESH_TOKEN = 'refreshToken';
+export const ACCESS_TOKEN = 'accessToken';
+export const REFRESH_TOKEN = 'refreshToken';
 
 @Injectable({
   providedIn: 'root'
@@ -31,17 +33,11 @@ export class AuthStoreService extends RxStore<AuthState> {
     loggedIn: (state: AuthState) => !!state.refreshToken
   }
 
-  constructor() {
+  constructor(
+    private readonly eventBus: EventBus,
+  ) {
     super(defaultValues);
-    const accessToken = localStorage.getItem(ACCESS_TOKEN) || '';
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN) || '';
 
-    if (!refreshToken) {
-      this.removeTokens();
-      return;
-    }
-
-    this.setTokens({accessToken, refreshToken});
   }
 
   public removeTokens() {

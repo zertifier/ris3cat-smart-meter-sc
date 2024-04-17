@@ -1,7 +1,10 @@
-export type Cancellation = () => void;
+import {DomainEvent} from "./DomainEvent";
+
+export type CallbackCancellation = () => void;
+export type EventCallback = (event: DomainEvent<unknown>) => Promise<void>;
 
 export abstract class EventBus {
-  public abstract publishEvent(): Promise<void>;
+  public abstract publishEvents(...event: DomainEvent<unknown>[]): Promise<void>;
 
-  public abstract subscribe(eventName: string, callback: (event: any) => Promise<void>): Cancellation;
+  public abstract subscribe(eventName: string, callback: EventCallback): CallbackCancellation;
 }

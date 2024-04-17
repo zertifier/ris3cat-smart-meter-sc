@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authTokenInterceptor])
     ),
     provideAnimations(),
-    {provide: EventBus, useClass: InMemoryEventBusService}
+    {provide: EventBus, useClass: InMemoryEventBusService},
   ]
 };

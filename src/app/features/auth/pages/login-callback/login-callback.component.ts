@@ -5,6 +5,7 @@ import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
 import {AuthStoreService} from "../../services/auth-store.service";
 import {ApiService} from "../../../../shared/infrastructure/services/api.service";
+import {LoginActionService} from "../../actions/login-action.service";
 
 @Component({
   selector: 'app-login-callback',
@@ -20,6 +21,7 @@ export class LoginCallbackComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly authStore: AuthStoreService,
+    private readonly loginAction: LoginActionService,
   ) {
   }
 
@@ -31,14 +33,7 @@ export class LoginCallbackComponent implements OnInit {
       throw new Error('Code not received from oauth');
     }
 
-    const response = await firstValueFrom(this.zertiauthApiService.getPrivateKey(code));
-    const wallet = new ethers.Wallet(response.privateKey as string);
-
-    // login
-    const tokens = await this.apiService.auth.login(wallet.address, wallet.privateKey, response.email);
-
-    // TODO migrate user updater to event system
-    this.authStore.setTokens({refreshToken: tokens.refreshToken, accessToken: tokens.accessToken});
+    await this.loginAction.run(code);
     this.router.navigate(['/energy-stats']);
   }
 }
