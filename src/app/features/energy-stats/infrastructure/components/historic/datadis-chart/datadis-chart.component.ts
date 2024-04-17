@@ -204,12 +204,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       let consumption = showEnergy ? d.kwhIn : d.kwhInPrice * d.kwhIn;
       let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice * d.kwhOut;
       let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPrice * d.kwhOutVirtual;
+      let production = showEnergy ? d.production : d.kwhInPrice * d.production;
 
       if (!cce) {
         return {
           consumption,
           surplus,
-          virtualSurplus
+          virtualSurplus,
+          production
         }
       }
 
@@ -224,7 +226,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       return {
         consumption,
         surplus,
-        virtualSurplus
+        virtualSurplus,
+        production
       }
     })
     const datasets: any[] = [
@@ -281,12 +284,12 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           grouped: true,
         },
         {
-          label: 'Excedent actiu comunitari',
+          label: 'Excedent actius comunitari',
           backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.communitySurplusActive),
-          stack: 'Excedent actiu',
+          stack: 'Excedent actius',
           grouped: true,
         },
       )
@@ -296,7 +299,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         backgroundColor: StatsColors.CUPS_PRODUCTION,
         borderRadius: 10,
         borderWidth: 1,
-        data: data.map(d => d.production),
+        data: mappedData.map(d => d.production),
         stack: 'Production',
         grouped: true,
       })
