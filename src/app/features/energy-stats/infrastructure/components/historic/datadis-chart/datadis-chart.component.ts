@@ -90,7 +90,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.latestFetchedStats[context.dataIndex];
               if (context.datasetIndex === 0) {
-                labels.push(`Total membres: 32`);
+                labels.push(`Total membres: 31`);
                 labels.push(`----------------`);
               } else if (context.datasetIndex === context.chart.config.data.datasets.length-1) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
