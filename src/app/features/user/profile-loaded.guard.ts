@@ -5,7 +5,5 @@ import {inject} from "@angular/core";
 
 export const profileLoadedGuard: CanActivateFn = (route, state) => {
   const userStore = inject(UserStoreService);
-  return userStore.selectOnly(userStore.$.communityId).pipe(filter(id => !!id),
-    map(() => true)
-  );
+  return userStore.selectOnly(userStore.$.profileLoaded);
 };

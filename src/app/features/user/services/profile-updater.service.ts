@@ -4,6 +4,7 @@ import {UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../auth/domain/UserLoggedInEvent";
+import {CupsResponseDTO} from "../../../shared/infrastructure/services/zertipower/DTOs/CupsResponseDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class ProfileUpdaterService {
         throw new Error(`User with id ${authData.id} not found`);
       }
 
-      const cups = await this.zertipower.getCups(user.id);
+      // const cups = await this.zertipower.getCups(user.id);
+      const cups: CupsResponseDTO[] = [];
       const surplusDistribution = parseFloat(cups[0]?.surplus_distribution || "0") * 100;
       this.userStore.patchState({
         selectedCupsIndex: 0,
