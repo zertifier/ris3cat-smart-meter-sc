@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AuthStoreService} from "../../auth/services/auth-store.service";
+import {AuthStoreService} from "../../auth/infrastructure/services/auth-store.service";
 import {UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../shared/domain/EventBus";

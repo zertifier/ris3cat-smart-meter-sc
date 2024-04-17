@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ACCESS_TOKEN, AuthStoreService, REFRESH_TOKEN} from "./auth-store.service";
-import {EventBus} from "../../../shared/domain/EventBus";
-import {UserLoggedInEvent} from "../domain/UserLoggedInEvent";
+import {EventBus} from "../../../../shared/domain/EventBus";
+import {UserLoggedInEvent} from "../../domain/UserLoggedInEvent";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,4 @@ export class AuthPersistenceProxyService {
     this.authStore.setTokens({accessToken, refreshToken});
     this.eventBus.publishEvents(new UserLoggedInEvent());
   }
-
 }

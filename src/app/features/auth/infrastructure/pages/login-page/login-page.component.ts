@@ -6,7 +6,7 @@ import {LoginImagesService} from "../../services/login-images.service";
 import {NgClass, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {BreakPoints, ScreenService} from "../../../../shared/infrastructure/services/screen.service";
+import {BreakPoints, ScreenService} from "../../../../../shared/infrastructure/services/screen.service";
 
 @Component({
   selector: 'app-login-page',

@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ProfileUpdaterService} from "./features/user/services/profile-updater.service";
-import {AuthPersistenceProxyService} from "./features/auth/services/auth-persistence-proxy.service";
+import {AuthPersistenceProxyService} from "./features/auth/infrastructure/services/auth-persistence-proxy.service";
 
 @Component({
   selector: 'app-root',

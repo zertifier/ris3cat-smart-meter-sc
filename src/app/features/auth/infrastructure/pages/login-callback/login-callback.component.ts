@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {firstValueFrom} from "rxjs";
-import {ethers} from "ethers";
 import {AuthStoreService} from "../../services/auth-store.service";
-import {ApiService} from "../../../../shared/infrastructure/services/api.service";
-import {LoginActionService} from "../../actions/login-action.service";
+import {ApiService} from "../../../../../shared/infrastructure/services/api.service";
+import {LoginActionService} from "../../../actions/login-action.service";
 
 @Component({
   selector: 'app-login-callback',

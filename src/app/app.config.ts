@@ -4,7 +4,7 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideHttpClient, withFetch, withInterceptors} from "@angular/common/http";
 import {provideAnimations} from "@angular/platform-browser/animations";
-import {authTokenInterceptor} from "./features/auth/interceptors/auth-token.interceptor";
+import {authTokenInterceptor} from "./features/auth/infrastructure/interceptors/auth-token.interceptor";
 import {EventBus} from "./shared/domain/EventBus";
 import {InMemoryEventBusService} from "./shared/infrastructure/services/in-memory-event-bus.service";
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
-import {AuthStoreService} from "../services/auth-store.service";
-import {ZertiauthApiService} from "../services/zertiauth-api.service";
+import {AuthStoreService} from "../infrastructure/services/auth-store.service";
+import {ZertiauthApiService} from "../infrastructure/services/zertiauth-api.service";
 import {ApiService} from "../../../shared/infrastructure/services/api.service";
 import {EventBus} from "../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../domain/UserLoggedInEvent";

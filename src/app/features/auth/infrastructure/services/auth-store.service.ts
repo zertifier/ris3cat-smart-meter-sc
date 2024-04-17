@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
 import {jwtDecode, JwtPayload} from 'jwt-decode';
-import {EventBus} from "../../../shared/domain/EventBus";
-import {UserLoggedInEvent} from "../domain/UserLoggedInEvent";
+import {EventBus} from "../../../../shared/domain/EventBus";
 
 export interface AuthState {
   accessToken: string;
@@ -40,6 +39,7 @@ export class AuthStoreService extends RxStore<AuthState> {
 
   }
 
+  // TODO move local storage interaction to persistence proxy
   public removeTokens() {
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(REFRESH_TOKEN);

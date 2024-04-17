@@ -10,7 +10,7 @@ import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
-import {AuthStoreService} from "../../../../auth/services/auth-store.service";
+import {AuthStoreService} from "../../../../auth/infrastructure/services/auth-store.service";
 import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
 import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
 import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
