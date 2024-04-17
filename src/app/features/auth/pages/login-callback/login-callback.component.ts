@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {filter, firstValueFrom} from "rxjs";
+import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
-import {ApiService} from "../../../../shared/services/api.service";
 import {AuthStoreService} from "../../services/auth-store.service";
-import {UserStoreService} from "../../../user/services/user-store.service";
+import {ApiService} from "../../../../shared/infrastructure/services/api.service";
 
 @Component({
   selector: 'app-login-callback',
@@ -21,7 +20,6 @@ export class LoginCallbackComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly authStore: AuthStoreService,
-    private readonly userStore: UserStoreService,
   ) {
   }
 
@@ -39,6 +37,7 @@ export class LoginCallbackComponent implements OnInit {
     // login
     const tokens = await this.apiService.auth.login(wallet.address, wallet.privateKey, response.email);
 
+    // TODO migrate user updater to event system
     this.authStore.setTokens({refreshToken: tokens.refreshToken, accessToken: tokens.accessToken});
     this.router.navigate(['/energy-stats']);
   }

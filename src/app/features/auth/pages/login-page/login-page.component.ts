@@ -5,8 +5,8 @@ import {WebWalletLoginComponent} from "../../components/web-wallet-login/web-wal
 import {LoginImagesService} from "../../services/login-images.service";
 import {NgClass, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
-import {BreakPoints, ScreenService} from "../../../../shared/services/screen.service";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
+import {BreakPoints, ScreenService} from "../../../../shared/infrastructure/services/screen.service";
 
 @Component({
   selector: 'app-login-page',

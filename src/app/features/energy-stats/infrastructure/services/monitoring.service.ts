@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {firstValueFrom, map, Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {HttpResponse} from "../../../../shared/services/HttpResponse";
+import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
 
 export interface EnergyStat {
   inHouseConsumption: number;

@@ -3,16 +3,16 @@ import {HttpClient} from "@angular/common/http";
 import {HttpResponse} from "../HttpResponse";
 import {firstValueFrom, map} from "rxjs";
 import axios from "axios";
-import {SKIP_AUTH_INTERCEPTOR} from "../../../features/auth/interceptors/auth-token.interceptor";
-import {AuthStoreService} from "../../../features/auth/services/auth-store.service";
-import {LegacyCriteria} from "../../LegacyCriteria";
 import {UserResponseDTO} from "./DTOs/UserResponseDTO";
-import {DatadisEnergyStat, EnergyStatDTO} from "./DTOs/EnergyStatDTO";
+import {EnergyStatDTO} from "./DTOs/EnergyStatDTO";
 import dayjs from "dayjs";
-import {environment} from "../../../../environments/environment";
-import {DateRange} from "../../../features/energy-stats/domain/DateRange";
 import {CupsResponseDTO} from "./DTOs/CupsResponseDTO";
-import {ChartEntity} from "../../../features/energy-stats/domain/ChartEntity";
+import {environment} from "../../../../../environments/environment";
+import {AuthStoreService} from "../../../../features/auth/services/auth-store.service";
+import {SKIP_AUTH_INTERCEPTOR} from "../../../../features/auth/interceptors/auth-token.interceptor";
+import {LegacyCriteria} from "../../../LegacyCriteria";
+import {DateRange} from "../../../../features/energy-stats/domain/DateRange";
+import {ChartEntity} from "../../../../features/energy-stats/domain/ChartEntity";
 
 @Injectable({
   providedIn: 'root'

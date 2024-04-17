@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit, signal} from '@angular/core';
-import {NavbarComponent} from "../../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {Subscription} from "rxjs";
@@ -7,12 +6,10 @@ import {AsyncPipe, JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
-import {FooterComponent} from "../../../../../shared/components/footer/footer.component";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
-import {ZertipowerService} from "../../../../../shared/services/zertipower/zertipower.service";
 import {AuthStoreService} from "../../../../auth/services/auth-store.service";
 import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
 import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
@@ -23,6 +20,10 @@ import {
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
 import {UserStoreService} from "../../../../user/services/user-store.service";
+import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
+import {ZertipowerService} from "../../../../../shared/infrastructure/services/zertipower/zertipower.service";
+import {EventBus} from "../../../../../shared/domain/EventBus";
 
 dayjs.extend(utc);
 
@@ -93,7 +94,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly monitoringService: MonitoringService,
-    private readonly zertipower: ZertipowerService,
     private readonly authStore: AuthStoreService,
     private readonly userStore: UserStoreService,
   ) {

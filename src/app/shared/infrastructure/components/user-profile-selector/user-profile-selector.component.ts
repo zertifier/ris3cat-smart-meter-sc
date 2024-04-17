@@ -6,9 +6,8 @@ import {
   NgbDropdownModule,
   NgbDropdownToggle
 } from "@ng-bootstrap/ng-bootstrap";
-import {LogoutActionService} from "../../../features/auth/actions/logout-action.service";
 import {Confirmable} from "../../decorators/Confirmable";
-import {ConfirmationService} from "primeng/api";
+import {LogoutActionService} from "../../../../features/auth/actions/logout-action.service";
 
 @Component({
   selector: 'app-user-profile-selector',

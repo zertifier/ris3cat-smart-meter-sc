@@ -1,10 +1,8 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {NavbarComponent} from "../../../../../shared/components/navbar/navbar.component";
 import {ChartModule} from "primeng/chart";
 import {AsyncPipe, JsonPipe} from "@angular/common";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {StatsColors} from "../../../domain/StatsColors";
-import {FooterComponent} from "../../../../../shared/components/footer/footer.component";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
 import {UserStoreService} from "../../../../user/services/user-store.service";
@@ -16,8 +14,12 @@ import {
   ConsumptionItemsComponent
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
-import {QuestionBadgeComponent} from "../../../../../shared/components/question-badge/question-badge.component";
 import {Subscription} from "rxjs";
+import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
+import {
+  QuestionBadgeComponent
+} from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 
 
 @Component({
