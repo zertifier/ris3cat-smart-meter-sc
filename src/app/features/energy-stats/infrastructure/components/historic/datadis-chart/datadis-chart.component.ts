@@ -56,7 +56,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     },
     {
       color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
-      label: 'Excedent actiu comunitari',
+      label: 'Excedent comunitari actius',
       radius: '2.5rem',
     },
     {
@@ -70,24 +70,35 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   data: any;
   latestFetchedStats: DatadisEnergyStat[] = [];
   chartOptions = {
+  interaction: {
+    intersect: false,
+    mode: 'index',
+  },
     plugins: {
       tooltip: {
         callbacks: {
           label: (context: any) => {
+            console.log({context})
+            console.log(context.chart.config.data.datasets.length)
             const {label} = context.dataset;
             const {formattedValue} = context;
-            const labels: string[] = [`${label}: ${formattedValue}`];
+            const chartEntity = this.chartStoreService.snapshotOnly(state => state);
 
-            const chartEntity = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
-            if (chartEntity === ChartEntity.COMMUNITIES) {
+            const unit = chartEntity.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+            const labels: string[] = [`${label}: ${formattedValue} ${unit}`];
+
+            if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.latestFetchedStats[context.dataIndex];
               if (context.datasetIndex === 0) {
                 labels.push(`Total membres: 32`);
-              } else {
-                labels.push(`Members actius: ${stat.activeMembers}`);
+                labels.push(`----------------`);
+              } else if (context.datasetIndex === context.chart.config.data.datasets.length-1) {
+                labels.push(`Membres actius: ${stat.activeMembers}`);
               }
             }
 
+
+            console.log({labels})
             return labels;
           }
         }
@@ -125,7 +136,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           //   })
           // }
 
-          if (selectedChartEntity === ChartEntity.CUPS || selectedChartResource === ChartResource.PRICE) {
+          if (selectedChartEntity === ChartEntity.CUPS) {
             this.chartLabels.push(...this.cupsLabels);
           } else {
             this.chartLabels.push(...this.communitiesLabels);
@@ -197,14 +208,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
     const showEnergy = resource === ChartResource.ENERGY;
     const addCommunityDataset = this.chartStoreService.snapshotOnly(state => {
-      return state.selectedChartEntity === ChartEntity.COMMUNITIES && state.selectedChartResource === ChartResource.ENERGY
+      return state.selectedChartEntity === ChartEntity.COMMUNITIES
     });
     const cce = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
     const mappedData = data.map(d => {
-      let consumption = showEnergy ? d.kwhIn : d.kwhInPrice * d.kwhIn;
-      let surplus = showEnergy ? d.kwhOut : d.kwhOutPrice * d.kwhOut;
-      let virtualSurplus = showEnergy ? d.kwhOutVirtual : d.kwhOutPriceCommunity * d.kwhOutVirtual;
-      let production = showEnergy ? d.production : d.kwhInPrice * d.production;
+      let consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
+      let surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
+      let virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
+      let production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
 
       if (!cce) {
         return {
@@ -284,16 +295,17 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           grouped: true,
         },
         {
-          label: 'Excedent actius comunitari',
+          label: 'Excedent comunitari actius',
           backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
           data: data.map(d => d.communitySurplusActive),
-          stack: 'Excedent actius',
+          stack: 'Excedent comunitari actius',
           grouped: true,
         },
       )
     } else {
+      console.log('CUUUUUUUUUUUUUUUUUUUUUUUUUUUPPPSSSSSSSSSSS')
       datasets.unshift({
         label: 'Producció',
         backgroundColor: StatsColors.CUPS_PRODUCTION,
