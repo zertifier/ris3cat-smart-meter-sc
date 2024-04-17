@@ -215,6 +215,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     const mappedData = data.map(d => {
       let consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
       let surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
+      let communitySurplus = showEnergy ? d.communitySurplus : +(d.kwhInPrice * d.communitySurplus).toFixed(2);
+      let communitySurplusActive = showEnergy ? d.communitySurplusActive : +(d.kwhInPrice * d.communitySurplusActive).toFixed(2);
       let virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
       let production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
 
@@ -223,7 +225,9 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           consumption,
           surplus,
           virtualSurplus,
-          production
+          production,
+          communitySurplus,
+          communitySurplusActive
         }
       }
 
@@ -239,7 +243,9 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         consumption,
         surplus,
         virtualSurplus,
-        production
+        production,
+        communitySurplus,
+        communitySurplusActive
       }
     })
     const datasets: any[] = [
@@ -291,7 +297,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => d.communitySurplus),
+          data: mappedData.map(d => d.communitySurplus),
           stack: 'Excedent',
           grouped: true,
         },
@@ -300,7 +306,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
-          data: data.map(d => d.communitySurplusActive),
+          data: mappedData.map(d => d.communitySurplusActive),
           stack: 'Excedent comunitari actius',
           grouped: true,
         },
