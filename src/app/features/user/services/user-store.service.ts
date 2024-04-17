@@ -30,6 +30,7 @@ export class UserStoreService extends RxStore<UserStore> {
     cupId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
     communityId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.communityId,
     cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.reference,
+    profileLoaded: (state: UserStore) => state.selectedCupsIndex !== -1,
   }
 
   constructor() {
