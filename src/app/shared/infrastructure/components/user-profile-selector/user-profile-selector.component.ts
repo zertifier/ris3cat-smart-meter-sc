@@ -36,7 +36,7 @@ export class UserProfileSelectorComponent {
     .pipe(
       map(wallet => {
         if (!wallet) {
-          return 'No Wallet'
+          return 'No hi ha cap wallet assignada'
         }
 
         return new TextShorterPipe().transform(wallet, 6, 4);
@@ -53,7 +53,7 @@ export class UserProfileSelectorComponent {
   ) {
   }
 
-  @Confirmable("Are you sure?", {confirmButton: 'Logout'})
+  @Confirmable("Estas segur?", {confirmButton: 'Tancar sessió', cancelButton: 'Mantenir sessió'})
   async logout() {
     await this.logoutAction.run();
   }
