@@ -8,7 +8,8 @@ export enum ENERGY_STATS_ROUTE_NAMES {
   STATS_COMMUNITY = 'stats-community',
   STATS_CUPS = 'stats-cups',
   MISSING_COMMUNITY = 'missing-community',
-  MISSING_CUPS = 'missing-cups'
+  MISSING_CUPS = 'missing-cups',
+  GOVERNANCE = 'GOVERNANCE'
 }
 
 export const routes: Routes = [
@@ -16,6 +17,13 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('../../../../core/layouts/navbar-layout/navbar-layout.component').then(c => c.NavbarLayoutComponent),
     children: [
+      {
+        path: 'governance',
+        loadComponent: () => import('./governance-page/governance-page.component').then(c => c.GovernancePageComponent),
+        data: {
+          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
+        }
+      },
       {
         path: 'community',
         loadComponent: () => import('./my-community-page/my-community-page.component').then(c => c.MyCommunityPageComponent),
