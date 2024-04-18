@@ -5,7 +5,7 @@ import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {StatsColors} from "../../../domain/StatsColors";
 import {CalendarModule} from "primeng/calendar";
 import {ReactiveFormsModule} from "@angular/forms";
-import {UserStoreService} from "../../../../user/services/user-store.service";
+import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
 import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
 import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";

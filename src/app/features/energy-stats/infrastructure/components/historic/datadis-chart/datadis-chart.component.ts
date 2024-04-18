@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import {Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
-import {UserStoreService} from "../../../../../user/services/user-store.service";
+import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 import {ChartResource} from "../../../../domain/ChartResource";
 import {ChartEntity} from "../../../../domain/ChartEntity";
 import {DateRange} from "../../../../domain/DateRange";
