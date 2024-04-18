@@ -30,8 +30,8 @@ export class ProfileUpdaterService {
         throw new Error(`User with id ${authData.id} not found`);
       }
 
-      // const cups = await this.zertipower.getCups(user.id);
-      const cups: CupsResponseDTO[] = [];
+      const cups = await this.zertipower.getCups(user.id);
+      // const cups: CupsResponseDTO[] = [];
       const surplusDistribution = parseFloat(cups[0]?.surplus_distribution || "0") * 100;
       this.userStore.patchState({
         selectedCupsIndex: 0,
