@@ -312,7 +312,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         },
       )
     } else {
-      console.log('CUUUUUUUUUUUUUUUUUUUUUUUUUUUPPPSSSSSSSSSSS')
       datasets.unshift({
         label: 'Producció',
         backgroundColor: StatsColors.CUPS_PRODUCTION,
