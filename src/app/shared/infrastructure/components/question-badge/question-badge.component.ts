@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {NgbTooltip, Placement} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-question-badge',
@@ -12,4 +12,5 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 })
 export class QuestionBadgeComponent {
   @Input({required: true}) text = '';
+  @Input() tooltipPlacement: Placement = 'auto';
 }
