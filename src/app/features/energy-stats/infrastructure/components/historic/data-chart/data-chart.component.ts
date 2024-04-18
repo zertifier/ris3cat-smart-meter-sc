@@ -26,7 +26,7 @@ export class DataChartComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  onResize() {
     if (window.innerWidth <= 990)
       this.changeToMobile();
     else
@@ -68,7 +68,7 @@ export class DataChartComponent implements OnInit, OnDestroy {
         y: {
           stacked: true,
           ticks: {
-            callback: function (value: any, index: any, values: any) {
+            callback: function (value: any) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
               return `${value} ${label}`;
             },
@@ -108,7 +108,7 @@ export class DataChartComponent implements OnInit, OnDestroy {
         x: {
           stacked: true,
           ticks: {
-            callback: function (value: any, index: any, values: any) {
+            callback: function (value: any) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
               return `${value} ${label}`;
             },

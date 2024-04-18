@@ -213,12 +213,12 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     });
     const cce = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
     const mappedData = data.map(d => {
-      let consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
-      let surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
-      let communitySurplus = showEnergy ? d.communitySurplus : +(d.kwhInPrice * d.communitySurplus).toFixed(2);
-      let communitySurplusActive = showEnergy ? d.communitySurplusActive : +(d.kwhInPrice * d.communitySurplusActive).toFixed(2);
-      let virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
-      let production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
+      const consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
+      const surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
+      const communitySurplus = showEnergy ? d.communitySurplus : +(d.kwhInPrice * d.communitySurplus).toFixed(2);
+      const communitySurplusActive = showEnergy ? d.communitySurplusActive : +(d.kwhInPrice * d.communitySurplusActive).toFixed(2);
+      const virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
+      const production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
 
       if (!cce) {
         return {

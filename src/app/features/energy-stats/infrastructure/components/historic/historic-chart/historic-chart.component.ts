@@ -7,9 +7,9 @@ import {AsyncPipe, NgClass} from "@angular/common";
 import {DatadisChartComponent} from "../datadis-chart/datadis-chart.component";
 import {DateRange} from '../../../../domain/DateRange';
 import {ChartStoreService} from '../../../services/chart-store.service';
-import {ChartResource } from '../../../../domain/ChartResource';
+import {ChartResource} from '../../../../domain/ChartResource';
 import {MonitoringService} from "../../../services/monitoring.service";
-import { ChartType } from '../../../../domain/ChartType';
+import {ChartType} from '../../../../domain/ChartType';
 import {ChartOrigins} from "../../../../domain/ChartOrigins";
 
 @Component({

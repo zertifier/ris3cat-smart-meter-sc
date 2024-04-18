@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {firstValueFrom} from "rxjs";
 import {ethers} from "ethers";
 import {AuthStoreService} from "../infrastructure/services/auth-store.service";

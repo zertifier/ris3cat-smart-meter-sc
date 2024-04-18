@@ -11,7 +11,7 @@ import {NgOptimizedImage} from "@angular/common";
   styleUrl: './oauth-login.component.scss'
 })
 export class OauthLoginComponent {
-  @Output('webWalletLoginRequest') webWalletLoginRequest: EventEmitter<void> = new EventEmitter<void>()
+  @Output() webWalletLoginRequest: EventEmitter<void> = new EventEmitter<void>()
   constructor(
     public zertiAuthServ: ZertiauthApiService,
   ) {

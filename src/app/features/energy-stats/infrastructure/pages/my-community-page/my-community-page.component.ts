@@ -22,8 +22,6 @@ import {HistoricChartComponent} from "../../components/historic/historic-chart/h
 import {UserStoreService} from "../../../../user/services/user-store.service";
 import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
 import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
-import {ZertipowerService} from "../../../../../shared/infrastructure/services/zertipower/zertipower.service";
-import {EventBus} from "../../../../../shared/domain/EventBus";
 
 dayjs.extend(utc);
 

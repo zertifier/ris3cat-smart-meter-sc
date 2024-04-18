@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AppLogoComponent } from './app-logo.component';
+import {AppLogoComponent} from './app-logo.component';
 
 describe('AppLogoComponent', () => {
   let component: AppLogoComponent;
@@ -11,7 +11,7 @@ describe('AppLogoComponent', () => {
       imports: [AppLogoComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(AppLogoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

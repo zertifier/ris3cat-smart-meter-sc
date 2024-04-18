@@ -11,7 +11,7 @@ import {NgOptimizedImage} from "@angular/common";
   styleUrl: './web-wallet-login.component.scss'
 })
 export class WebWalletLoginComponent {
-  @Output('oauthLoginRequest') oauthLoginRequest: EventEmitter<void> = new EventEmitter<void>();
+  @Output() oauthLoginRequest: EventEmitter<void> = new EventEmitter<void>();
   constructor(
   ) {
   }

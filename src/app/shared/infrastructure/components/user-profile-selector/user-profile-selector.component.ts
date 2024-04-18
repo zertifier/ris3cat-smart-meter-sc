@@ -9,7 +9,7 @@ import {
 import {Confirmable} from "../../decorators/Confirmable";
 import {LogoutActionService} from "../../../../features/auth/actions/logout-action.service";
 import {UserStoreService} from "../../../../features/user/services/user-store.service";
-import {map, skipWhile} from "rxjs";
+import {map} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {TextShorterPipe} from "../../pipes/wallet-address-shortener.pipe";
 

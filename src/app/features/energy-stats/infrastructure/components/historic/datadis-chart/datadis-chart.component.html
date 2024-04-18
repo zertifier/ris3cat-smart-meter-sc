@@ -1,4 +1,4 @@
-@if (!(fetchingData$ | async)) {
+@if ((fetchingData$ | async) === false) {
   <app-data-chart [data]="data" [options]="chartOptions"/>
   <p class="text-center mt-4 fw-bold" *ngIf="showCommunity$ | async">
     Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}

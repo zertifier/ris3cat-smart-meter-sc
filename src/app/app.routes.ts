@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {LoggedInGuard} from "./features/auth/infrastructure/guards/LoggedInGuard";
 import {LoggedOutGuard} from "./features/auth/infrastructure/guards/logged-out.guard";
 

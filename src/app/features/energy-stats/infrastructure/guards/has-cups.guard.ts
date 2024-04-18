@@ -4,7 +4,7 @@ import {UserStoreService} from "../../../user/services/user-store.service";
 import {map, skipWhile} from "rxjs";
 import {ENERGY_STATS_ROUTE_NAMES} from "../pages/energy-stats-pages-routing.module";
 
-export const hasCupsGuard: CanActivateFn = (route, state) => {
+export const hasCupsGuard: CanActivateFn = (route) => {
   const userStore = inject(UserStoreService);
   const router = inject(Router);
   return userStore.select().pipe(

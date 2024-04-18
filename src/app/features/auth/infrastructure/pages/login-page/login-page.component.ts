@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {OauthLoginComponent} from "../../components/oauth-login/oauth-login.component";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 import {WebWalletLoginComponent} from "../../components/web-wallet-login/web-wallet-login.component";

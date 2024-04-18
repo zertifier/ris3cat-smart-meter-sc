@@ -1,4 +1,4 @@
-import { TextShorterPipe } from './wallet-address-shortener.pipe';
+import {TextShorterPipe} from './wallet-address-shortener.pipe';
 
 describe('WalletAddressShortenerPipe', () => {
   it('create an instance', () => {

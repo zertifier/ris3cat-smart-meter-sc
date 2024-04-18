@@ -6,7 +6,6 @@ import {AddUserFormModalComponent} from "../../components/add-user-form-modal/ad
 import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
 
 
-
 @Component({
   selector: 'app-share-page',
   standalone: true,
@@ -20,7 +19,7 @@ import {NavbarComponent} from "../../../../../shared/infrastructure/components/n
   templateUrl: './share-page.component.html',
   styleUrl: './share-page.component.scss'
 })
-export class SharePageComponent implements OnInit {
+export class SharePageComponent {
 
   constructor(
     private ngModal: NgbModal,
@@ -28,10 +27,6 @@ export class SharePageComponent implements OnInit {
     private monitoringService: MonitoringService
   ) {
   }
-
-  ngOnInit(): void {
-  }
-
 
   addUser() {
     this.ngModal.open(AddUserFormModalComponent);

@@ -4,7 +4,6 @@ import {UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../auth/domain/UserLoggedInEvent";
-import {CupsResponseDTO} from "../../../shared/infrastructure/services/zertipower/DTOs/CupsResponseDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class ProfileUpdaterService {
     private zertipower: ZertipowerService,
     private eventBus: EventBus,
   ) {
-    this.eventBus.subscribe(UserLoggedInEvent.NAME, async (event) => {
+    this.eventBus.subscribe(UserLoggedInEvent.NAME, async (_) => {
       const authData = this.authStore.snapshotOnly(state => state.authData);
 
       if (!authData) {
