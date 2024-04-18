@@ -42,7 +42,7 @@ export class UserProfileSelectorComponent {
     );
   userName$ = this.userStore.selectOnly(state => state.user?.username)
     .pipe(
-      map(username => username || 'Anonim'),
+      map(username => username || 'Anònim'),
     );
 
   constructor(
