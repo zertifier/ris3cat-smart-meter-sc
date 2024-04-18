@@ -26,6 +26,6 @@ export class LoginCallbackComponent implements OnInit {
     }
 
     await this.loginAction.run(code);
-    this.router.navigate(['/energy-stats']);
+    await this.router.navigate(['/energy-stats']);
   }
 }
