@@ -40,7 +40,7 @@ export class UserProfileSelectorComponent {
         return new TextShorterPipe().transform(wallet, 6, 4);
       })
     );
-  userName$ = this.userStore.selectOnly(state => state.user?.username)
+  firstName = this.userStore.selectOnly(state => state.user?.firstname)
     .pipe(
       map(username => username || 'Anònim'),
     );
