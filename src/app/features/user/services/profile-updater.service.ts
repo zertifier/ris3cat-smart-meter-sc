@@ -36,12 +36,13 @@ export class ProfileUpdaterService {
       this.userStore.patchState({
         selectedCupsIndex: 0,
         surplusDistribution,
+        user,
         cups: cups.map(c => {
           return {
             id: c.id,
             communityId: c.community_id,
             reference: c.cups,
-            surplusDistribution: parseFloat(c.surplus_distribution)
+            surplusDistribution: parseFloat(c.surplus_distribution),
           }
         })
       })

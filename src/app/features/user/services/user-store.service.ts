@@ -1,6 +1,16 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
 
+export interface UserProfile {
+  id: number,
+  firstname: string,
+  role: string,
+  username: string,
+  email: string,
+  lastname: string,
+  wallet_address: string,
+}
+
 export interface UserStore {
   cups: {
     id: number;
@@ -12,6 +22,7 @@ export interface UserStore {
   activeMembers: number;
   totalMembers: number;
   surplusDistribution: number;
+  user?: UserProfile;
 }
 
 const defaultValues: UserStore = {
