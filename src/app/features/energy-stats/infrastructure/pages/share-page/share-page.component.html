@@ -1,31 +1,30 @@
-<app-navbar/>
-
 <div class="container">
   <div class="d-flex justify-content-end mt-4">
     <button (click)="addUser()" class="btn btn-dark">Afegir</button>
   </div>
   <table class="table table-striped">
     <thead>
-      <tr>
-        <th>Usuari</th>
-        <th>Email</th>
-        <th>Preu</th>
-        <th>Accions</th>
-      </tr>
+    <tr>
+      <th>Usuari</th>
+      <th>Email</th>
+      <th>Preu</th>
+      <th>Accions</th>
+    </tr>
     </thead>
     <tbody>
       @for (user of sharingUsers.sharingUsers; track user.id) {
         <tr>
           <td>
-            {{user.name}}
+            {{ user.name }}
           </td>
           <td>
-              {{user.email}}
+            {{ user.email }}
           </td>
           <td>
             <select class="form-select" [value]="user.price">
               <option [selected]="user.price === EnergyPrice.FREE" [value]="EnergyPrice.FREE">Free</option>
-              <option [selected]="user.price === EnergyPrice.COMMUNITY" [value]="EnergyPrice.COMMUNITY">Community</option>
+              <option [selected]="user.price === EnergyPrice.COMMUNITY" [value]="EnergyPrice.COMMUNITY">Community
+              </option>
             </select>
           </td>
           <td>
