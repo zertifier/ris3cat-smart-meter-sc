@@ -7,9 +7,5 @@ export const LoggedInGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   const loggedIn = authStore.snapshotOnly(authStore.$.loggedIn);
-  if (loggedIn) {
-    return true;
-  } else {
-    return router.createUrlTree(['/auth']);
-  }
+  return loggedIn || router.createUrlTree(['/auth']);
 }

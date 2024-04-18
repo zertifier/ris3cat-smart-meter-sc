@@ -7,9 +7,5 @@ export const LoggedOutGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const loggedIn = authStore.snapshotOnly(authStore.$.loggedIn);
-  if (!loggedIn) {
-    return true;
-  } else {
-    return router.createUrlTree(['/energy-stats']);
-  }
+  return !loggedIn || router.createUrlTree(['/energy-stats']);
 };

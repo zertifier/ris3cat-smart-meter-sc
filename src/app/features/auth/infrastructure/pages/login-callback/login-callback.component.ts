@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {AuthStoreService} from "../../services/auth-store.service";
-import {ApiService} from "../../../../../shared/infrastructure/services/api.service";
 import {LoginActionService} from "../../../actions/login-action.service";
 
 @Component({
@@ -15,10 +12,7 @@ import {LoginActionService} from "../../../actions/login-action.service";
 export class LoginCallbackComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly zertiauthApiService: ZertiauthApiService,
-    private readonly apiService: ApiService,
     private readonly router: Router,
-    private readonly authStore: AuthStoreService,
     private readonly loginAction: LoginActionService,
   ) {
   }
