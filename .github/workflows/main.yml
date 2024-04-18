@@ -19,9 +19,8 @@ jobs:
       - name: Detect changes in smart-meter-dev-ris3cat
         id: check_smart-meter-dev-ris3cat
         run: |
+          cd /home/megatro/apps/dockers/Ris3Cat/ris3cat-smart-meter
           echo "Getting smart-meter-dev-ris3cat diff"
-          whoami
-          pwd
           CHANGED_FILES=$(git diff --name-only HEAD HEAD~1 | grep '[[:print:]]' || true)
           echo "Checking smart-meter-dev-ris3cat diff"
           if [ -n "$CHANGED_FILES" ]; then
