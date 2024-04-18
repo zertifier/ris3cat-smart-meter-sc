@@ -20,6 +20,7 @@ jobs:
         id: check_smart-meter-dev-ris3cat
         run: |
           echo "Getting smart-meter-dev-ris3cat diff"
+          whoami
           CHANGED_FILES=$(git diff --name-only HEAD HEAD~1 | grep "^.//" || true)
           echo "Checking smart-meter-dev-ris3cat diff"
           if [ -n "$CHANGED_FILES" ]; then
