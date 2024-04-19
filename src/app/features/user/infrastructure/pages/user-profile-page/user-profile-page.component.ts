@@ -5,6 +5,7 @@ import {
 } from "../../../../../shared/infrastructure/services/screen-break-points.service";
 import {map} from "rxjs";
 import {AsyncPipe, NgClass} from "@angular/common";
+import {UserStoreService} from "../../services/user-store.service";
 
 @Component({
   selector: 'app-user-profile-page',
@@ -21,6 +22,15 @@ export class UserProfilePageComponent {
     .observeBreakpoints()
     .pipe(map(breakPoint => breakPoint <= BreakPoints.MD));
 
-  constructor(private readonly screensBreakpointsService: ScreenBreakPointsService) {
+  firstName$ = this.userStore.selectOnly(state => state.user?.firstname)
+    .pipe(map(firstName => firstName || "No hi ha nom"));
+
+  lastName$ = this.userStore.selectOnly(state => state.user?.lastname)
+    .pipe(map(lastname => lastname || "No hi ha cognom"));
+
+  constructor(
+    private readonly screensBreakpointsService: ScreenBreakPointsService,
+    private readonly userStore: UserStoreService,
+  ) {
   }
 }
