@@ -4,6 +4,7 @@ import {UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
+import {UserProfileChanged} from "../../../auth/domain/UserProfileChanged";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,16 @@ export class ProfileUpdaterService {
     private zertipower: ZertipowerService,
     private eventBus: EventBus,
   ) {
+    this.eventBus.subscribe(UserProfileChanged.NAME, async _ => {
+      const userProfile = this.userStore.snapshotOnly(state => state.user);
+      if (!userProfile) {
+        throw new Error("User profile not defined");
+      }
+
+      const user = await this.findUserProfileById(userProfile.id);
+      this.userStore.patchState({user});
+    });
+
     this.eventBus.subscribe(UserLoggedInEvent.NAME, async (_) => {
       const authData = this.authStore.snapshotOnly(state => state.authData);
 
@@ -23,12 +34,7 @@ export class ProfileUpdaterService {
         return;
       }
 
-      const users = await this.zertipower.getUsers({filters: []});
-      const user = users.find(user => user.id === authData.id);
-      if (!user) {
-        throw new Error(`User with id ${authData.id} not found`);
-      }
-
+      const user = await this.findUserProfileById(authData.id);
       const cups = await this.zertipower.getCups(user.id);
       // const cups: CupsResponseDTO[] = [];
       const surplusDistribution = parseFloat(cups[0]?.surplus_distribution || "0") * 100;
@@ -46,5 +52,15 @@ export class ProfileUpdaterService {
         })
       })
     });
+  }
+
+  private async findUserProfileById(id: number) {
+    const users = await this.zertipower.getUsers({filters: []});
+    const user = users.find(user => user.id === id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+
+    return user;
   }
 }

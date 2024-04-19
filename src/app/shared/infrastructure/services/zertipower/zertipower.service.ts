@@ -13,6 +13,7 @@ import {SKIP_AUTH_INTERCEPTOR} from "../../../../features/auth/infrastructure/in
 import {LegacyCriteria} from "../../../LegacyCriteria";
 import {DateRange} from "../../../../features/energy-stats/domain/DateRange";
 import {ChartEntity} from "../../../../features/energy-stats/domain/ChartEntity";
+import {UpdateUserDTO} from "./DTOs/UpdateUserDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class ZertipowerService {
 
   async getCups(id: number): Promise<CupsResponseDTO[]> {
     return firstValueFrom(
-      this.httpClient.get<HttpResponse<any>>(`${this.BASE_URL}/users/${id}/cups`)
+      this.httpClient.get<HttpResponse<never>>(`${this.BASE_URL}/users/${id}/cups`)
         .pipe(map(r => r.data))
     );
   }
@@ -70,14 +71,17 @@ export class ZertipowerService {
     return response.data.data;
   }
 
+  async updateUser(id: number, data: UpdateUserDTO): Promise<void> {
+    const response = this.httpClient.put<void>(`${environment.zertipower_url}/users/${id}`, data);
+    await firstValueFrom(response);
+  }
+
   async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange) {
-    const response = await this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
-    return response;
+    return this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
   }
 
   async getCommunityEnergyStats(communityId: number, source: string, date: Date, dateRange: DateRange) {
-    const response = await this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
-    return response;
+    return this.getEnergyStats(ChartEntity.COMMUNITIES, communityId, source, date, dateRange);
   }
 
   async getEnergyStats(resource: ChartEntity, resourceId: number, source: string, date: Date, dateRange: DateRange) {
