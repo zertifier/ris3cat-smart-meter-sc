@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {fromEvent, map, Observable} from "rxjs";
 
 // Bootstrap breakpoints
 export enum BreakPoints {
@@ -13,7 +14,8 @@ export enum BreakPoints {
 @Injectable({
   providedIn: 'root'
 })
-export class ScreenService {
+export class ScreenBreakPointsService {
+  private readonly breakPoint$ = fromEvent(window, 'resize').pipe(map(_ => this.getCurrentBreakPoint()));
   getCurrentBreakPoint(): BreakPoints {
     const width = window.innerWidth;
     let breakPoint = BreakPoints.XXL;
@@ -35,5 +37,9 @@ export class ScreenService {
     }
 
     return breakPoint as BreakPoints;
+  }
+
+  observeBreakpoints(): Observable<BreakPoints> {
+    return this.breakPoint$;
   }
 }
