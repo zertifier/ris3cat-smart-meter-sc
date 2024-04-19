@@ -4,12 +4,12 @@
   <form class="row">
     <div class="col-12 col-md-6">
       <label for="name">Nom (requerit)</label>
-      <input id="name" type="text" class="form-control form-control-lg">
+      <input id="name" type="text" class="form-control form-control-lg" [value]="firstName$ | async">
     </div>
 
     <div class="col-12 col-md-6">
       <label for="lastname">Cognom (requerit)</label>
-      <input id="lastname" type="text" class="form-control form-control-lg">
+      <input id="lastname" type="text" class="form-control form-control-lg" [value]="lastName$ | async">
     </div>
 
     <div class="col-12 col-md-6 mt-5">
