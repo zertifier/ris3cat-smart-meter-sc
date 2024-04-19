@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {AuthStoreService} from "../../auth/infrastructure/services/auth-store.service";
+import {AuthStoreService} from "../../../auth/infrastructure/services/auth-store.service";
 import {UserStoreService} from "./user-store.service";
-import {ZertipowerService} from "../../../shared/infrastructure/services/zertipower/zertipower.service";
-import {EventBus} from "../../../shared/domain/EventBus";
-import {UserLoggedInEvent} from "../../auth/domain/UserLoggedInEvent";
+import {ZertipowerService} from "../../../../shared/infrastructure/services/zertipower/zertipower.service";
+import {EventBus} from "../../../../shared/domain/EventBus";
+import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
 
 @Injectable({
   providedIn: 'root'

@@ -6,7 +6,7 @@ import {LoginImagesService} from "../../services/login-images.service";
 import {NgClass, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
-import {BreakPoints, ScreenService} from "../../../../../shared/infrastructure/services/screen.service";
+import {BreakPoints, ScreenBreakPointsService} from "../../../../../shared/infrastructure/services/screen-break-points.service";
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +33,7 @@ export class LoginPageComponent {
   constructor(
     private router: Router,
     public loginImagesService: LoginImagesService,
-    private screenService: ScreenService,
+    private screenService: ScreenBreakPointsService,
     private zertiauthApiService: ZertiauthApiService,
   ) {
     this.onResize()

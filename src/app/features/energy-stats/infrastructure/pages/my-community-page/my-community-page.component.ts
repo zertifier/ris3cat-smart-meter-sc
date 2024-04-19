@@ -19,7 +19,7 @@ import {
   ConsumptionItemsComponent
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
-import {UserStoreService} from "../../../../user/services/user-store.service";
+import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
 import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
 

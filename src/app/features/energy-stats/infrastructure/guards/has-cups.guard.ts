@@ -1,6 +1,6 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
-import {UserStoreService} from "../../../user/services/user-store.service";
+import {UserStoreService} from "../../../user/infrastructure/services/user-store.service";
 import {map, skipWhile} from "rxjs";
 import {ENERGY_STATS_ROUTE_NAMES} from "../pages/energy-stats-pages-routing.module";
 

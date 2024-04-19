@@ -1,0 +1,18 @@
+<div class="container mt-5">
+  <h4>La meva wallet</h4>
+
+  <form>
+    <div class="mb-3">
+      <label for="wallet">Wallet</label>
+      <input readonly id="wallet" type="text" class="form-control form-control-lg" [value]="wallet$ | async">
+    </div>
+
+    <div>
+      <label for="balance">Saldo</label>
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg" id="balance" placeholder="">
+        <button class="btn btn-primary" type="button">Token EKW</button>
+      </div>
+    </div>
+  </form>
+</div>
