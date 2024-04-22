@@ -79,6 +79,8 @@ export class MyCupPageComponent implements OnInit {
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   protected readonly StatsColors = StatsColors;
   cupsReference$ = this.userStore.selectOnly(this.userStore.$.cupsReference);
+  cups$ = this.userStore.selectOnly(state => state.cups);
+  selectedCupsIndex$ = this.userStore.selectOnly(state => state.selectedCupsIndex);
   surplusDistribution$ = this.userStore.selectOnly(state => state.surplusDistribution);
   subscriptions: Subscription[] = [];
 
@@ -101,6 +103,11 @@ export class MyCupPageComponent implements OnInit {
           })
         })
     )
+  }
+
+  selectCups(event: any) {
+    const value: number = event.target.value;
+    this.userStore.patchState({selectedCupsIndex: value});
   }
 
 }
