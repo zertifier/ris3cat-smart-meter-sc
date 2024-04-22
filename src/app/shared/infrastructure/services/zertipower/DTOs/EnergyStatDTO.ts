@@ -14,8 +14,7 @@ export interface EnergyStatDTO {
   type: string;
   createdAt: string; // Date
   updatedAt: string; // Date
-  communitySurplusActive: number,
-  communitySurplus: number,
+  productionActives: number,
   communityId?: number
   production: number,
 }
@@ -35,8 +34,7 @@ export interface DatadisEnergyStat {
   kwhOutPriceCommunity: number;
   type: string;
   createdAt: Date;
-  communitySurplusActive: number;
-  communitySurplus: number;
+  productionActives: number;
   updatedAt: Date;
   communityId?: number;
   production: number
