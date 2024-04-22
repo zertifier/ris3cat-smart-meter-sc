@@ -4,10 +4,17 @@
     </p>
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
   </div>
-  <div class="w-100">
-    <p>Produccio assignada: {{surplusDistribution$ | async}}% <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/></p>
-    <p><span><i class="fa-solid fa-angle-right" style="color: transparent"></i></span>
-      CUPS: {{ cupsReference$ | async }}</p>
+  <div class="w-100 mb-3">
+    <p class="ps-3">Produccio assignada: {{ surplusDistribution$ | async }}%
+      <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/>
+    </p>
+    <div class="w-100 d-flex ps-3" style="max-width: 20rem">
+      <select class="form-select" (change)="selectCups($event)">
+        @for (cup of (cups$ | async); track $index) {
+          <option [selected]="$index === (selectedCupsIndex$ | async)" [value]="$index">{{ cup.reference }}</option>
+        }
+      </select>
+    </div>
   </div>
   <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el consum producció</h5>
   <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
