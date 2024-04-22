@@ -94,16 +94,15 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
             if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.latestFetchedStats[context.dataIndex];
-              if (context.datasetIndex === 0) {
+              if (context.datasetIndex === 1) {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
-                labels.push(`----------------`);
-              } else if (context.datasetIndex === context.chart.config.data.datasets.length - 1) {
+                // labels.push(`----------------`);
+              } else if (context.datasetIndex === 3) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
+                labels.push(`----------------`);
               }
             }
-
-
             return labels;
           }
         }
@@ -254,6 +253,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     })
     const datasets: any[] = [
       {
+        order: 1,
         label: addCommunityDataset ? 'Consum actius' : 'Consum',
         backgroundColor: StatsColors.BUY_CONSUMPTION,
         borderRadius: 10,
@@ -265,6 +265,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
     if (cce) {
       datasets.push({
+        order: 2,
         label: 'Excedent compartit',
         backgroundColor: StatsColors.VIRTUAL_SURPLUS,
         borderRadius: 10,
@@ -273,6 +274,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       })
     } else {
       datasets.push({
+        order: 2,
         label: 'Excedent',
         backgroundColor: StatsColors.SURPLUS,
         borderRadius: 10,
@@ -297,7 +299,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     if (addCommunityDataset) {
       datasets.unshift(
         {
-          label: 'Excedent comunitari actius',
+          order: 0,
+          label: 'Producció actius',
           backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
@@ -306,8 +309,9 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           grouped: true,
         },
         {
-          label: 'Excedent comunitari',
+          order: 3,
           backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
+          label: 'Producció',
           borderRadius: 10,
           borderWidth: 1,
           data: mappedData.map(d => d.communitySurplus - d.communitySurplusActive),
