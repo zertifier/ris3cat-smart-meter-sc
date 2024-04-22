@@ -36,7 +36,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
   cupsLabels: DataLabel[] = [
     {
-      color: StatsColors.CUPS_PRODUCTION,
+      color: StatsColors.COMMUNITY_PRODUCTION,
       label: 'Producció',
       radius: '2.5rem',
     },
@@ -70,19 +70,24 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   data: any;
   latestFetchedStats: DatadisEnergyStat[] = [];
   chartOptions = {
-  interaction: {
-    intersect: false,
-    mode: 'index',
-  },
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
     plugins: {
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            console.log({context})
-            console.log(context.chart.config.data.datasets.length)
             const {label} = context.dataset;
-            const {formattedValue} = context;
+            let {formattedValue} = context;
             const chartEntity = this.chartStoreService.snapshotOnly(state => state);
+
+            if (context.datasetIndex === 1 && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
+              const value = context.raw;
+              const register = this.latestFetchedStats[context.dataIndex];
+              const total = register.communitySurplusActive + value;
+              formattedValue = total.toLocaleString();
+            }
 
             const unit = chartEntity.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
             const labels: string[] = [`${label}: ${formattedValue} ${unit}`];
@@ -93,13 +98,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 labels.push(`----------------`);
-              } else if (context.datasetIndex === context.chart.config.data.datasets.length-1) {
+              } else if (context.datasetIndex === context.chart.config.data.datasets.length - 1) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
+              } else if (context.datasetIndex === 1) {
+
               }
             }
 
 
-            console.log({labels})
             return labels;
           }
         }
@@ -293,28 +299,28 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     if (addCommunityDataset) {
       datasets.unshift(
         {
-          label: 'Excedent comunitari',
-          backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
-          borderRadius: 10,
-          borderWidth: 1,
-          data: mappedData.map(d => d.communitySurplus),
-          stack: 'Excedent',
-          grouped: true,
-        },
-        {
           label: 'Excedent comunitari actius',
           backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
           borderRadius: 10,
           borderWidth: 1,
           data: mappedData.map(d => d.communitySurplusActive),
-          stack: 'Excedent comunitari actius',
+          stack: 'Excedent',
+          grouped: true,
+        },
+        {
+          label: 'Excedent comunitari',
+          backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
+          borderRadius: 10,
+          borderWidth: 1,
+          data: mappedData.map(d => d.communitySurplus - d.communitySurplusActive),
+          stack: 'Excedent',
           grouped: true,
         },
       )
     } else {
       datasets.unshift({
         label: 'Producció',
-        backgroundColor: StatsColors.CUPS_PRODUCTION,
+        backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
         borderRadius: 10,
         borderWidth: 1,
         data: mappedData.map(d => d.production),
