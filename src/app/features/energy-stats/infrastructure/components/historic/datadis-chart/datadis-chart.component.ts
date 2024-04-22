@@ -103,8 +103,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 labels.push(`----------------`);
               }
             }
-
-
             return labels;
           }
         }
