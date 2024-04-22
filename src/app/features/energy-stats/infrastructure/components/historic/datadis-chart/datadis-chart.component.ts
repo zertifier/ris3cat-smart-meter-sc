@@ -85,7 +85,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             if (context.datasetIndex === 1 && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const value = context.raw;
               const register = this.latestFetchedStats[context.dataIndex];
-              const total = register.communitySurplusActive + value;
+              const total = register.productionActives + value;
               formattedValue = total.toLocaleString();
             }
 
@@ -100,8 +100,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 labels.push(`----------------`);
               } else if (context.datasetIndex === context.chart.config.data.datasets.length - 1) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
-              } else if (context.datasetIndex === 1) {
-
               }
             }
 
@@ -221,8 +219,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     const mappedData = data.map(d => {
       const consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
       const surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
-      const communitySurplus = showEnergy ? d.communitySurplus : +(d.kwhInPrice * d.communitySurplus).toFixed(2);
-      const communitySurplusActive = showEnergy ? d.communitySurplusActive : +(d.kwhInPrice * d.communitySurplusActive).toFixed(2);
+      const communitySurplus = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
+      const communitySurplusActive = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
       const virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
       const production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
 
