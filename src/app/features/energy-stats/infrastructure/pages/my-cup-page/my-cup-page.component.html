@@ -17,34 +17,43 @@
     </div>
   </div>
   <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el consum producció</h5>
-  <div class="d-flex gap-4 justify-content-around w-100" style="margin: 10rem 0">
-    <app-stat-display
-      [disabled]="true"
-      width="20%"
-      [color]="StatsColors.BUY_CONSUMPTION"
-      label="Consum"
-      [text]="powerFlow().buy.toFixed(2) + ' KW'"/>
 
-    <app-stat-display
-      [disabled]="powerFlow().inHouse === 0"
-      width="20%"
-      [color]="StatsColors.IN_HOUSE_CONSUMPTION"
-      label="Autoconsum"
-      [text]="powerFlow().inHouse.toFixed(2) + ' KW'"/>
+  <div class="row justify-content-around w-100" style="margin: 7rem 0">
+    <div class="col-6 col-lg my-3">
+      <app-stat-display
+        [disabled]="true"
+        width="20%"
+        [color]="StatsColors.BUY_CONSUMPTION"
+        label="Consum"
+        [text]="powerFlow().buy.toFixed(2) + ' KW'"/>
+    </div>
 
-    <app-stat-display
-      [disabled]="powerFlow().production === 0"
-      width="20%"
-      [color]="StatsColors.COMMUNITY_PRODUCTION"
-      label="Energia generada"
-      [text]="powerFlow().production.toFixed(2) + ' KW'"/>
+    <div class="col-6 col-lg my-3">
+      <app-stat-display
+        [disabled]="powerFlow().inHouse === 0"
+        width="20%"
+        [color]="StatsColors.IN_HOUSE_CONSUMPTION"
+        label="Autoconsum"
+        [text]="powerFlow().inHouse.toFixed(2) + ' KW'"/>
+    </div>
 
-    <app-stat-display
-      [disabled]="powerFlow().sell === 0"
-      width="20%"
-      [color]="StatsColors.SURPLUS"
-      label="Excedent"
-      [text]="powerFlow().sell.toFixed(2) + ' KW'"/>
+    <div class="col-6 col-lg my-3">
+      <app-stat-display
+        [disabled]="powerFlow().production === 0"
+        width="20%"
+        [color]="StatsColors.COMMUNITY_PRODUCTION"
+        label="Energia generada"
+        [text]="powerFlow().production.toFixed(2) + ' KW'"/>
+    </div>
+
+    <div class="col-6 col-lg my-3">
+      <app-stat-display
+        [disabled]="powerFlow().sell === 0"
+        width="20%"
+        [color]="StatsColors.SURPLUS"
+        label="Excedent"
+        [text]="powerFlow().sell.toFixed(2) + ' KW'"/>
+    </div>
   </div>
 
   <div class="w-100" style="margin-bottom: 10rem;">
