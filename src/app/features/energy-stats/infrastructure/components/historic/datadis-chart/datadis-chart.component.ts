@@ -45,7 +45,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       label: 'Consum',
       radius: '2.5rem',
     },
-
   ]
 
   communitiesLabels: DataLabel[] = [
