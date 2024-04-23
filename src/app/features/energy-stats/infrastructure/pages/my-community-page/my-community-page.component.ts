@@ -106,10 +106,11 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     private readonly userStore: UserStoreService,
     private readonly monitoringStore: MonitoringStoreService
   ) {
-    this.monitoringService.start(60000);
   }
 
   async ngOnInit(): Promise<void> {
+    await this.monitoringService.start(60000);
+
     const authData = this.authStore.snapshotOnly(state => state.authData);
     if (!authData) {
       alert('no auth data')
@@ -120,7 +121,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       this.monitoringService
         .getPowerFlow()
         .subscribe(value => {
-          this.monitoringStore.patchState({lastPowerFlowUpdate: new Date()});
           const {production, buy, inHouse, sell} = value;
           this.powerFlow.set({
             production: production / 1000,

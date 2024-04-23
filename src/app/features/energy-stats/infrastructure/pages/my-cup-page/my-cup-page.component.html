@@ -1,13 +1,20 @@
 <div class="container my-5">
   <div class="mt-5 d-flex align-items-center justify-content-between">
-    <p><span><i class="fa-solid fa-angle-right"></i></span> El meu CUPS <span class="text-secondary">(Cost Unitari de la Potència)</span>
+    <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> El meu C.U.P.S. <span class="text-secondary">(Cost Unitari de la Potència)</span>
     </p>
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
   </div>
   <div class="w-100 mb-3">
-    <p class="ps-3">Produccio assignada: {{ surplusDistribution$ | async }}%
-      <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/>
-    </p>
+    <div class="w-100 d-flex justify-content-between">
+      <p class="ps-3">Produccio assignada: {{ surplusDistribution$ | async }}%
+        <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/>
+      </p>
+      @if (lastUpdate$ | async) {
+        <p>Actualitzat a les {{lastUpdate$ | async}} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i class="fa-solid fa-circle"></i></span></p>
+      } @else {
+        <p>No s'ha registrat cap dada</p>
+      }
+    </div>
     <div class="w-100 d-flex ps-3" style="max-width: 20rem">
       <select class="form-select" (change)="selectCups($event)">
         @for (cup of (cups$ | async); track $index) {
