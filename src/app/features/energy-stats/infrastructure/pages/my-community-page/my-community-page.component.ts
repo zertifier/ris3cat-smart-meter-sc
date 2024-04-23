@@ -109,7 +109,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.monitoringService.start(60000);
+    await this.monitoringService.start();
 
     const authData = this.authStore.snapshotOnly(state => state.authData);
     if (!authData) {

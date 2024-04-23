@@ -32,7 +32,7 @@ export class MonitoringService {
   ) {
   }
 
-  async start(interval: number) {
+  async start() {
     if (this.interval) {
       return;
     }
@@ -40,7 +40,7 @@ export class MonitoringService {
 
     this.interval = setInterval(async () => {
       await this.updatePowerFlow()
-    }, interval);
+    }, 60000);
   }
 
   getPowerFlow() {
