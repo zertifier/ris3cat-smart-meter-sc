@@ -103,7 +103,7 @@ export class MyCupPageComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.monitoringService.start(60000);
+    await this.monitoringService.start();
 
     this.subscriptions.push(
       this.monitoringService
