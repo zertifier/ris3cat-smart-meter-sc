@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
-import {Subscription} from "rxjs";
+import {catchError, map, Subscription, throwError} from "rxjs";
 import {AsyncPipe, JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
@@ -22,6 +22,8 @@ import {HistoricChartComponent} from "../../components/historic/historic-chart/h
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
 import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
+import {MonitoringStoreService} from "../../services/monitoring-store.service";
+import {getMonth} from "../../../../../shared/utils/DatesUtils";
 
 dayjs.extend(utc);
 
@@ -88,12 +90,21 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   subscriptions: Subscription[] = [];
   totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  lastUpdate$ = this.monitoringStore.selectOnly(state => state.lastPowerFlowUpdate)
+    .pipe(map(value => {
+      if (!value) {
+        return '';
+      }
+      const month = getMonth(value.getMonth());
+      return dayjs(value).format(`HH:mm:ss - DD [${month}] YYYY`);
+    }));
   protected readonly StatsColors = StatsColors;
 
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly authStore: AuthStoreService,
     private readonly userStore: UserStoreService,
+    private readonly monitoringStore: MonitoringStoreService
   ) {
     this.monitoringService.start(60000);
   }
@@ -109,6 +120,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
       this.monitoringService
         .getPowerFlow()
         .subscribe(value => {
+          this.monitoringStore.patchState({lastPowerFlowUpdate: new Date()});
           const {production, buy, inHouse, sell} = value;
           this.powerFlow.set({
             production: production / 1000,
