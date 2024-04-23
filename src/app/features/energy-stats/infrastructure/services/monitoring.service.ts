@@ -45,8 +45,6 @@ export class MonitoringService {
 
   getPowerFlow() {
     return this.powerFlow.asObservable().pipe(tap(() => {
-      console.debug('Powerflow updated');
-      this.monitoringStoreService.patchState({lastPowerFlowUpdate: new Date()})
     }));
   }
 
@@ -81,11 +79,14 @@ export class MonitoringService {
   }
 
   private async fetchPowerFlow() {
-    return firstValueFrom(this.httpClient.get<HttpResponse<{
+    const response = await firstValueFrom(this.httpClient.get<HttpResponse<{
       production: number,
       consumption: number,
       grid: number
     }>>(`${environment.api_url}/monitoring/powerflow/`)
       .pipe(map(r => r.data)))
+
+    this.monitoringStoreService.patchState({lastPowerFlowUpdate: new Date()})
+    return response;
   }
 }
