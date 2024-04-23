@@ -1,13 +1,17 @@
 <div class="container my-5">
   <div class="mt-5 d-flex align-items-center justify-content-between">
     <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> La cups de la teva comunitat</p>
-    <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-success"></i></span></p>
+    <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
   </div>
   <div class="d-flex justify-content-between">
     <h5 class="gap-2 fw-bold ps-3">Aquest és el teu consum i producció energètica de la teva
       comunitat</h5>
     <!--TODO every time that we get a powerflow update this date-->
-    <p>Actualitzat a les {{lastUpdate$ | async}} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i class="fa-solid fa-circle"></i></span></p>
+    @if (lastUpdate$ | async) {
+      <p>Actualitzat a les {{lastUpdate$ | async}} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i class="fa-solid fa-circle"></i></span></p>
+    } @else {
+      <p>No s'ha registrat cap dada</p>
+    }
   </div>
 
   <div class="ms-3 w-100">

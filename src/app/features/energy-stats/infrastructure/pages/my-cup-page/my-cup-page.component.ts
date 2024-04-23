@@ -14,12 +14,15 @@ import {
   ConsumptionItemsComponent
 } from "../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
-import {Subscription} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
 import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
 import {
   QuestionBadgeComponent
 } from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+import {MonitoringStoreService} from "../../services/monitoring-store.service";
+import {getMonth} from "../../../../../shared/utils/DatesUtils";
+import dayjs from "dayjs";
 
 
 @Component({
@@ -44,6 +47,14 @@ import {
   styleUrl: './my-cup-page.component.scss'
 })
 export class MyCupPageComponent implements OnInit {
+  lastUpdate$ = this.monitoringStore.selectOnly(state => state.lastPowerFlowUpdate)
+    .pipe(map(value => {
+      if (!value) {
+        return '';
+      }
+      const month = getMonth(value.getMonth());
+      return dayjs(value).format(`HH:mm:ss - DD [${month}] YYYY`);
+    }));
   consumptionItems: ConsumptionItem[] = [
     {
       consumption: 0.015,
@@ -84,11 +95,16 @@ export class MyCupPageComponent implements OnInit {
   surplusDistribution$ = this.userStore.selectOnly(state => state.surplusDistribution);
   subscriptions: Subscription[] = [];
 
-  constructor(private readonly monitoringService: MonitoringService, private readonly userStore: UserStoreService) {
-    this.monitoringService.start(60000);
+  constructor(
+    private readonly monitoringService: MonitoringService,
+    private readonly userStore: UserStoreService,
+    private readonly monitoringStore: MonitoringStoreService
+  ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.monitoringService.start(60000);
+
     this.subscriptions.push(
       this.monitoringService
         .getPowerFlow()

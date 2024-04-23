@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {firstValueFrom, map, Subject} from "rxjs";
+import {BehaviorSubject, firstValueFrom, map, tap} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
+import {MonitoringStoreService} from "./monitoring-store.service";
 
 export interface EnergyStat {
   inHouseConsumption: number;
@@ -22,58 +23,29 @@ export interface PowerStats {
   providedIn: 'root'
 })
 export class MonitoringService {
-  private powerFlow = new Subject<PowerStats>();
+  private powerFlow = new BehaviorSubject<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0});
   private interval: any;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private monitoringStoreService: MonitoringStoreService,
+  ) {
   }
 
-  start(interval: number) {
+  async start(interval: number) {
     if (this.interval) {
-      this.stop()
+      return;
     }
-    firstValueFrom(this.httpClient.get<HttpResponse<{
-      production: number,
-      consumption: number,
-      grid: number
-    }>>(`${environment.api_url}/monitoring/powerflow/`).pipe(map(r => r.data)))
-      .then(data => {
-        const stats: PowerStats = {buy: 0,sell: 0,inHouse: 0, production: 0}
-        stats.production = data.production
-        if (data.consumption > data.production) {
-          stats.inHouse = data.production;
-          stats.buy = data.consumption - data.production
-        } else {
-          stats.inHouse = data.consumption;
-          stats.sell = data.production - data.consumption
-        }
-        this.powerFlow.next(stats)
-      });
+    this.updatePowerFlow().then(() => console.log('first powerflow updated'));
 
     this.interval = setInterval(async () => {
-      const data = await firstValueFrom(this.httpClient.get<HttpResponse<{
-        production: number,
-        consumption: number,
-        grid: number
-      }>>(`${environment.api_url}/monitoring/powerflow/`)
-        .pipe(map(r => r.data)));
-
-      const stats: PowerStats = {buy: 0,sell: 0,inHouse: 0, production: 0}
-      stats.production = data.production
-      if (data.consumption > data.production) {
-        stats.inHouse = data.production;
-        stats.buy = data.consumption - data.production
-      } else {
-        stats.inHouse = data.consumption;
-        stats.sell = data.production - data.consumption
-      }
-      this.powerFlow.next(stats)
+      await this.updatePowerFlow()
     }, interval);
   }
 
-
   getPowerFlow() {
-    return this.powerFlow.asObservable();
+    return this.powerFlow.asObservable().pipe(tap(() => {
+    }));
   }
 
   async getEnergyStats(date: string, dateRange: number) {
@@ -85,5 +57,36 @@ export class MonitoringService {
 
   stop() {
     clearInterval(this.interval);
+  }
+
+  private async updatePowerFlow() {
+    try {
+      const data = await this.fetchPowerFlow();
+
+      const stats: PowerStats = {buy: 0, sell: 0, inHouse: 0, production: 0}
+      stats.production = data.production
+      if (data.consumption > data.production) {
+        stats.inHouse = data.production;
+        stats.buy = data.consumption - data.production
+      } else {
+        stats.inHouse = data.consumption;
+        stats.sell = data.production - data.consumption
+      }
+      this.powerFlow.next(stats);
+    } catch (err: unknown) {
+      this.monitoringStoreService.patchState({lastPowerFlowUpdate: undefined});
+    }
+  }
+
+  private async fetchPowerFlow() {
+    const response = await firstValueFrom(this.httpClient.get<HttpResponse<{
+      production: number,
+      consumption: number,
+      grid: number
+    }>>(`${environment.api_url}/monitoring/powerflow/`)
+      .pipe(map(r => r.data)))
+
+    this.monitoringStoreService.patchState({lastPowerFlowUpdate: new Date()})
+    return response;
   }
 }

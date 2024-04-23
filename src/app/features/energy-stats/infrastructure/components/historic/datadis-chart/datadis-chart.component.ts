@@ -45,7 +45,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       label: 'Consum',
       radius: '2.5rem',
     },
-
   ]
 
   communitiesLabels: DataLabel[] = [
@@ -149,13 +148,13 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           if (chartType === ChartType.CCE) {
             this.chartLabels.push({
               color: StatsColors.VIRTUAL_SURPLUS,
-              label: 'Excedent actiu compartit',
+              label: 'Excedent actius compartit',
               radius: '2.5rem',
             })
           } else {
             this.chartLabels.push({
               color: StatsColors.SURPLUS,
-              label: 'Excedent actiu',
+              label: 'Excedent actius',
               radius: '2.5rem',
             })
           }
@@ -266,7 +265,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     if (cce) {
       datasets.push({
         order: 2,
-        label: 'Excedent actiu compartit',
+        label: 'Excedent actius compartit',
         backgroundColor: StatsColors.VIRTUAL_SURPLUS,
         borderRadius: 10,
         borderWidth: 1,
@@ -275,7 +274,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     } else {
       datasets.push({
         order: 2,
-        label: 'Excedent actiu',
+        label: 'Excedent actius',
         backgroundColor: StatsColors.SURPLUS,
         borderRadius: 10,
         borderWidth: 1,
