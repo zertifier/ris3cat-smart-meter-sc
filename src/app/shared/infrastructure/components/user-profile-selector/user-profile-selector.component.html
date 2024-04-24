@@ -1,19 +1,17 @@
-<div class="btn-group w-100">
-  <button type="button" class="btn btn-outline-white d-flex align-items-center gap-3 p-3">
+<div class="btn-group w-100" display="dynamic" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+  <button type="button" class="py-3 btn btn-outline-white d-flex align-items-center gap-3" ngbDropdownToggle>
     <i class="fa-solid fa-circle-user text-white" style="font-size: 2rem;"></i>
-    <div>
+    <div class="me-auto">
       <span class="text-white">{{ firstName | async }}</span>
       <p class="text-white fw-normal m-0">
         {{ userWallet$ | async }}
       </p>
     </div>
+    <i class="px-3 fa-solid fa-sort-down text-white" style="border-left: 0; font-size: 1.5rem;"></i>
   </button>
-  <div class="btn-group" display="dynamic" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-    <button type="button" class="btn btn-outline-white" ngbDropdownToggle></button>
-    <div class="dropdown-menu" ngbDropdownMenu>
-      <a ngbDropdownItem routerLink="/user/profile">Perfil</a>
-      <a ngbDropdownItem routerLink="/user/wallet">Wallet</a>
-      <a ngbDropdownItem (click)="logout()">Tancar sessió</a>
-    </div>
+  <div class="dropdown-menu" ngbDropdownMenu>
+    <a ngbDropdownItem routerLink="/user/profile">Perfil</a>
+    <a ngbDropdownItem routerLink="/user/wallet">Wallet</a>
+    <a ngbDropdownItem (click)="logout()">Tancar sessió</a>
   </div>
 </div>

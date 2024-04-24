@@ -1,0 +1,39 @@
+@import 'styles/colors';
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+
+.nav-link {
+  font-weight: bold;
+}
+
+.navbar * {
+  border-color: $white !important;
+}
+
+.active {
+  text-decoration: $active-hover underline !important;
+  color: $active-hover !important;
+}
+
+.navbar-toggler-icon::before {
+  color: $white !important;
+}
+
+.nav-link {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.navbar-container {
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar-container {
+    padding: 0 5rem;
+  }
+}
+

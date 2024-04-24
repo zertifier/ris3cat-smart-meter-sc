@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {fromEvent, map, Observable} from "rxjs";
+import {BehaviorSubject, fromEvent, map, Observable} from "rxjs";
 
 // Bootstrap breakpoints
 export enum BreakPoints {
@@ -15,7 +15,15 @@ export enum BreakPoints {
   providedIn: 'root'
 })
 export class ScreenBreakPointsService {
-  private readonly breakPoint$ = fromEvent(window, 'resize').pipe(map(_ => this.getCurrentBreakPoint()));
+  private readonly breakPoint$ = new BehaviorSubject<BreakPoints>(this.getCurrentBreakPoint());
+
+  constructor() {
+    window.addEventListener('resize', () => {
+      const breakPoint = this.getCurrentBreakPoint();
+      this.breakPoint$.next(breakPoint);
+    });
+  }
+
   getCurrentBreakPoint(): BreakPoints {
     const width = window.innerWidth;
     let breakPoint = BreakPoints.XXL;
@@ -40,6 +48,6 @@ export class ScreenBreakPointsService {
   }
 
   observeBreakpoints(): Observable<BreakPoints> {
-    return this.breakPoint$;
+    return this.breakPoint$.asObservable();
   }
 }
