@@ -13,6 +13,7 @@ import {map} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {TextShorterPipe} from "../../pipes/wallet-address-shortener.pipe";
 import {RouterLink} from "@angular/router";
+import {BreakPoints, ScreenBreakPointsService} from "../../services/screen-break-points.service";
 
 @Component({
   selector: 'app-user-profile-selector',
@@ -31,6 +32,10 @@ import {RouterLink} from "@angular/router";
   styleUrl: './user-profile-selector.component.scss'
 })
 export class UserProfileSelectorComponent {
+  currentBreakpoint$ = this.screenBreakpointService.observeBreakpoints();
+  hideName$ = this.currentBreakpoint$.pipe(map(value => {
+    return value <= BreakPoints.MD;
+  }));
   userWallet$ = this.userStore
     .selectOnly(state => state.user?.wallet_address)
     .pipe(
@@ -50,6 +55,7 @@ export class UserProfileSelectorComponent {
   constructor(
     private readonly logoutAction: LogoutActionService,
     private readonly userStore: UserStoreService,
+    private readonly screenBreakpointService: ScreenBreakPointsService,
   ) {
   }
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, fromEvent, map, Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 
 // Bootstrap breakpoints
 export enum BreakPoints {
