@@ -1,4 +1,4 @@
-<ul class="navbar-container bg-primary navbar-nav w-100 d-flex flex-column flex-lg-row align-items-center">
+<ul class="navbar-container bg-primary navbar-nav justify-content-between w-100 d-flex flex-column flex-lg-row align-items-center">
   @if ((hideLogo$ | async) === false) {
     <li class="nav-item me-auto">
       <app-logo [width]="(logoWidth$ | async) || ''"/>
@@ -27,7 +27,7 @@
     </li>
   </div>
 
-  <div class="ms-auto">
+  <div>
     <app-user-profile-selector [style.width]="'20rem'"/>
   </div>
 </ul>
