@@ -1,15 +1,11 @@
-<div class="btn-group">
+<div class="btn-group w-100">
   <button type="button" class="btn btn-outline-white d-flex align-items-center gap-3 p-3">
     <i class="fa-solid fa-circle-user text-white" style="font-size: 2rem;"></i>
-    <div class="row">
-      <div class="col">
-        <span class="text-white">{{ firstName | async }}</span>
-      </div>
-      <div class="col">
-        <span class="text-white">
-          {{ userWallet$ | async }}
-        </span>
-      </div>
+    <div>
+      <span class="text-white">{{ firstName | async }}</span>
+      <p class="text-white fw-normal m-0">
+        {{ userWallet$ | async }}
+      </p>
     </div>
   </button>
   <div class="btn-group" display="dynamic" ngbDropdown role="group" aria-label="Button group with nested dropdown">

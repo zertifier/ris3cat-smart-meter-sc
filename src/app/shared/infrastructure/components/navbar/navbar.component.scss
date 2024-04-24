@@ -1,21 +1,29 @@
 @import 'styles/colors';
 
-.active {
-  text-decoration: $active-hover underline !important;
-  color: $active-hover !important;
-  font-weight: normal !important;
-}
-
 .nav-link {
   font-weight: bold;
 }
 
 .navbar * {
-  color: $white !important;
   border-color: $white !important;
+}
+
+
+.active {
+  text-decoration: $active-hover underline !important;
+  color: $active-hover !important;
 }
 
 .navbar-toggler-icon::before {
   color: $white !important;
 }
 
+.navbar-container {
+  padding: 0 5rem;
+  width: 100%;
+}
+
+.nav-link {
+  font-size: 1.1rem;
+  font-weight: 600;
+}

@@ -1,21 +1,23 @@
-<div class="container my-5">
+<div class="container-page">
   <div class="mt-5 d-flex align-items-center justify-content-between">
-    <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> El meu C.U.P.S. <span class="text-secondary">(Cost Unitari de la Potència)</span>
+    <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> El meu C.U.P.S. <span
+      class="text-secondary">(Cost Unitari de la Potència)</span>
     </p>
     <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
   </div>
   <div class="w-100 mb-3">
     <div class="w-100 d-flex justify-content-between">
-      <p class="ps-3">Produccio assignada: {{ surplusDistribution$ | async }}%
+      <p>Produccio assignada: {{ surplusDistribution$ | async }}%
         <app-question-badge text="El percentatge de l'energia produida que se li assigna a aquest CUPS"/>
       </p>
       @if (lastUpdate$ | async) {
-        <p>Actualitzat a les {{lastUpdate$ | async}} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i class="fa-solid fa-circle"></i></span></p>
+        <p>Actualitzat a les {{ lastUpdate$ | async }} <span class="text-success" style="font-size: 0.8rem;"><i
+          class="fa-solid fa-circle"></i></span></p>
       } @else {
         <p>No s'ha registrat cap dada</p>
       }
     </div>
-    <div class="w-100 d-flex ps-3" style="max-width: 20rem">
+    <div class="w-100 d-flex" style="max-width: 20rem">
       <select class="form-select" (change)="selectCups($event)">
         @for (cup of (cups$ | async); track $index) {
           <option [selected]="$index === (selectedCupsIndex$ | async)" [value]="$index">{{ cup.reference }}</option>
@@ -23,7 +25,7 @@
       </select>
     </div>
   </div>
-  <h5 class="d-flex align-items-center gap-2 fw-bold ps-3">Aquest és el consum producció</h5>
+  <h5 class="d-flex align-items-center gap-2 fw-bold">Aquest és el consum producció</h5>
 
   <div class="row justify-content-around w-100" style="margin: 7rem 0">
     <div class="col-6 col-lg my-3">
