@@ -11,6 +11,9 @@ import {ChartResource} from '../../../../domain/ChartResource';
 import {MonitoringService} from "../../../services/monitoring.service";
 import {ChartType} from '../../../../domain/ChartType';
 import {ChartOrigins} from "../../../../domain/ChartOrigins";
+import {
+  QuestionBadgeComponent
+} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 
 @Component({
   selector: 'app-historic-chart',
@@ -23,7 +26,8 @@ import {ChartOrigins} from "../../../../domain/ChartOrigins";
     ReactiveFormsModule,
     AsyncPipe,
     FormsModule,
-    DatadisChartComponent
+    DatadisChartComponent,
+    QuestionBadgeComponent
   ],
   templateUrl: './historic-chart.component.html',
   styleUrl: './historic-chart.component.scss'

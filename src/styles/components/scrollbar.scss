@@ -1,0 +1,28 @@
+/* WebKit */
+@import "../colors";
+
+$scrollbar-width: 0.8rem;
+::-webkit-scrollbar {
+  width: $scrollbar-width;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: $scrollbar-width;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: $scrollbar-width;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary;
+}
+
+
+::-webkit-scrollbar-thumb:active {
+  //background: $primary;
+
+  background: #555;
+}
