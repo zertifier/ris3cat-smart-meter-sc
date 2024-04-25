@@ -14,7 +14,7 @@ import {ChartResource} from "../../../../domain/ChartResource";
   styleUrl: './data-chart.component.scss'
 })
 export class DataChartComponent implements OnInit, OnDestroy {
-  @Input() data: any;
+  @Input() data: unknown;
   @Input() options: any;
   subscriptions: Subscription[] = [];
 
@@ -48,6 +48,11 @@ export class DataChartComponent implements OnInit, OnDestroy {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
       maintainAspectRatio: false,
       indexAxis: 'x',
       aspectRatio: 0.8,
@@ -68,7 +73,7 @@ export class DataChartComponent implements OnInit, OnDestroy {
         y: {
           stacked: true,
           ticks: {
-            callback: function (value: any) {
+            callback: function (value: never) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
               return `${value} ${label}`;
             },
@@ -87,6 +92,11 @@ export class DataChartComponent implements OnInit, OnDestroy {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
       maintainAspectRatio: false,
       aspectRatio: 0.1,
       indexAxis: 'y',
@@ -108,7 +118,7 @@ export class DataChartComponent implements OnInit, OnDestroy {
         x: {
           stacked: true,
           ticks: {
-            callback: function (value: any) {
+            callback: function (value: never) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
               return `${value} ${label}`;
             },
