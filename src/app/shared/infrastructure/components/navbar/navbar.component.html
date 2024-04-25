@@ -1,65 +1,20 @@
-<nav class="navbar navbar-expand-lg bg-primary text-white p-4">
-  <div class="container-fluid">
-    <div class="d-lg-none d-flex w-100 mb-3 align-items-center">
-      <div>
-        <app-logo/>
-      </div>
-
-      <div class="ms-auto d-flex justify-content-end gap-5 w-100">
-        <button class="navbar-toggler p-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="collapse navbar-collapse w-100" id="navbarNav">
-      <ul class="navbar-nav w-100 d-flex align-items-center">
-        <li class="d-none d-lg-block nav-item">
-          <app-logo/>
-        </li>
-        <!--                <div class="ms-auto d-flex justify-content-end gap-5 w-100">-->
-        <div class="ms-auto d-flex justify-content-end gap-5 w-100 align-items-center">
-          <div class="row align-items-center">
-            <div class="col my-2">
-              <li class="nav-item">
-                <a class="nav-link text-white" [routerLink]="'/energy-stats/community'" [routerLinkActive]="'active'">La
-                  meva comunitat</a>
-              </li>
-
-            </div>
-            <div class="col my-2">
-              <li class="nav-item">
-                <a class="nav-link text-white" [routerLink]="'/energy-stats/my-cup'" [routerLinkActive]="'active'">El
-                  meu
-                  CUPS</a>
-              </li>
-
-            </div>
-            <div class="col my-2">
-              <li class="nav-item">
-                <a class="nav-link text-white" [routerLink]="'/energy-stats/share'" [routerLinkActive]="'active'">Compartir
-                  energia</a>
-              </li>
-
-            </div>
-
-            <div class="col my-2">
-              <li>
-                <a class="nav-link text-white" [routerLink]="'/energy-stats/governance'" [routerLinkActive]="'active'">Governança</a>
-              </li>
-            </div>
-
-            <div class="col my-2">
-              <li>
-                <app-user-profile-selector/>
-              </li>
-            </div>
-
-          </div>
-        </div>
-
-      </ul>
-    </div>
+<div class="w-100" [ngSwitch]="(currentBreakPoint | async)">
+  <div class="w-100" *ngSwitchCase="BreakPoints.XS">
+    <app-short-navbar/>
   </div>
-</nav>
+  <div class="w-100" *ngSwitchCase="BreakPoints.SM">
+    <app-short-navbar/>
+  </div>
+  <div class="w-100" *ngSwitchCase="BreakPoints.MD">
+    <app-short-navbar/>
+  </div>
+  <div class="w-100" *ngSwitchCase="BreakPoints.LG">
+    <app-large-navbar/>
+  </div>
+  <div class="w-100" *ngSwitchCase="BreakPoints.XL">
+    <app-large-navbar/>
+  </div>
+  <div class="w-100" *ngSwitchCase="BreakPoints.XXL">
+    <app-large-navbar/>
+  </div>
+</div>

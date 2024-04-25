@@ -1,0 +1,10 @@
+.container-page {
+  padding: 0 !important;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding: 2rem 6rem !important;
+  }
+}

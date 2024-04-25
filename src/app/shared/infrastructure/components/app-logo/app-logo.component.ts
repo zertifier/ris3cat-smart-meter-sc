@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, Input, NgZone, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-logo',
@@ -9,6 +9,8 @@ import {Component, NgZone, OnInit} from '@angular/core';
 })
 export class AppLogoComponent implements OnInit {
   public logoUrl = '';
+
+  @Input() width: string = '15rem';
 
   constructor(private ngZone: NgZone) {
   }
