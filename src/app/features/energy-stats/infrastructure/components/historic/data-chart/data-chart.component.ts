@@ -133,6 +133,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   private parseInput() {
     const datasets: any[] = [];
     this.legendLabels = [];
+    const self = this;
     for (const entry of this.dataset) {
       datasets.push({
         label: entry.label,
@@ -147,7 +148,21 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.legendLabels.push({
         label: entry.label,
         radius: '2.5rem',
-        color: entry.color
+        color: entry.color,
+        hidden: false,
+        toggle: function () {
+          const datasetIndex = self.chart.data.datasets.findIndex(d => d.label === entry.label);
+          if (datasetIndex === -1) {
+            return this.hidden;
+          }
+
+          const dataset = self.chart.data.datasets[datasetIndex];
+          console.log(`changing visibility: ${!dataset.hidden}`);
+          dataset.hidden = !dataset.hidden;
+          // this.chart.setDatasetVisibility(datasetIndex, !dataset.hidden);
+          self.chart.update();
+          return dataset.hidden;
+        }
       });
     }
 
