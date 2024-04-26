@@ -20,13 +20,13 @@
 <!--    TODO update active members-->
     <span>Membres actius: 00</span>
   </div>
-  <div class="row justify-content-around w-100" style="margin: 7rem 0">
+  <div class="row justify-content-evenly w-100 mt-5" style="margin-bottom: 8rem;">
 
     <div class="col-6 col-lg my-3">
       <app-stat-display
         [disabled]="powerFlow().buy === 0"
         width="20%"
-        [color]="StatsColors.BUY_CONSUMPTION"
+        [color]="StatsColors.CONSUMPTION"
         label="Consum"
         [text]="powerFlow().buy.toFixed(2) + ' KWH'"/>
     </div>
