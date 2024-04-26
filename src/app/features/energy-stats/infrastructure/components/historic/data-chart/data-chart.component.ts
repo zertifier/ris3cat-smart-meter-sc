@@ -13,9 +13,11 @@ import {ChartModule} from "primeng/chart";
 import {Subscription} from "rxjs";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {ChartResource} from "../../../../domain/ChartResource";
-import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
+import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {Chart,} from "chart.js";
 import {ChartEntity} from "../../../../domain/ChartEntity";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 
 export interface ChartDataset {
   label: string,
@@ -30,7 +32,9 @@ export interface ChartDataset {
   standalone: true,
   imports: [
     ChartModule,
-    ChartLegendComponent
+    ChartLegendComponent,
+    AsyncPipe,
+    NgIf
   ],
   templateUrl: './data-chart.component.html',
   styleUrl: './data-chart.component.scss'
@@ -84,13 +88,22 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input({required: true}) labels: string[] = [];
   chart!: Chart;
   @ViewChild('chart') chartElement!: ElementRef;
+  legendLabels: DataLabel[] = [];
 
   subscriptions: Subscription[] = [];
 
   textColorSecondary = 'rgba(0, 0, 0, 0.54)';
   surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
-  constructor(private chartStoreService: ChartStoreService) {
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  showCommunity$ = this.chartStoreService
+    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
+
+  constructor(
+    private chartStoreService: ChartStoreService,
+    private userStore: UserStoreService
+  ) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -109,7 +122,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (window.innerWidth <= 990)
@@ -120,6 +132,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private parseInput() {
     const datasets: any[] = [];
+    this.legendLabels = [];
     for (const entry of this.dataset) {
       datasets.push({
         label: entry.label,
@@ -130,6 +143,11 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         stack: entry.stack,
         grouped: true,
         order: entry.order,
+      });
+      this.legendLabels.push({
+        label: entry.label,
+        radius: '2.5rem',
+        color: entry.color
       });
     }
 

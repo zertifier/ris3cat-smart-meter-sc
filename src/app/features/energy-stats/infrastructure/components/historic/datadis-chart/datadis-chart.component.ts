@@ -30,10 +30,6 @@ import {ZertipowerService} from "../../../../../../shared/infrastructure/service
 export class DatadisChartComponent implements OnInit, OnDestroy {
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   subscriptions: Subscription[] = [];
-  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
-  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
-  showCommunity$ = this.chartStoreService
-    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
   datasets: ChartDataset[] = [];
   labels: string[] = [];

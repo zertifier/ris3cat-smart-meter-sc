@@ -1,4 +1,8 @@
 <div>
   <canvas #chart></canvas>
 </div>
-<app-chart-legend/>
+<p class="text-center mt-4 fw-bold" *ngIf="showCommunity$ | async">
+  Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
+  membres de la comunitat.
+</p>
+<app-chart-legend [labels]="legendLabels"/>
