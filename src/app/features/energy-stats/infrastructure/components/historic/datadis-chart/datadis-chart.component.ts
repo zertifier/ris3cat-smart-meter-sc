@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AsyncPipe, NgIf} from "@angular/common";
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
-import {DataChartComponent} from "../data-chart/data-chart.component";
+import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
 import {Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
@@ -21,7 +21,8 @@ import {ZertipowerService} from "../../../../../../shared/infrastructure/service
     AsyncPipe,
     ChartLegendComponent,
     DataChartComponent,
-    NgIf
+    NgIf,
+    JsonPipe
   ],
   templateUrl: './datadis-chart.component.html',
   styleUrl: './datadis-chart.component.scss'
@@ -34,80 +35,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   showCommunity$ = this.chartStoreService
     .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
-  cupsLabels: DataLabel[] = [
-    {
-      color: StatsColors.COMMUNITY_PRODUCTION,
-      label: 'Producció',
-      radius: '2.5rem',
-    },
-    {
-      color: StatsColors.BUY_CONSUMPTION,
-      label: 'Consum',
-      radius: '2.5rem',
-    },
-  ]
-
-  communitiesLabels: DataLabel[] = [
-    {
-      color: StatsColors.COMMUNITY_PRODUCTION,
-      label: 'Producció',
-      radius: '2.5rem',
-    },
-    {
-      color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
-      label: 'Producció actius',
-      radius: '2.5rem',
-    },
-    {
-      color: StatsColors.BUY_CONSUMPTION,
-      label: 'Consum actius',
-      radius: '2.5rem',
-    },
-  ]
-
-  chartLabels: DataLabel[] = [];
-  data: any;
-  latestFetchedStats: DatadisEnergyStat[] = [];
-  chartOptions = {
-    interaction: {
-      intersect: false,
-      mode: 'index',
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: (context: any) => {
-            const {label} = context.dataset;
-            let {formattedValue} = context;
-            const chartEntity = this.chartStoreService.snapshotOnly(state => state);
-
-            if (context.datasetIndex === 1 && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
-              const value = context.raw;
-              const register = this.latestFetchedStats[context.dataIndex];
-              const total = register.productionActives + value;
-              formattedValue = total.toLocaleString();
-            }
-
-            const unit = chartEntity.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
-            const labels: string[] = [`${label}: ${formattedValue} ${unit}`];
-
-            if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
-              const stat = this.latestFetchedStats[context.dataIndex];
-              if (context.datasetIndex === 1) {
-                // Todo: change 31 to the real number
-                labels.push(`Total membres: 31`);
-                // labels.push(`----------------`);
-              } else if (context.datasetIndex === 3) {
-                labels.push(`Membres actius: ${stat.activeMembers}`);
-                labels.push(`----------------`);
-              }
-            }
-            return labels;
-          }
-        }
-      }
-    }
-  };
+  datasets: ChartDataset[] = [];
+  labels: string[] = [];
 
   constructor(
     private readonly chartStoreService: ChartStoreService,
@@ -119,48 +48,99 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
       this.chartStoreService
-        .selectOnly(this.chartStoreService.$.justData)
-        .subscribe(async ({
-                            date,
-                            dateRange,
-                            selectedChartResource,
-                            selectedChartEntity,
-                            chartType,
-                          }) => {
-          const data = await this.fetchEnergyStats(date, dateRange);
-          this.setDataChart(data, dateRange, selectedChartResource);
-          this.chartLabels = [];
+        .selectOnly(this.chartStoreService.$.params)
+        .subscribe(
+          async ({
+                   date,
+                   dateRange,
+                   selectedChartResource,
+                   selectedChartEntity,
+                   chartType,
+                 }) => {
+            // Every time that params change, fetch data and update chart
+            // Fetching data
+            const data = await this.fetchEnergyStats(date, dateRange);
+            this.chartStoreService.patchState({lastFetchedStats: data});
 
-          // if (selectedChartResource === ChartResource.PRICE) {
-          //   this.chartLabels.push({
-          //     label: 'Estalvi',
-          //     radius: '2.5rem',
-          //     color: StatsColors.COMMUNITY_PRODUCTION,
-          //   })
-          // }
+            // Create labels
+            let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
+            if (dateRange === DateRange.MONTH) {
+              labels = data.map(d => {
+                return dayjs(d.infoDt).format('DD');
+              });
+            } else if (dateRange === DateRange.DAY) {
+              labels = data.map(d => {
+                return dayjs(d.infoDt).format('HH');
+              })
+            }
 
-          if (selectedChartEntity === ChartEntity.CUPS) {
-            this.chartLabels.push(...this.cupsLabels);
-          } else {
-            this.chartLabels.push(...this.communitiesLabels);
-          }
+            const cce = chartType === ChartType.CCE;
+            const community = selectedChartEntity === ChartEntity.COMMUNITIES;
 
-          if (chartType === ChartType.CCE) {
-            this.chartLabels.push({
-              color: StatsColors.VIRTUAL_SURPLUS,
-              label: 'Excedent actius compartit',
-              radius: '2.5rem',
-            })
-          } else {
-            this.chartLabels.push({
-              color: StatsColors.SURPLUS,
-              label: 'Excedent actius',
-              radius: '2.5rem',
-            })
-          }
-        }),
+            // Map data to a more easy to use objects
+            const mappedData = this.mapData(data, chartType, selectedChartResource);
+
+            // Create data sets
+            const datasets: ChartDataset[] = [
+              {
+                label: 'Consum actius',
+                data: mappedData.map(d => d.consumption),
+                stack: 'Consumption',
+                order: 0,
+                color: StatsColors.CONSUMPTION
+              }
+            ];
+
+            if (cce) {
+              datasets.push({
+                order: 2,
+                label: 'Excedent actius compartit',
+                color: StatsColors.VIRTUAL_SURPLUS,
+                data: mappedData.map(d => d.virtualSurplus),
+              })
+            } else {
+              datasets.push({
+                order: 2,
+                label: 'Excedent actius',
+                color: StatsColors.SURPLUS,
+                data: mappedData.map(d => d.surplus),
+                stack: 'Stack 2',
+              })
+            }
+
+            if (community) {
+              datasets.unshift(
+                {
+                  order: 0,
+                  label: 'Producció actius',
+                  color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
+                  data: mappedData.map(d => d.productionActives),
+                  stack: 'Excedent',
+                },
+                {
+                  order: 3,
+                  color: StatsColors.COMMUNITY_PRODUCTION,
+                  label: 'Producció',
+                  data: mappedData.map(d => d.production - d.productionActives),
+                  stack: 'Excedent',
+                },
+              )
+            } else {
+              datasets.unshift({
+                label: 'Producció',
+                color: StatsColors.COMMUNITY_PRODUCTION,
+                data: mappedData.map(d => d.production),
+                stack: 'Production',
+              })
+            }
+
+            this.labels = labels;
+            this.datasets = datasets;
+          }),
     );
   }
+
+
 
   async fetchEnergyStats(date: Date, range: DateRange) {
     this.chartStoreService.snapshotOnly(state => state.origin);
@@ -184,41 +164,20 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
       }
-      this.latestFetchedStats = data;
+      // this.latestFetchedStats = data;
       return data;
     } finally {
       this.chartStoreService.fetchingData(false);
     }
   }
 
-  /**
-   * It is responsible to format data to the corresponding objects for the chart and even changes the labels
-   * @param data
-   * @param range
-   * @param resource
-   */
-  setDataChart(data: DatadisEnergyStat[], range: DateRange, resource: ChartResource) {
-    let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
-    if (range === DateRange.MONTH) {
-      labels = data.map(d => {
-        return dayjs(d.infoDt).format('DD');
-      });
-    } else if (range === DateRange.DAY) {
-      labels = data.map(d => {
-        return dayjs(d.infoDt).format('HH');
-      })
-    }
-
-    const showEnergy = resource === ChartResource.ENERGY;
-    const addCommunityDataset = this.chartStoreService.snapshotOnly(state => {
-      return state.selectedChartEntity === ChartEntity.COMMUNITIES
-    });
-    const cce = this.chartStoreService.snapshotOnly(state => state.chartType === ChartType.CCE);
-    const mappedData = data.map(d => {
+  mapData(data: DatadisEnergyStat[], chartType: ChartType, chartResource: ChartResource) {
+    const showEnergy = chartResource === ChartResource.ENERGY;
+    const cce = chartType === ChartType.CCE;
+    return data.map(d => {
       const consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
       const surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
-      const communitySurplus = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
-      const communitySurplusActive = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
+      const productionActives = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
       const virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
       const production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
 
@@ -228,111 +187,18 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           surplus,
           virtualSurplus,
           production,
-          communitySurplus,
-          communitySurplusActive
+          productionActives
         }
       }
-
-      // if (consumption >= virtualSurplus) {
-      //   consumption -= virtualSurplus;
-      //   virtualSurplus = 0;
-      // } else {
-      //   consumption = 0;
-      //   virtualSurplus -= consumption;
-      // }
 
       return {
         consumption,
         surplus,
         virtualSurplus,
         production,
-        communitySurplus,
-        communitySurplusActive
+        productionActives
       }
     })
-    const datasets: any[] = [
-      {
-        order: 1,
-        label: addCommunityDataset ? 'Consum actius' : 'Consum',
-        backgroundColor: StatsColors.BUY_CONSUMPTION,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: mappedData.map(d => d.consumption),
-        stack: 'Stack 1'
-      }
-    ]
-
-    if (cce) {
-      datasets.push({
-        order: 2,
-        label: 'Excedent actius compartit',
-        backgroundColor: StatsColors.VIRTUAL_SURPLUS,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: mappedData.map(d => d.virtualSurplus),
-      })
-    } else {
-      datasets.push({
-        order: 2,
-        label: 'Excedent actius',
-        backgroundColor: StatsColors.SURPLUS,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: mappedData.map(d => d.surplus),
-        stack: 'Stack 2'
-      })
-    }
-
-    // if (!showEnergy) {
-    //   datasets.unshift({
-    //     label: 'Estalvi',
-    //     backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
-    //     borderRadius: 10,
-    //     borderWidth: 1,
-    //     data: data.map(d => d.kwhOut),
-    //     stack: 'Estalvi',
-    //     grouped: true,
-    //   });
-    // }
-
-    if (addCommunityDataset) {
-      datasets.unshift(
-        {
-          order: 0,
-          label: 'Producció actius',
-          backgroundColor: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
-          borderRadius: 10,
-          borderWidth: 1,
-          data: mappedData.map(d => d.communitySurplusActive),
-          stack: 'Excedent',
-          grouped: true,
-        },
-        {
-          order: 3,
-          backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
-          label: 'Producció',
-          borderRadius: 10,
-          borderWidth: 1,
-          data: mappedData.map(d => d.communitySurplus - d.communitySurplusActive),
-          stack: 'Excedent',
-          grouped: true,
-        },
-      )
-    } else {
-      datasets.unshift({
-        label: 'Producció',
-        backgroundColor: StatsColors.COMMUNITY_PRODUCTION,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: mappedData.map(d => d.production),
-        stack: 'Production',
-        grouped: true,
-      })
-    }
-    this.data = {
-      labels,
-      datasets,
-    }
   }
 
   ngOnDestroy(): void {

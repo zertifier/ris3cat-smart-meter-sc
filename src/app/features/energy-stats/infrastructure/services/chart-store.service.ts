@@ -5,6 +5,7 @@ import {ChartEntity} from "../../domain/ChartEntity";
 import {ChartResource} from "../../domain/ChartResource";
 import {ChartType} from "../../domain/ChartType";
 import {ChartOrigins} from "../../domain/ChartOrigins";
+import {DatadisEnergyStat} from "../../../../shared/infrastructure/services/zertipower/DTOs/EnergyStatDTO";
 
 export interface ChartStore {
   dateRange: DateRange,
@@ -13,7 +14,8 @@ export interface ChartStore {
   origin: ChartOrigins,
   selectedChartEntity: ChartEntity,
   selectedChartResource: ChartResource,
-  chartType: ChartType
+  chartType: ChartType,
+  lastFetchedStats: DatadisEnergyStat[]
 }
 
 const defaultValues: ChartStore = {
@@ -23,7 +25,8 @@ const defaultValues: ChartStore = {
   origin: ChartOrigins.DATADIS,
   selectedChartEntity: ChartEntity.CUPS,
   selectedChartResource: ChartResource.ENERGY,
-  chartType: ChartType.ACC
+  chartType: ChartType.ACC,
+  lastFetchedStats: []
 }
 
 @Injectable({
@@ -31,7 +34,7 @@ const defaultValues: ChartStore = {
 })
 export class ChartStoreService extends RxStore<ChartStore> {
   $ = {
-    justData(state: ChartStore) {
+    params(state: ChartStore) {
       const {dateRange, date, selectedChartResource, origin, selectedChartEntity, chartType} = state;
       return {
         dateRange, date, selectedChartResource, origin, selectedChartEntity, chartType

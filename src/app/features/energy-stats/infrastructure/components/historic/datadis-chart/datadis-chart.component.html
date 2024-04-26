@@ -1,10 +1,9 @@
 @if ((fetchingData$ | async) === false) {
-  <app-data-chart [data]="data" [options]="chartOptions"/>
+  <app-data-chart [dataset]="datasets" [labels]="labels"/>
   <p class="text-center mt-4 fw-bold" *ngIf="showCommunity$ | async">
     Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
     membres de la comunitat.
   </p>
-  <app-chart-legend [labels]="chartLabels"/>
 } @else {
   <div class="w-100 d-flex justify-content-center flex-column gap-2 align-items-center">
     <h4>Carregant dades</h4>
