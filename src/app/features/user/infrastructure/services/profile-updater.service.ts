@@ -35,7 +35,7 @@ export class ProfileUpdaterService {
       }
 
       const user = await this.findUserProfileById(authData.id);
-      const cups = await this.zertipower.getCups(user.id);
+      const cups = await this.zertipower.users.getCups(user.id);
       // const cups: CupsResponseDTO[] = [];
       const surplusDistribution = parseFloat(cups[0]?.surplus_distribution || "0") * 100;
       this.userStore.patchState({
@@ -55,7 +55,7 @@ export class ProfileUpdaterService {
   }
 
   private async findUserProfileById(id: number) {
-    const users = await this.zertipower.getUsers({filters: []});
+    const users = await this.zertipower.users.get({filters: []});
     const user = users.find(user => user.id === id);
     if (!user) {
       throw new Error(`User with id ${id} not found`);

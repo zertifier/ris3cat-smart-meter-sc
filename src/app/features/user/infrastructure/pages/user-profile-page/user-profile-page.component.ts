@@ -66,7 +66,7 @@ export class UserProfilePageComponent implements OnInit {
     }
     const {id, email, wallet_address, username, role} = user;
     const {firstname, lastname} = this.formGroup.value;
-    await this.zertipower.updateUser(id, {
+    await this.zertipower.users.update(id, {
       email, wallet_address, username, role, firstname: firstname!, lastname: lastname!, password: '',
     });
     await this.eventBus.publishEvents(new UserProfileChanged());

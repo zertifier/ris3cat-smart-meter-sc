@@ -14,6 +14,7 @@ import {LegacyCriteria} from "../../../LegacyCriteria";
 import {DateRange} from "../../../../features/energy-stats/domain/DateRange";
 import {ChartEntity} from "../../../../features/energy-stats/domain/ChartEntity";
 import {UpdateUserDTO} from "./DTOs/UpdateUserDTO";
+import {ZertipowerUserService} from "./users/ZertipowerUserService";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class ZertipowerService {
   private BASE_URL = environment.zertipower_url;
   private axiosClient = axios.create({
     baseURL: this.BASE_URL,
-  })
+  });
+  public readonly users: ZertipowerUserService;
 
   // Note, the usage of axios is because it can parse the criteria object and send it correctly.
   // Angular http client cannot do that.
@@ -32,6 +34,7 @@ export class ZertipowerService {
   ) {
     // Implementing auth token interceptor
     this.axiosClient.interceptors.request.use((config) => {
+      console.log('request interceptor')
       if (config.headers.has(SKIP_AUTH_INTERCEPTOR)) {
         config.headers.delete(SKIP_AUTH_INTERCEPTOR);
         return config;
@@ -39,17 +42,11 @@ export class ZertipowerService {
 
       const accessToken = this.authStore.snapshotOnly(state => state.accessToken);
       config.headers.delete(SKIP_AUTH_INTERCEPTOR);
-      config.headers.set('Auhtorization', `Bearer ${accessToken}`);
+      config.headers.set('Authorization', `Bearer ${accessToken}`);
 
       return config;
     });
-  }
-
-  async getCups(id: number): Promise<CupsResponseDTO[]> {
-    return firstValueFrom(
-      this.httpClient.get<HttpResponse<never>>(`${this.BASE_URL}/users/${id}/cups`)
-        .pipe(map(r => r.data))
-    );
+    this.users = new ZertipowerUserService(this.axiosClient);
   }
 
   async login(walletAddress: string, signature: string, email: string): Promise<{
@@ -63,17 +60,6 @@ export class ZertipowerService {
       .pipe(map(r => ({accessToken: r.data.access_token, refreshToken: r.data.refresh_token})));
 
     return firstValueFrom(response);
-  }
-
-
-  async getUsers(criteria: LegacyCriteria) {
-    const response = await this.axiosClient.get<HttpResponse<UserResponseDTO[]>>("/users", {params: {criteria}});
-    return response.data.data;
-  }
-
-  async updateUser(id: number, data: UpdateUserDTO): Promise<void> {
-    const response = this.httpClient.put<void>(`${environment.zertipower_url}/users/${id}`, data);
-    await firstValueFrom(response);
   }
 
   async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange) {
