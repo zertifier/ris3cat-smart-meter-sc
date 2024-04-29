@@ -11,6 +11,6 @@ import {NgbTooltip, Placement} from "@ng-bootstrap/ng-bootstrap";
   styleUrl: './question-badge.component.scss'
 })
 export class QuestionBadgeComponent {
-  @Input({required: true}) text = '';
   @Input() tooltipPlacement: Placement = 'auto';
+  @Input() tooltipClass: string = '';
 }

@@ -1,5 +1,8 @@
 <!--<span class="badge text-bg-secondary" >-->
 <!--  <i class="fa-solid fa-question"></i>-->
 <!--</span>-->
-<i class="fa-solid fa-circle-question" [style.color]="'#5F7187'" [ngbTooltip]="text" [placement]="tooltipPlacement"></i>
+<ng-template #tooltipContent>
+  <ng-content/>
+</ng-template>
+<i class="fa-solid fa-circle-question" [style.color]="'#5F7187'" [tooltipClass]="tooltipClass" [ngbTooltip]="tooltipContent" [placement]="tooltipPlacement"></i>
 <!--'#212529'-->

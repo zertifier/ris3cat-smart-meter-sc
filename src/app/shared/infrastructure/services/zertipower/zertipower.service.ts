@@ -6,6 +6,7 @@ import {SKIP_AUTH_INTERCEPTOR} from "../../../../features/auth/infrastructure/in
 import {ZertipowerUserService} from "./users/ZertipowerUserService";
 import {ZertipowerEnergyStats} from "./energy-stats/ZertipowerEnergyStats";
 import {ZertipowerAuthService} from "./auth/ZertipowerAuthService";
+import {ZertipowerCommunitiesService} from "./communities/ZertipowerCommunitiesService";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class ZertipowerService {
   public readonly users: ZertipowerUserService;
   public readonly energyStats: ZertipowerEnergyStats;
   public readonly auth: ZertipowerAuthService;
+  public readonly communities: ZertipowerCommunitiesService;
 
   // Note, the usage of axios is because it can parse the criteria object and send it correctly.
   // Angular http client cannot do that.
@@ -41,5 +43,6 @@ export class ZertipowerService {
     this.users = new ZertipowerUserService(this.axiosClient);
     this.energyStats = new ZertipowerEnergyStats(this.axiosClient);
     this.auth = new ZertipowerAuthService(this.axiosClient);
+    this.communities = new ZertipowerCommunitiesService(this.axiosClient);
   }
 }

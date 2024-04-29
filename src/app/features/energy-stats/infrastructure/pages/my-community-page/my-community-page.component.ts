@@ -90,6 +90,7 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
   subscriptions: Subscription[] = [];
   totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
   lastUpdate$ = this.monitoringStore.selectOnly(state => state.lastPowerFlowUpdate)
     .pipe(map(value => {
       if (!value) {
