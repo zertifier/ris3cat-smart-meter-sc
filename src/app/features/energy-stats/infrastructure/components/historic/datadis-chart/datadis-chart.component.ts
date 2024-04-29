@@ -1,6 +1,6 @@
-import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
-import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
+import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
 import {Subscription} from "rxjs";
@@ -147,7 +147,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       const communityId = this.userStore.snapshotOnly(this.userStore.$.communityId);
       const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
       if (selectedChart === ChartEntity.CUPS) {
-        const response = await this.zertipower.getCupEnergyStats(cupId, 'datadis', date, range);
+        const response = await this.zertipower.energyStats.getCupEnergyStats(cupId, 'datadis', date, range);
         this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
         this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
@@ -155,7 +155,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         if (!communityId) {
           return [];
         }
-        const response = await this.zertipower.getCommunityEnergyStats(communityId, 'datadis', date, range);
+        const response = await this.zertipower.energyStats.getCommunityEnergyStats(communityId, 'datadis', date, range);
         this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
         this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
