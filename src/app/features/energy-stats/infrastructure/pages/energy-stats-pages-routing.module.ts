@@ -25,6 +25,13 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'proposals',
+        loadComponent: () => import('./proposals-page/proposals-page.component').then(c => c.ProposalsPageComponent),
+        data: {
+          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
+        }
+      },
+      {
         path: 'community',
         loadComponent: () => import('./my-community-page/my-community-page.component').then(c => c.MyCommunityPageComponent),
         canActivate: [switchChartEntityGuard(ChartEntity.COMMUNITIES), hasCommunityGuard],

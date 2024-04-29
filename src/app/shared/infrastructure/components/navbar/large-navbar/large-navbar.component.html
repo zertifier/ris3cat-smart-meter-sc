@@ -22,8 +22,24 @@
     </li>
 
     <li>
-      <a class="nav-link text-white" [routerLink]="'/energy-stats/governance'"
-         [routerLinkActive]="'active'">Governança</a>
+
+      <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-primary px-0 bg-transparent" id="governDropdown" ngbDropdownToggle>
+          Governança
+        </button>
+        <div class="bg-primary px-2" ngbDropdownMenu aria-labelledby="governDropdown">
+          <a ngbDropdownItem class="nav-link text-white bg-transparent" [routerLink]="'/energy-stats/proposals'"
+             [routerLinkActive]="'active'">Propostes</a>
+          <a ngbDropdownItem class="nav-link text-white bg-transparent" [routerLink]="'/energy-stats/governance'"
+             [routerLinkActive]="'active'">Participants</a>
+          <!--<button ngbDropdownItem>Propostes</button>
+          <button ngbDropdownItem>Another Action</button>
+          <button ngbDropdownItem>Something else is here</button>-->
+        </div>
+
+      </div>
+     <!-- <a class="nav-link text-white" [routerLink]="'/energy-stats/governance'"
+         [routerLinkActive]="'active'">Governança</a>-->
     </li>
   </div>
 

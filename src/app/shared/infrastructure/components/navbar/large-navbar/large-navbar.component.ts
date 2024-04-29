@@ -5,6 +5,7 @@ import {UserProfileSelectorComponent} from "../../user-profile-selector/user-pro
 import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-break-points.service";
 import {AsyncPipe, NgStyle} from "@angular/common";
 import {map} from "rxjs";
+import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-large-navbar',
@@ -15,7 +16,11 @@ import {map} from "rxjs";
     RouterLinkActive,
     UserProfileSelectorComponent,
     NgStyle,
-    AsyncPipe
+    AsyncPipe,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownItem,
+    NgbDropdownToggle
   ],
   templateUrl: './large-navbar.component.html',
   styleUrl: './large-navbar.component.scss'
