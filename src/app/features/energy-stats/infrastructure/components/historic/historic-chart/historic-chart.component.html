@@ -2,15 +2,25 @@
   <div class="col-4">
     <h5>Tipus de dades</h5>
     <select class="form-select w-100" (change)="setChartResource($event)">
-      <option [value]="ChartResource.ENERGY" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Energia kwh</option>
-      <option [value]="ChartResource.PRICE" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu energètic</option>
+      <option [value]="ChartResource.ENERGY" [selected]="(chartResource$ | async) === ChartResource.ENERGY">Energia
+        kwh
+      </option>
+      <option [value]="ChartResource.PRICE" [selected]="(chartResource$ | async) === ChartResource.PRICE">Preu
+        energètic
+      </option>
     </select>
   </div>
 
   <div class="col-4">
 
-<!--    TODO set the correct question message-->
-    <h5>Model comunitari <app-question-badge text="Lorem ipsum"/></h5>
+    <!--    TODO set the correct question message-->
+    <h5>Model comunitari
+      <app-question-badge>
+        <strong>ACC</strong> (Auto Consum Compartit)
+        <br>
+        <strong>CCE</strong> (Consum Comunitari Energètic)
+      </app-question-badge>
+    </h5>
     <select class="form-select w-100" (change)="setChartType($event)">
       <option [selected]="(chartType$ | async) === ChartType.ACC">ACC</option>
       <option [selected]="(chartType$ | async) === ChartType.CCE">CCE</option>
@@ -19,7 +29,12 @@
 
   <div class="col-4">
     <!--    TODO set the correct question message-->
-    <h5>Font de les dades <app-question-badge text="Lorem ipsum"/></h5>
+    <h5>Font de les dades
+      <app-question-badge>
+        Selecciona la plataforma des d'on prefereixis extreure i analitzar
+        les dades relatives al consum, producció i excedent energètic.
+      </app-question-badge>
+    </h5>
     <select class="form-select w-100">
       <option selected>Datadis</option>
     </select>
@@ -53,7 +68,8 @@
 
 <div class="row justify-content-center">
   <div class="col-md-3 mb-4">
-    <p-calendar [maxDate]="maxDate" (onSelect)="setDate($event)" (ngModelChange)="setInputDate($event)" [ngModel]="date$ | async" iconDisplay="input"
+    <p-calendar [maxDate]="maxDate" (onSelect)="setDate($event)" (ngModelChange)="setInputDate($event)"
+                [ngModel]="date$ | async" iconDisplay="input"
                 [dateFormat]="(dateFormat$ | async) || 'yy'" [showIcon]="true" styleClass="w-100"
                 [view]="(calendarView$ | async) || 'month'"/>
 
@@ -61,10 +77,10 @@
 </div>
 
 @switch (origin$ | async) {
-  @case (ChartOrigins.DATADIS) {
-    <app-datadis-chart/>
-  }
-  @default {
-    <h3>Nothing to display</h3>
-  }
+@case (ChartOrigins.DATADIS) {
+<app-datadis-chart/>
 }
+@default {
+<h3>Nothing to display</h3>
+}
+  }
