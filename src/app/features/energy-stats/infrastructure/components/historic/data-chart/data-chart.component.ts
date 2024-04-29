@@ -46,6 +46,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       mode: 'index',
     },
     plugins: {
+      legend: {
+        display: false
+      },
       tooltip: {
         callbacks: {
           label: (context: any) => {
@@ -69,7 +72,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 // labels.push(`----------------`);
-              } else if (context.datasetIndex === 3) {
+              } else if (context.datasetIndex === 0) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
                 labels.push(`----------------`);
               }
@@ -133,6 +136,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   private parseInput() {
     const datasets: any[] = [];
     this.legendLabels = [];
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     for (const entry of this.dataset) {
       datasets.push({
@@ -184,11 +188,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
       maintainAspectRatio: false,
       indexAxis: 'x',
       aspectRatio: 0.8,
@@ -228,11 +227,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
       maintainAspectRatio: false,
       aspectRatio: 0.1,
       indexAxis: 'y',
