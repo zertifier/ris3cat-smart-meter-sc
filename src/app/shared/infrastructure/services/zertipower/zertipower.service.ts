@@ -101,7 +101,7 @@ export class ZertipowerService {
         range = 'yearly'
         break;
     }
-    const formattedDate = dayjs(date).format(desiredFormat); // TODO use dayjs to format date
+    const formattedDate = dayjs(date).format(desiredFormat);
     const response = await this.axiosClient.get<HttpResponse<{
       totalActiveMembers: number,
       totalMembers: number,
