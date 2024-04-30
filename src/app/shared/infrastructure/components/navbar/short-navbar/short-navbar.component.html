@@ -9,14 +9,14 @@
 </div>
 
 <ng-template #menu let-modal>
-  <div class="bg-primary">
-    <button type="button" class="btn btn-white text-white" style="font-size: 1.5rem" aria-label="Close" (click)="modal.dismiss('Cross click')">
+  <div class="bg-white h-100">
+    <button type="button" class="btn btn-white" style="font-size: 1.5rem" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <i class="fa-solid fa-close"></i>
     </button>
 
     <div class="d-flex flex-column gap-4 p-4 align-items-center" (click)="modal.close('')">
       @for (button of buttons; track $index) {
-        <a class="text-white" [routerLink]="button.route" [routerLinkActive]="'active'">{{ button.label }}</a>
+        <a [routerLink]="button.route" [routerLinkActive]="'active'">{{ button.label }}</a>
       }
     </div>
   </div>

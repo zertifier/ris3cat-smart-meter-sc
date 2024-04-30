@@ -2,7 +2,6 @@ import {Component, TemplateRef} from '@angular/core';
 import {UserProfileSelectorComponent} from "../../user-profile-selector/user-profile-selector.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import defaultCallbacks from "chart.js/dist/plugins/plugin.tooltip";
 
 @Component({
   selector: 'app-short-navbar',
@@ -28,6 +27,6 @@ export class ShortNavbarComponent {
   }
 
   showMenu(content: TemplateRef<any>) {
-    this.ngbModalService.open(content, {size: "xl"});
+    this.ngbModalService.open(content, {fullscreen: true, backdrop: false, modalDialogClass: 'opacity-75'});
   }
 }
