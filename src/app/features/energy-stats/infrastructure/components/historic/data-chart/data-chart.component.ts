@@ -72,7 +72,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 // labels.push(`----------------`);
-              } else if (context.datasetIndex === 0) {
+              } else if (context.datasetIndex === 3) {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
                 labels.push(`----------------`);
               }
@@ -161,7 +161,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
           }
 
           const dataset = self.chart.data.datasets[datasetIndex];
-          console.log(`changing visibility: ${!dataset.hidden}`);
           dataset.hidden = !dataset.hidden;
           // this.chart.setDatasetVisibility(datasetIndex, !dataset.hidden);
           self.chart.update();
