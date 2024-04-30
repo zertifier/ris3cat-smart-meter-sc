@@ -21,7 +21,6 @@ export class AddUserFormModalComponent {
   }
 
   setSelectedUser(event: any) {
-    console.log(event.target.value);
   }
   addUser(id: string) {
     console.log(id);

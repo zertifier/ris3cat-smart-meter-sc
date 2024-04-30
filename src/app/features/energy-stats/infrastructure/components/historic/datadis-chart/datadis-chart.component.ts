@@ -117,7 +117,12 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   order: 3,
                   color: StatsColors.COMMUNITY_PRODUCTION,
                   label: 'Producció',
-                  data: mappedData.map(d => d.production - d.productionActives),
+                  data: mappedData.map(d => {
+                    if (!d.production) {
+                      return 0;
+                    }
+                    return d.production - d.productionActives;
+                  }),
                   stack: 'Excedent',
                 },
               )
