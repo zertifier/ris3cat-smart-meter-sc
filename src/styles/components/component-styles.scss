@@ -26,7 +26,17 @@
   color: $complementary !important;
 }
 
+.btn-outline-complementary-low {
+  border-color: $low-complementary !important;
+  color: $low-complementary !important;
+}
+
 .btn-outline-complementary:hover {
+  border-color: $active-complementary !important;
+  color: $active-complementary !important;
+}
+
+.btn-outline-complementary:active {
   border-color: $active-complementary !important;
   color: $active-complementary !important;
 }

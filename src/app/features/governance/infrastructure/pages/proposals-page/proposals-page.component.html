@@ -5,48 +5,53 @@
 
   <div class="d-flex mb-3">
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'all' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'all' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getAllProposals()"> Totes </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getProposalsByStatus('active')"> Actiu </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getProposalsByStatus('pending')"> Pendent </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getProposalsByStatus('succeeded')"> Acceptades </button>
     </div>
     <div class="me-3">
-      <button class="btn btn-outline-secondary" [ngClass]="proposalType == 'executed' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'executed' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getProposalsByStatus('executed')"> Executades </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-secondary' : 'btn-outline-secondary'"
+      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
               (click)="getProposalsByStatus('finished')"> Vençudes </button>
+    </div>
+
+
+    <div class="ms-auto">
+      <button class="btn btn-secondary" (click)="getProposalsByStatus('finished')"> Nova proposta </button>
     </div>
   </div>
 
 
   <div class="d-flex justify-content-center">
-    <div *ngFor="let proposal of proposals" class="card mb-3 w-100">
+    <div *ngFor="let proposal of proposals" class="card mb-3 w-100 bg-white">
       <div class="row g-0 px-5">
         <!--<div class="col-md-4">
           <img src="..." class="img-fluid rounded-start" alt="...">
         </div>-->
         <div class="col-md-12">
-          <div class="card-body">
-            <div class="mb-4" *ngIf="proposalType == 'all'">
+          <div class="card-body py-4">
+            <div class="mb-3" *ngIf="proposalType == 'all'">
               <button class="btn btn-outline-complementary">{{proposal.status}}</button>
             </div>
             <h5 class="card-title">{{proposal.proposal}}</h5>
             <p class="card-text">{{proposal.description}}</p>
             <div class="d-flex w-100">
-                <span class="card-text"><small class="text-body-secondary">{{proposal.firstname}}</small></span>
-                <span class="card-text ms-auto"><small class="text-body-secondary">{{proposal.expirationDt | date: 'yyyy-MM-dd hh:mm' : 'es'}}</small></span>
+                <span class="card-text"><small class="text-body-secondary">Feta per: {{proposal.firstname}}</small></span>
+                <span class="card-text ms-auto"><small class="text-body-secondary">Expiració: {{proposal.expirationDt | date: 'yyyy-MM-dd hh:mm' : 'es'}}</small></span>
             </div>
           </div>
         </div>
