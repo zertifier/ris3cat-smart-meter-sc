@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {catchError, map, Subscription, throwError} from "rxjs";
@@ -7,7 +7,7 @@ import {StatsColors} from "../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
 import {CalendarModule} from "primeng/calendar";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import {AuthStoreService} from "../../../../auth/infrastructure/services/auth-store.service";
@@ -24,6 +24,7 @@ import {NavbarComponent} from "../../../../../shared/infrastructure/components/n
 import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
 import {MonitoringStoreService} from "../../services/monitoring-store.service";
 import {getMonth} from "../../../../../shared/utils/DatesUtils";
+import {KnobModule} from "primeng/knob";
 
 dayjs.extend(utc);
 
@@ -49,7 +50,9 @@ dayjs.extend(utc);
     CalendarModule,
     ReactiveFormsModule,
     HistoricChartComponent,
-    AsyncPipe
+    AsyncPipe,
+    KnobModule,
+    FormsModule
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
@@ -88,6 +91,14 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
     },
   ];
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
+  readonly knobValue = computed(() => {
+    const consumptionRatio = (this.powerFlow().sell * 100) / this.powerFlow().production;
+    if (isNaN(consumptionRatio)) {
+      return '0 %';
+    }
+
+    return `${consumptionRatio.toFixed(0)} %`;
+  });
   subscriptions: Subscription[] = [];
   totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
   activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);

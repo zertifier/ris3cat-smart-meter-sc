@@ -77,6 +77,32 @@
     <app-consumption-items [items]="consumptionItems"/>
   </div>
 
+  <p class="mt-5">
+    Aquest gràfic mostra la teva despesa actual segons els electrodomèstics endollats. Per a optimitzar el consum, el
+    percentatge indica si pots afegir més electrodomèstics o treure.
+    <span style="color: #5F7187;">
+    Per exemple, si es mes alt vol dir que pots afegir més aparells perquè has acumulat energia per a consumir.
+  </span>
+  </p>
+
+
+  <div class="d-flex justify-content-center align-items-center my-5" style="gap: 4rem;">
+    <div class="d-flex gap-2 align-items-center">
+      <div class="me-2" style="border-radius: 50%"
+           [ngStyle]="{'background-color': StatsColors.VIRTUAL_SURPLUS, width: '1.5rem', height: '1.5rem'}"></div>
+      <h3 class="m-0">Excedent</h3>
+    </div>
+
+    <p-knob [size]="250" [ngModel]="powerFlow().sell" [max]="powerFlow().production"
+            [valueTemplate]="knobValue()" [readonly]="true"
+            [valueColor]="StatsColors.VIRTUAL_SURPLUS" [rangeColor]="StatsColors.CONSUMPTION"></p-knob>
+    <div class="d-flex gap-2 align-items-center">
+      <div class="me-2" style="border-radius: 50%"
+           [ngStyle]="{'background-color': StatsColors.CONSUMPTION, width: '1.5rem', height: '1.5rem'}"></div>
+      <h3 class="m-0">Consum</h3>
+    </div>
+  </div>
+
   <hr>
 
   <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric consum/excedent</h5>

@@ -1,10 +1,10 @@
-import {Component, OnInit, signal} from '@angular/core';
+import {Component, computed, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgStyle} from "@angular/common";
 import {MonitoringService, PowerStats} from "../../services/monitoring.service";
 import {StatsColors} from "../../../domain/StatsColors";
 import {CalendarModule} from "primeng/calendar";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
 import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
@@ -23,6 +23,7 @@ import {
 import {MonitoringStoreService} from "../../services/monitoring-store.service";
 import {getMonth} from "../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
+import {KnobModule} from "primeng/knob";
 
 
 @Component({
@@ -41,7 +42,10 @@ import dayjs from "dayjs";
     ReactiveFormsModule,
     HistoricChartComponent,
     AsyncPipe,
-    QuestionBadgeComponent
+    QuestionBadgeComponent,
+    KnobModule,
+    NgStyle,
+    FormsModule
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
@@ -88,6 +92,14 @@ export class MyCupPageComponent implements OnInit {
     },
   ];
   readonly powerFlow = signal<PowerStats>({production: 0, buy: 0, inHouse: 0, sell: 0})
+  readonly knobValue = computed(() => {
+    const consumptionRatio = (this.powerFlow().sell * 100) / this.powerFlow().production;
+    if (isNaN(consumptionRatio)) {
+      return '0 %';
+    }
+
+    return `${consumptionRatio.toFixed(0)} %`;
+  });
   protected readonly StatsColors = StatsColors;
   cupsReference$ = this.userStore.selectOnly(this.userStore.$.cupsReference);
   cups$ = this.userStore.selectOnly(state => state.cups);
