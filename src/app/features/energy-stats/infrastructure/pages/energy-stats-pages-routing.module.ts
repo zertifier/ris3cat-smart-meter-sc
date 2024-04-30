@@ -19,14 +19,14 @@ export const routes: Routes = [
     children: [
       {
         path: 'governance',
-        loadComponent: () => import('./governance-page/governance-page.component').then(c => c.GovernancePageComponent),
+        loadComponent: () => import('../../../governance/infrastructure/pages/governance-page/governance-page.component').then(c => c.GovernancePageComponent),
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
         }
       },
       {
         path: 'proposals',
-        loadComponent: () => import('./proposals-page/proposals-page.component').then(c => c.ProposalsPageComponent),
+        loadComponent: () => import('../../../governance/infrastructure/pages/proposals-page/proposals-page.component').then(c => c.ProposalsPageComponent),
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
         }
