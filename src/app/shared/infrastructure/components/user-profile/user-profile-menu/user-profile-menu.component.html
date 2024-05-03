@@ -1,0 +1,38 @@
+<ng-template let-modal #modal>
+  <div class="h-100" style="background-color: rgba(14, 43,76, 0.9)">
+    <div class="w-100 d-flex justify-content-end">
+      <button type="button" class="btn btn-white text-white" style="font-size: 1.5rem" aria-label="Close"
+              (click)="modal.dismiss('Cross click')">
+        <i class="fa-solid fa-close"></i>
+      </button>
+    </div>
+
+    <div class="w-100 text-white d-flex flex-column gap-2 align-items-center">
+      <i class="fa-solid fa-circle-user text-white mb-4" style="font-size: 4rem;"></i>
+      <h3>
+        {{ firstname$ | async }}
+      </h3>
+      <h3>
+        {{ wallet$ | async }}
+      </h3>
+      <hr class="border-white opacity-100 mx-5" style="width: 90%">
+      <button type="button" class="btn btn-toolbar text-white" style="font-size: 1.5rem;"
+              (click)="modal.dismiss()"
+              [routerLink]="'/user/profile'">Perfil
+      </button>
+      <button type="button" class="btn btn-toolbar text-white" style="font-size: 1.5rem;"
+              (click)="modal.dismiss()"
+              [routerLink]="'/user/wallet'">
+        Wallet
+      </button>
+      <button type="button" class="btn btn-toolbar text-white" style="font-size: 1.5rem;"
+              (click)="logout(); modal.dismiss()">Tancar
+        sessió
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<button type="button" class="btn btn-toolbar" (click)="showMenu(modal)">
+  <i class="fa-solid fa-circle-user text-white" style="font-size: 2rem;"></i>
+</button>

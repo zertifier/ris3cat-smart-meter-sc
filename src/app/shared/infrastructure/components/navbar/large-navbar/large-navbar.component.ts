@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import {AppLogoComponent} from "../../app-logo/app-logo.component";
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {UserProfileSelectorComponent} from "../../user-profile-selector/user-profile-selector.component";
+import {UserProfileSelectorComponent} from "../../user-profile/user-profile-selector/user-profile-selector.component";
 import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-break-points.service";
 import {AsyncPipe, NgStyle} from "@angular/common";
 import {map} from "rxjs";
+import {UserProfileButtonComponent} from "../../user-profile/user-profile-button/user-profile-button.component";
 
 @Component({
   selector: 'app-large-navbar',
@@ -15,7 +16,8 @@ import {map} from "rxjs";
     RouterLinkActive,
     UserProfileSelectorComponent,
     NgStyle,
-    AsyncPipe
+    AsyncPipe,
+    UserProfileButtonComponent
   ],
   templateUrl: './large-navbar.component.html',
   styleUrl: './large-navbar.component.scss'

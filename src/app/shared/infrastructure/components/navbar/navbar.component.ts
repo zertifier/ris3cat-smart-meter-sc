@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {AppLogoComponent} from "../app-logo/app-logo.component";
-import {UserProfileSelectorComponent} from "../user-profile-selector/user-profile-selector.component";
+import {UserProfileSelectorComponent} from "../user-profile/user-profile-selector/user-profile-selector.component";
 import {AsyncPipe, NgClass, NgStyle, NgSwitch, NgSwitchCase} from "@angular/common";
 import {BreakPoints, ScreenBreakPointsService} from "../../services/screen-break-points.service";
 import {LargeNavbarComponent} from "./large-navbar/large-navbar.component";

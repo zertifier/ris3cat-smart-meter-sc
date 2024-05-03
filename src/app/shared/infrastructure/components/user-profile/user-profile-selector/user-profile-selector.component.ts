@@ -6,14 +6,14 @@ import {
   NgbDropdownModule,
   NgbDropdownToggle
 } from "@ng-bootstrap/ng-bootstrap";
-import {Confirmable} from "../../decorators/Confirmable";
-import {LogoutActionService} from "../../../../features/auth/actions/logout-action.service";
-import {UserStoreService} from "../../../../features/user/infrastructure/services/user-store.service";
+import {Confirmable} from "../../../decorators/Confirmable";
+import {LogoutActionService} from "../../../../../features/auth/actions/logout-action.service";
+import {UserStoreService} from "../../../../../features/user/infrastructure/services/user-store.service";
 import {map} from "rxjs";
 import {AsyncPipe} from "@angular/common";
-import {TextShorterPipe} from "../../pipes/wallet-address-shortener.pipe";
+import {TextShorterPipe} from "../../../pipes/wallet-address-shortener.pipe";
 import {RouterLink} from "@angular/router";
-import {BreakPoints, ScreenBreakPointsService} from "../../services/screen-break-points.service";
+import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-break-points.service";
 
 @Component({
   selector: 'app-user-profile-selector',
