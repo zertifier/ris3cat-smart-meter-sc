@@ -25,6 +25,7 @@ import {FooterComponent} from "../../../../../shared/infrastructure/components/f
 import {MonitoringStoreService} from "../../services/monitoring-store.service";
 import {getMonth} from "../../../../../shared/utils/DatesUtils";
 import {KnobModule} from "primeng/knob";
+import {PowerflowGausComponent} from "../../components/powerflow-gaus/powerflow-gaus.component";
 
 dayjs.extend(utc);
 
@@ -52,7 +53,8 @@ dayjs.extend(utc);
     HistoricChartComponent,
     AsyncPipe,
     KnobModule,
-    FormsModule
+    FormsModule,
+    PowerflowGausComponent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'

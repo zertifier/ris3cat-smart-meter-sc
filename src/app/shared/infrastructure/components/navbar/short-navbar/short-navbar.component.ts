@@ -27,6 +27,6 @@ export class ShortNavbarComponent {
   }
 
   showMenu(content: TemplateRef<any>) {
-    this.ngbModalService.open(content, {fullscreen: true, backdrop: false, modalDialogClass: 'opacity-75'});
+    this.ngbModalService.open(content, {fullscreen: true, backdrop: false, modalDialogClass: 'transparent-modal'});
   }
 }

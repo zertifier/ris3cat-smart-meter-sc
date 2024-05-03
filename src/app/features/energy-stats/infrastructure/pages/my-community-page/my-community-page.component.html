@@ -80,22 +80,7 @@
   </p>
 
 
-  <div class="d-flex justify-content-center align-items-center my-5" style="gap: 4rem;">
-    <div class="d-flex gap-2 align-items-center">
-      <div class="me-2" style="border-radius: 50%"
-           [ngStyle]="{'background-color': StatsColors.VIRTUAL_SURPLUS, width: '1.5rem', height: '1.5rem'}"></div>
-      <h3 class="m-0">Excedent</h3>
-    </div>
-
-    <p-knob [size]="250" [ngModel]="powerFlow().sell" [max]="powerFlow().production"
-            [valueTemplate]="knobValue()" [readonly]="true"
-            [valueColor]="StatsColors.VIRTUAL_SURPLUS" [rangeColor]="StatsColors.CONSUMPTION"></p-knob>
-    <div class="d-flex gap-2 align-items-center">
-      <div class="me-2" style="border-radius: 50%"
-           [ngStyle]="{'background-color': StatsColors.CONSUMPTION, width: '1.5rem', height: '1.5rem'}"></div>
-      <h3 class="m-0">Consum</h3>
-    </div>
-  </div>
+  <app-powerflow-gaus [production]="powerFlow().production"  [sell]="powerFlow().sell"/>
 
   <hr>
 
