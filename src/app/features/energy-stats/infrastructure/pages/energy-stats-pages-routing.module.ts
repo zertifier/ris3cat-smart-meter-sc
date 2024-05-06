@@ -18,20 +18,6 @@ export const routes: Routes = [
     loadComponent: () => import('../../../../core/layouts/navbar-layout/navbar-layout.component').then(c => c.NavbarLayoutComponent),
     children: [
       {
-        path: 'governance',
-        loadComponent: () => import('../../../governance/infrastructure/pages/governance-page/governance-page.component').then(c => c.GovernancePageComponent),
-        data: {
-          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
-        }
-      },
-      {
-        path: 'proposals',
-        loadComponent: () => import('../../../governance/infrastructure/pages/proposals-page/proposals-page.component').then(c => c.ProposalsPageComponent),
-        data: {
-          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
-        }
-      },
-      {
         path: 'community',
         loadComponent: () => import('./my-community-page/my-community-page.component').then(c => c.MyCommunityPageComponent),
         canActivate: [switchChartEntityGuard(ChartEntity.COMMUNITIES), hasCommunityGuard],

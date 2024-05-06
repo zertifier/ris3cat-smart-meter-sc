@@ -41,6 +41,18 @@
   color: $active-complementary !important;
 }
 
+.btn-primary-force {
+  background-color: $primary !important;
+  color: white !important;
+}
+.btn-secondary-force {
+  background-color: $secondary !important;
+  color: white !important;
+}
+
+.text-complementary{
+  color: $complementary !important;
+}
 
 .mi-clase:not(::after) {
   /* Estilos sin ::after */

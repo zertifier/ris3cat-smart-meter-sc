@@ -22,6 +22,18 @@ export interface Proposal {
   updatedAt: string;
 }
 
+export interface SaveProposal {
+  userId: number,
+  communityId: number,
+  proposal: string,
+  description: string,
+  expirationDt: string,
+  status: ProposalStatus,
+  transparent: number,
+  quorum: number,
+  type: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,7 +48,12 @@ export class ProposalsService {
   getProposals(){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals`)
   }
+
   getProposalsByStatus(status: ProposalStatus){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/status/${status}`)
+  }
+
+  saveProposal(proposal: SaveProposal){
+    return this.httpClient.post<HttpResponse<SaveProposal>>(`${this.baseUrl}/proposals`, proposal)
   }
 }

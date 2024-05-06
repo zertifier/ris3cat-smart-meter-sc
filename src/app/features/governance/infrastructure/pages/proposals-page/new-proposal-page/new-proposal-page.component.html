@@ -1,0 +1,32 @@
+<div class="container-page">
+  <div class="my-4 d-flex align-items-center justify-content-between">
+    <h3 class="fw-bold">Nova proposta</h3>
+  </div>
+
+  <div>
+    <h5 class="form-label">
+      Afegeix un títol descriptiu
+    </h5>
+
+    <input [(ngModel)]="proposal" class="form-control bg-white shadow-none" placeholder="Títol de la proposta">
+  </div>
+  <div class="my-4">
+    <h5 class="form-label">
+      Descriu els aspectes principals de la teva proposta
+    </h5>
+
+    <textarea [(ngModel)]="proposalDescription" class="form-control bg-white shadow-none" placeholder="Hola, m'agradaria proposar..." id="description"
+              style="height: 100px"></textarea>
+    <label class="mt-2">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
+  </div>
+
+  <div class="my-5">
+    <button class="btn btn-secondary" style="min-width: 100px" (click)="saveProposal()" [disabled]="loading">
+      <span *ngIf="!loading">
+        Desa
+      </span>
+      <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
+    </button>
+  </div>
+
+</div>

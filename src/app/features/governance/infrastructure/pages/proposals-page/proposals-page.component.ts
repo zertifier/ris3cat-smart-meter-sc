@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Proposal, ProposalsService} from "../../services/proposals.service";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 type ProposalType = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded' | 'defeated' | 'all';
 @Component({
@@ -11,7 +12,9 @@ type ProposalType = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded'
     NgForOf,
     DatePipe,
     NgClass,
-    NgIf
+    NgIf,
+    RouterLinkActive,
+    RouterLink
   ],
   templateUrl: './proposals-page.component.html',
   styleUrl: './proposals-page.component.scss'
