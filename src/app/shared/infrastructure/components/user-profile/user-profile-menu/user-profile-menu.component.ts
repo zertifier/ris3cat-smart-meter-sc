@@ -40,7 +40,7 @@ export class UserProfileMenuComponent {
   }
 
   showMenu(content: TemplateRef<any>) {
-    this.ngbModal.open(content, {fullscreen: true, backdrop: false, modalDialogClass: 'transparent-modal'});
+    this.ngbModal.open(content, {backdrop: false, modalDialogClass: 'h-100 expand-modal-content my-0'});
   }
 
   @Confirmable("Estas segur?", {confirmButton: 'Tancar sessió', cancelButton: 'Mantenir sessió'})
