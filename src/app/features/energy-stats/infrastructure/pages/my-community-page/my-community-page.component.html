@@ -1,16 +1,19 @@
 <div class="container-page">
-  <div class="mt-5 d-flex align-items-center justify-content-between">
-    <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> La cups de la teva comunitat</p>
-    <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
-  </div>
-  <div class="d-flex justify-content-between">
-    <h4 style="font-weight: 600;">Consum i producció</h4>
-    @if (lastUpdate$ | async) {
-      <p>Actualitzat a les {{ lastUpdate$ | async }} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i
-        class="fa-solid fa-circle"></i></span></p>
-    } @else {
-      <p>No s'ha registrat cap dada</p>
-    }
+  <div class="d-flex flex-wrap justify-content-between flex-wrap-reverse gap-5">
+    <div class="d-flex flex-column">
+      <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> La cups de la teva comunitat</p>
+      <h4 style="font-weight: 600;">Consum i producció</h4>
+    </div>
+
+    <div class="d-flex flex-column">
+      <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
+      @if (lastUpdate$ | async) {
+        <p>Actualitzat a les {{ lastUpdate$ | async }} <span class="ms-3 text-success" style="font-size: 0.8rem;"><i
+          class="fa-solid fa-circle"></i></span></p>
+      } @else {
+        <p>No s'ha registrat cap dada</p>
+      }
+    </div>
   </div>
 
   <div class="w-100 d-flex flex-column">
@@ -80,7 +83,7 @@
   </p>
 
 
-  <app-powerflow-gaus [production]="powerFlow().production"  [sell]="powerFlow().sell"/>
+  <app-powerflow-gaus [production]="powerFlow().production" [sell]="powerFlow().sell"/>
 
   <hr>
 
