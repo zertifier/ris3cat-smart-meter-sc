@@ -1,6 +1,7 @@
 <div>
   <canvas #chart></canvas>
 </div>
+<button class="btn btn-light" (click)="resetChartZoom()">Restablir zoom</button>
 <p class="mt-4" *ngIf="showCommunity$ | async">
   · Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
   membres de la comunitat.

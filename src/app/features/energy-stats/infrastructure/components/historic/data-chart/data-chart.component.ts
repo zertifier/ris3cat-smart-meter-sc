@@ -19,7 +19,8 @@ import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 
-import zoomPlugin from 'chartjs-plugin-zoom';
+import zoomPlugin, {resetZoom} from 'chartjs-plugin-zoom';
+
 Chart.register(zoomPlugin);
 
 export interface ChartDataset {
@@ -43,7 +44,58 @@ export interface ChartDataset {
   styleUrl: './data-chart.component.scss'
 })
 export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  data!: {
+    datasets: any[],
+    labels: string[]
+  };
+  @Input({required: true}) dataset: ChartDataset[] = [];
+  @Input({required: true}) labels: string[] = [];
+  chart!: Chart;
+  @ViewChild('chart') chartElement!: ElementRef;
+  legendLabels: DataLabel[] = [];
+
+  subscriptions: Subscription[] = [];
+
+  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
+  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  showCommunity$ = this.chartStoreService
+    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
+
   options: any = {
+    maintainAspectRatio: false,
+    indexAxis: 'x',
+    aspectRatio: 0.8,
+    scales: {
+      x: {
+        stacked: true,
+        ticks: {
+          color: this.textColorSecondary,
+          font: {
+            weight: 500
+          }
+        },
+        grid: {
+          color: this.surfaceBorder,
+        }
+      },
+      y: {
+        stacked: true,
+        ticks: {
+          callback: (value: never) => {
+            const state = this.chartStoreService.snapshot();
+            const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+            return `${value} ${label}`;
+          },
+          color: this.textColorSecondary
+        },
+        grid: {
+          color: this.surfaceBorder,
+        }
+      }
+    },
     interaction: {
       intersect: true,
       mode: 'index',
@@ -52,6 +104,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       zoom: {
         zoom: {
           wheel: {
+            enabled: true,
+          },
+          pinch: {
             enabled: true,
           },
           mode: 'xy',
@@ -94,25 +149,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     }
   };
-  data!: {
-    datasets: any[],
-    labels: string[]
-  };
-  @Input({required: true}) dataset: ChartDataset[] = [];
-  @Input({required: true}) labels: string[] = [];
-  chart!: Chart;
-  @ViewChild('chart') chartElement!: ElementRef;
-  legendLabels: DataLabel[] = [];
-
-  subscriptions: Subscription[] = [];
-
-  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
-
-  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
-  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
-  showCommunity$ = this.chartStoreService
-    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
   constructor(
     private chartStoreService: ChartStoreService,
@@ -136,62 +172,16 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    // if (window.innerWidth <= 990)
-    //   this.changeToMobile();
-    // else
-    //   this.changeToDesktop();
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize() {
+  //   this.changeToDesktop();
+  // }
 
-  private parseInput() {
-    const datasets: any[] = [];
-    this.legendLabels = [];
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-    for (const entry of this.dataset) {
-      datasets.push({
-        label: entry.label,
-        backgroundColor: entry.color,
-        borderRadius: 10,
-        borderWidth: 1,
-        data: entry.data,
-        stack: entry.stack,
-        grouped: true,
-        order: entry.order,
-      });
-      this.legendLabels.push({
-        label: entry.label,
-        radius: '2.5rem',
-        color: entry.color,
-        hidden: false,
-        toggle: function () {
-          const datasetIndex = self.chart.data.datasets.findIndex(d => d.label === entry.label);
-          if (datasetIndex === -1) {
-            return this.hidden;
-          }
-
-          const dataset = self.chart.data.datasets[datasetIndex];
-          dataset.hidden = !dataset.hidden;
-          // this.chart.setDatasetVisibility(datasetIndex, !dataset.hidden);
-          self.chart.update();
-          return dataset.hidden;
-        }
-      });
+  resetChartZoom() {
+    if (!this.chart) {
+      return;
     }
-
-    this.data = {
-      labels: this.labels,
-      datasets,
-    }
-
-    // this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
-    //   if (window.innerWidth <= 990) {
-    //     this.changeToMobile();
-    //   } else {
-    //     this.changeToDesktop();
-    //   }
-    // });
+    resetZoom(this.chart);
   }
 
   changeToDesktop() {
@@ -286,5 +276,55 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  private parseInput() {
+    const datasets: any[] = [];
+    this.legendLabels = [];
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    for (const entry of this.dataset) {
+      datasets.push({
+        label: entry.label,
+        backgroundColor: entry.color,
+        borderRadius: 10,
+        borderWidth: 1,
+        data: entry.data,
+        stack: entry.stack,
+        grouped: true,
+        order: entry.order,
+      });
+      this.legendLabels.push({
+        label: entry.label,
+        radius: '2.5rem',
+        color: entry.color,
+        hidden: false,
+        toggle: function () {
+          const datasetIndex = self.chart.data.datasets.findIndex(d => d.label === entry.label);
+          if (datasetIndex === -1) {
+            return this.hidden;
+          }
+
+          const dataset = self.chart.data.datasets[datasetIndex];
+          dataset.hidden = !dataset.hidden;
+          // this.chart.setDatasetVisibility(datasetIndex, !dataset.hidden);
+          self.chart.update();
+          return dataset.hidden;
+        }
+      });
+    }
+
+    this.data = {
+      labels: this.labels,
+      datasets,
+    }
+
+    // this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
+    //   if (window.innerWidth <= 990) {
+    //     this.changeToMobile();
+    //   } else {
+    //     this.changeToDesktop();
+    //   }
+    // });
   }
 }
