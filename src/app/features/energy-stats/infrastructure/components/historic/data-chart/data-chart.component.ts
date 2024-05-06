@@ -54,9 +54,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
           wheel: {
             enabled: true,
           },
-          pinch: {
-            enabled: true
-          },
           mode: 'xy',
         }
       },
@@ -141,10 +138,10 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    if (window.innerWidth <= 990)
-      this.changeToMobile();
-    else
-      this.changeToDesktop();
+    // if (window.innerWidth <= 990)
+    //   this.changeToMobile();
+    // else
+    //   this.changeToDesktop();
   }
 
   private parseInput() {
@@ -188,13 +185,13 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       datasets,
     }
 
-    this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
-      if (window.innerWidth <= 990) {
-        this.changeToMobile();
-      } else {
-        this.changeToDesktop();
-      }
-    });
+    // this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
+    //   if (window.innerWidth <= 990) {
+    //     this.changeToMobile();
+    //   } else {
+    //     this.changeToDesktop();
+    //   }
+    // });
   }
 
   changeToDesktop() {
