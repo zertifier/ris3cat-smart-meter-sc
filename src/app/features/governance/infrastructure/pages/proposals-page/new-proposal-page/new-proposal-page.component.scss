@@ -1,0 +1,32 @@
+@import '../../../../../../../styles/colors';
+
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  background-color: $success !important;
+  border-color: $success !important;
+}
+
+.form-switch .form-check-input{
+  width: 75px;
+  height: 30px;
+}
+
+::ng-deep .p-datepicker table td> span{
+  border-radius: 20px;
+
+}
+::ng-deep .p-datepicker table td > span.p-highlight{
+  background: $complementary !important;
+}
+
+::ng-deep .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext{
+  border-color: $complementary !important;
+}
+
+::ng-deep .p-datepicker-year, ::ng-deep .p-datepicker-month, ::ng-deep .p-datepicker-next, ::ng-deep .p-datepicker-prev {
+  color: $complementary !important;
+}
+::ng-deep .p-datepicker table td > span,::ng-deep .p-inputtext{
+  box-shadow: none;
+}
