@@ -14,10 +14,13 @@ import {Subscription} from "rxjs";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {ChartResource} from "../../../../domain/ChartResource";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
-import {Chart,} from "chart.js";
+import {Chart} from "chart.js";
 import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+
+import zoomPlugin from 'chartjs-plugin-zoom';
+Chart.register(zoomPlugin);
 
 export interface ChartDataset {
   label: string,
@@ -46,6 +49,17 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       mode: 'index',
     },
     plugins: {
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy',
+        }
+      },
       legend: {
         display: false
       },
