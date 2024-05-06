@@ -24,6 +24,7 @@ import {MonitoringStoreService} from "../../services/monitoring-store.service";
 import {getMonth} from "../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
 import {KnobModule} from "primeng/knob";
+import {PowerflowGausComponent} from "../../components/powerflow-gaus/powerflow-gaus.component";
 
 
 @Component({
@@ -45,7 +46,8 @@ import {KnobModule} from "primeng/knob";
     QuestionBadgeComponent,
     KnobModule,
     NgStyle,
-    FormsModule
+    FormsModule,
+    PowerflowGausComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
