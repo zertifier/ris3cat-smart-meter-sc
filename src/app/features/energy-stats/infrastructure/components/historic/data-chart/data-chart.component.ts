@@ -42,7 +42,7 @@ export interface ChartDataset {
 export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   options: any = {
     interaction: {
-      intersect: false,
+      intersect: true,
       mode: 'index',
     },
     plugins: {
