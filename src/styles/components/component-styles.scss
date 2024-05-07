@@ -26,15 +26,13 @@
   border-color: $complementary !important;
   color: white !important;
 }
+.btn-complementary:hover {
+  color: #efefef !important;
+}
 
 .btn-outline-complementary {
   border-color: $complementary !important;
   color: $complementary !important;
-}
-
-.btn-outline-complementary-low {
-  border-color: $low-complementary !important;
-  color: $low-complementary !important;
 }
 
 .btn-outline-complementary:hover {
@@ -43,7 +41,8 @@
 }
 
 .btn-outline-complementary:active {
-  border-color: $active-complementary !important;
+  //border-color: $active-complementary !important;
+  background-color: $active-complementary !important;
   color: $active-complementary !important;
 }
 

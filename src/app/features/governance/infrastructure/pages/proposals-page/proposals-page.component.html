@@ -5,27 +5,27 @@
 
   <div class="d-flex mb-3">
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'all' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'all' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getAllProposals()"> Totes </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('active')"> Actiu </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('pending')"> Pendent </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('succeeded')"> Acceptades </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'executed' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'executed' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('executed')"> Executades </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-outline-complementary' : 'btn-outline-complementary-low'"
+      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('finished')"> Vençudes </button>
     </div>
 
@@ -44,7 +44,7 @@
         </div>-->
           <div class="card-body py-4">
             <div class="mb-3" *ngIf="proposalType == 'all'">
-              <button class="btn btn-outline-complementary">{{proposal.status}}</button>
+              <button class="badge text-complementary" disabled>{{proposal.status}}</button>
             </div>
             <h5 class="card-title fw-bold" [ngClass]="proposalType != 'all' ? 'text-complementary' : 'text-primary'">{{proposal.proposal}}</h5>
             <p class="card-text text-primary">{{proposal.description}}</p>
