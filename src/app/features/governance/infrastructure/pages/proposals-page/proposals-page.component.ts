@@ -45,4 +45,15 @@ export class ProposalsPageComponent {
     })
   }
 
+  statusTranslation(status: ProposalStatus){
+    switch (status.toLowerCase()){
+      case "active": return 'Actiu'
+      case "pending": return 'Pendent'
+      case "succeeded": return 'Acceptada'
+      case "executed": return 'Executada'
+      case "defeated": return 'Vençuda'
+      default: return
+    }
+  }
+
 }

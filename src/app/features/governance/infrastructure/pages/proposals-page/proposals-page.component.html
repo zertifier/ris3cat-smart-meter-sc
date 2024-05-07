@@ -44,7 +44,7 @@
         </div>-->
           <div class="card-body py-4">
             <div class="mb-3" *ngIf="proposalType == 'all'">
-              <button class="badge text-complementary" disabled>{{proposal.status}}</button>
+              <button class="badge text-complementary" disabled>{{statusTranslation(proposal.status)}}</button>
             </div>
             <h5 class="card-title fw-bold" [ngClass]="proposalType != 'all' ? 'text-complementary' : 'text-primary'">{{proposal.proposal}}</h5>
             <p class="card-text text-primary">{{proposal.description}}</p>
