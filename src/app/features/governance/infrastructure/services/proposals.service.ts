@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
 import {environment} from "../../../../../environments/environment";
 import {ProposalStatus} from "../../domain/ProposalStatus";
+import {ProposalTypes} from "../../domain/ProposalTypes";
 
 
 export interface Proposal {
@@ -23,6 +24,7 @@ export interface Proposal {
 }
 
 export interface SaveProposal {
+  id?: number,
   userId: number,
   communityId: number,
   proposal: string,
@@ -31,7 +33,12 @@ export interface SaveProposal {
   status: ProposalStatus,
   transparent: number,
   quorum: number,
-  type: string
+  type: ProposalTypes
+}
+
+export interface ProposalOption {
+  proposalId: number,
+  option: string
 }
 
 @Injectable({
@@ -56,4 +63,9 @@ export class ProposalsService {
   saveProposal(proposal: SaveProposal){
     return this.httpClient.post<HttpResponse<SaveProposal>>(`${this.baseUrl}/proposals`, proposal)
   }
+  saveProposalOption(proposalOption: ProposalOption[]){
+    return this.httpClient.post<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals-options`, proposalOption)
+  }
+
+
 }

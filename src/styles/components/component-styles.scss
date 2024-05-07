@@ -21,6 +21,12 @@
   border: 0 !important;
 }
 
+.btn-complementary {
+  background-color: $complementary !important;
+  border-color: $complementary !important;
+  color: white !important;
+}
+
 .btn-outline-complementary {
   border-color: $complementary !important;
   color: $complementary !important;
@@ -57,3 +63,5 @@
 .mi-clase:not(::after) {
   /* Estilos sin ::after */
 }
+
+

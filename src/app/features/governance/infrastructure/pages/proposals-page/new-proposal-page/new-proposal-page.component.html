@@ -1,6 +1,9 @@
 <div class="container-page">
-  <div class="my-4 d-flex align-items-center justify-content-between">
-    <h3 class="fw-bold">Nova proposta</h3>
+  <div class="mb-3">
+      <a [routerLink]="'../'" [routerLinkActive]="'active'" class="text-decoration-none">
+        <i class="fa-solid fa-arrow-left me-1"></i> Tornar a propostes
+      </a>
+    <h3 class="fw-bold mt-3">Nova proposta</h3>
   </div>
 
   <div>
@@ -8,14 +11,15 @@
       Afegeix un títol descriptiu
     </h5>
 
-    <input [(ngModel)]="proposal" class="form-control bg-white shadow-none" placeholder="Títol de la proposta">
+    <input [(ngModel)]="proposal" class="form-control bg-white shadow-none border-secondary" placeholder="Títol de la proposta">
   </div>
   <div class="my-4">
     <h5 class="form-label">
       Descriu els aspectes principals de la teva proposta
     </h5>
 
-    <textarea [(ngModel)]="proposalDescription" class="form-control bg-white shadow-none" placeholder="Hola, m'agradaria proposar..." id="description"
+    <textarea [(ngModel)]="proposalDescription" class="form-control bg-white border-secondary shadow-none"
+              placeholder="Hola, m'agradaria proposar..." id="description"
               style="height: 100px"></textarea>
     <label class="mt-2">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
   </div>
@@ -34,13 +38,6 @@
       </div>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label">Transparència</label>
-      <div class="form-check form-switch">
-        <input class="form-check-input bg-white shadow-none" type="checkbox" role="switch"
-               (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
-      </div>
-    </div>
-    <div class="col-6 col-md-2">
       <label class="form-label">Estat</label>
       <select class="form-select bg-white shadow-none" [(ngModel)]="status">
         <option selected [value]="'active'">Activa</option>
@@ -49,27 +46,41 @@
     </div>
     <div class="col-6 col-md-2">
       <label class="form-label">Tipus</label>
-      <select class="form-select bg-white shadow-none" [(ngModel)]="status">
-        <option selected [value]="'active'">Activa</option>
-        <option [value]="'pending'">Pendent</option>
+      <select class="form-select bg-white shadow-none" [(ngModel)]="type">
+        <option selected [value]="'weighted'">Ponderada</option>
+        <option [value]="'equal'">Igualitari</option>
       </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Transparència</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input bg-white shadow-none" type="checkbox" role="switch"
+               (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
+      </div>
     </div>
   </div>
 
-  <hr class="mx-5">
+  <hr class="mx-5 my-5">
 
-  <div>
-    <div *ngFor="let option of options, let i = index" class="input-group mb-3">
-      <input type="text" class="form-control bg-white" [value]="option">
-      <button *ngIf="i != 0 && options.length >= 2 && i == options.length-1"
-              class="btn btn-outline-secondary bg-success text-white" type="button" (click)="addOption()">
-        +
-      </button>
-      <button *ngIf="i != 0 && options.length > 2 && i != options.length-1" id="remove-{{i}}"
-              class="btn btn-outline-secondary bg-warning text-white" type="button" (click)="removeOption(i)">
-        -
-      </button>
+  <div class="row" >
+    <div class="d-flex mb-3">
+      <label class="form-label d-flex w-100z">Opcions</label>
+
+      <div class="btn btn-sm btn-complementary ms-auto" (click)="addOption()" style="width: 180px">
+        Afegir opció
+      </div>
     </div>
+    <div *ngFor="let option of options.reverse(), let i = index" class="col-12 col-md-3">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control bg-white shadow-none" [(ngModel)]="option.option" placeholder="Opció {{options.length}}">
+        <button [disabled]="options.length <= 2"
+                [ngbTooltip]="'La proposta és vàlida a partir de 2 opcions.'"
+                class="btn btn-danger text-white border-0 rounded-end-2" type="button" (click)="removeOption(i)" style="min-width: 37px">
+          x
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <div class="my-5">
