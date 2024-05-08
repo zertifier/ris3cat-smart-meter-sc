@@ -21,6 +21,44 @@
   border: 0 !important;
 }
 
+.btn-complementary {
+  background-color: $complementary !important;
+  border-color: $complementary !important;
+  color: white !important;
+}
+.btn-complementary:hover {
+  color: #efefef !important;
+}
+
+.btn-outline-complementary {
+  border-color: $complementary !important;
+  color: $complementary !important;
+}
+
+.btn-outline-complementary:hover {
+  border-color: $active-complementary !important;
+  color: $active-complementary !important;
+}
+
+.btn-outline-complementary:active {
+  //border-color: $active-complementary !important;
+  background-color: $active-complementary !important;
+  color: $active-complementary !important;
+}
+
+.btn-primary-force {
+  background-color: $primary !important;
+  color: white !important;
+}
+.btn-secondary-force {
+  background-color: $secondary !important;
+  color: white !important;
+}
+
+.text-complementary{
+  color: $complementary !important;
+}
+
 .mi-clase:not(::after) {
   /* Estilos sin ::after */
 }

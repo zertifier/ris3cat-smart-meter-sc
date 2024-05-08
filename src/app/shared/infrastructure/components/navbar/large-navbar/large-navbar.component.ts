@@ -6,6 +6,7 @@ import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-br
 import {AsyncPipe, NgStyle} from "@angular/common";
 import {map} from "rxjs";
 import {UserProfileButtonComponent} from "../../user-profile/user-profile-button/user-profile-button.component";
+import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-large-navbar',
@@ -17,7 +18,11 @@ import {UserProfileButtonComponent} from "../../user-profile/user-profile-button
     UserProfileSelectorComponent,
     NgStyle,
     AsyncPipe,
-    UserProfileButtonComponent
+    UserProfileButtonComponent,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownItem,
+    NgbDropdownToggle
   ],
   templateUrl: './large-navbar.component.html',
   styleUrl: './large-navbar.component.scss'

@@ -14,6 +14,11 @@ export const routes: Routes = [
     canActivate: [LoggedInGuard]
   },
   {
+    path: 'governance',
+    loadChildren: () => import('./features/governance/infrastructure/pages/governance-pages-routing.module').then(m => m.routes),
+    canActivate: [LoggedInGuard]
+  },
+  {
     path: 'user',
     loadChildren: () => import('./features/user/infrastructure/pages/user-pages-routing.module').then(m => m.routes),
     canActivate: [LoggedInGuard]
