@@ -1,5 +1,6 @@
 @if ((fetchingData$ | async) === false) {
   <app-data-chart [dataset]="datasets" [labels]="labels"/>
+  <button class="btn btn-light" type="button" (click)="dataChart.resetChartZoom()">Restableix zoom</button>
   <p class="mt-4" *ngIf="showCommunity$ | async">
     · Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
     membres de la comunitat.
