@@ -1,12 +1,3 @@
-<div>
+<div class="h-100 w-100">
   <canvas #chart></canvas>
 </div>
-<button class="btn btn-light" (click)="resetChartZoom()">Restablir zoom</button>
-<p class="mt-4" *ngIf="showCommunity$ | async">
-  · Aquesta estadística indica les dades dels {{ activeMembers$ | async }} membres actius d'un total de {{ totalMembers$ | async }}
-  membres de la comunitat.
-</p>
-<p>
-  · Coneix la despesa d'energia al detall fent clic en cada tipus de consum. La gràfica mostrarà la informació de consum individualitzada.
-</p>
-<app-chart-legend [labels]="legendLabels"/>

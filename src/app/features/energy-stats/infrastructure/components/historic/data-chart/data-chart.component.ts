@@ -13,11 +13,10 @@ import {ChartModule} from "primeng/chart";
 import {Subscription} from "rxjs";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {ChartResource} from "../../../../domain/ChartResource";
-import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
+import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
 import {Chart} from "chart.js";
 import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 
 import zoomPlugin, {resetZoom} from 'chartjs-plugin-zoom';
 
@@ -50,21 +49,16 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   };
   @Input({required: true}) dataset: ChartDataset[] = [];
   @Input({required: true}) labels: string[] = [];
-  chart!: Chart;
+  private chart!: Chart;
   @ViewChild('chart') chartElement!: ElementRef;
-  legendLabels: DataLabel[] = [];
+  // legendLabels: DataLabel[] = [];
 
-  subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
 
-  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+  private textColorSecondary = 'rgba(0, 0, 0, 0.54)';
+  private surfaceBorder = 'rgba(0, 0, 0, 0.12)';
 
-  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
-  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
-  showCommunity$ = this.chartStoreService
-    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
-
-  options: any = {
+  private options: any = {
     maintainAspectRatio: false,
     indexAxis: 'x',
     aspectRatio: 0.8,
@@ -151,8 +145,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   };
 
   constructor(
-    private chartStoreService: ChartStoreService,
-    private userStore: UserStoreService
+    private chartStoreService: ChartStoreService
   ) {
   }
 
@@ -181,14 +174,34 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
   }
 
-  resetChartZoom() {
+  public resetChartZoom() {
     if (!this.chart) {
       return;
     }
     resetZoom(this.chart);
   }
 
-  changeToDesktop() {
+  public toggleDataset(index: number) {
+    if (!this.chart) {
+      return;
+    }
+    const visible = this.getDatasetVisibility(index);
+    this.setDatasetVisible(index, !visible);
+  }
+
+  public setDatasetVisible(index: number, visible: boolean) {
+    if (!this.chart) {
+      return;
+    }
+    this.chart.setDatasetVisibility(index, visible);
+    this.chart.update();
+  }
+
+  public getDatasetVisibility(index: number): boolean {
+    return this.chart.isDatasetVisible(index);
+  }
+
+  private changeToDesktop() {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
@@ -227,7 +240,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.refreshChart();
   }
 
-  changeToMobile() {
+  private changeToMobile() {
     const state = this.chartStoreService.snapshot();
     this.options = {
       ...this.options,
@@ -268,7 +281,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.refreshChart();
   }
 
-  refreshChart() {
+  public refreshChart() {
     if (!this.chart) {
       return;
     }
@@ -284,9 +297,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private parseInput() {
     const datasets: any[] = [];
-    this.legendLabels = [];
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     for (const entry of this.dataset) {
       datasets.push({
         label: entry.label,
@@ -297,24 +307,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         stack: entry.stack,
         grouped: true,
         order: entry.order,
-      });
-      this.legendLabels.push({
-        label: entry.label,
-        radius: '2.5rem',
-        color: entry.color,
-        hidden: false,
-        toggle: function () {
-          const datasetIndex = self.chart.data.datasets.findIndex(d => d.label === entry.label);
-          if (datasetIndex === -1) {
-            return this.hidden;
-          }
-
-          const dataset = self.chart.data.datasets[datasetIndex];
-          dataset.hidden = !dataset.hidden;
-          // this.chart.setDatasetVisibility(datasetIndex, !dataset.hidden);
-          self.chart.update();
-          return dataset.hidden;
-        }
       });
     }
 

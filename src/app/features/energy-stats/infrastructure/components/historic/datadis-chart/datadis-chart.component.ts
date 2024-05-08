@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
-import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
+import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
 import {Subscription} from "rxjs";
@@ -30,9 +30,16 @@ import {ZertipowerService} from "../../../../../../shared/infrastructure/service
 export class DatadisChartComponent implements OnInit, OnDestroy {
   fetchingData$ = this.chartStoreService.selectOnly(state => state.fetchingData);
   subscriptions: Subscription[] = [];
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  showCommunity$ = this.chartStoreService
+    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
   datasets: ChartDataset[] = [];
   labels: string[] = [];
+  legendLabels: DataLabel[] = [];
+
+  @ViewChild(DataChartComponent) dataChart!: DataChartComponent;
 
   constructor(
     private readonly chartStoreService: ChartStoreService,
@@ -137,6 +144,18 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
             this.labels = labels;
             this.datasets = datasets;
+            this.legendLabels = datasets.map((entry, index) => {
+              return {
+                  label: entry.label,
+                  radius: '2.5rem',
+                  color: entry.color,
+                  hidden: false,
+                  toggle: () => {
+                    this.dataChart.toggleDataset(index);
+                    return !this.dataChart.getDatasetVisibility(index);
+                  }
+                }
+            });
           }),
     );
   }
