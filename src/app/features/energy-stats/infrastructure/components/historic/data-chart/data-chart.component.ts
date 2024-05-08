@@ -19,7 +19,8 @@ import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 
-import zoomPlugin from 'chartjs-plugin-zoom';
+import zoomPlugin, {resetZoom} from 'chartjs-plugin-zoom';
+
 Chart.register(zoomPlugin);
 
 export interface ChartDataset {
@@ -43,7 +44,58 @@ export interface ChartDataset {
   styleUrl: './data-chart.component.scss'
 })
 export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  data!: {
+    datasets: any[],
+    labels: string[]
+  };
+  @Input({required: true}) dataset: ChartDataset[] = [];
+  @Input({required: true}) labels: string[] = [];
+  chart!: Chart;
+  @ViewChild('chart') chartElement!: ElementRef;
+  legendLabels: DataLabel[] = [];
+
+  subscriptions: Subscription[] = [];
+
+  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
+  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
+
+  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
+  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
+  showCommunity$ = this.chartStoreService
+    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
+
   options: any = {
+    maintainAspectRatio: false,
+    indexAxis: 'x',
+    aspectRatio: 0.8,
+    scales: {
+      x: {
+        stacked: true,
+        ticks: {
+          color: this.textColorSecondary,
+          font: {
+            weight: 500
+          }
+        },
+        grid: {
+          color: this.surfaceBorder,
+        }
+      },
+      y: {
+        stacked: true,
+        ticks: {
+          callback: (value: never) => {
+            const state = this.chartStoreService.snapshot();
+            const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+            return `${value} ${label}`;
+          },
+          color: this.textColorSecondary
+        },
+        grid: {
+          color: this.surfaceBorder,
+        }
+      }
+    },
     interaction: {
       intersect: true,
       mode: 'index',
@@ -55,7 +107,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
             enabled: true,
           },
           pinch: {
-            enabled: true
+            enabled: true,
           },
           mode: 'xy',
         }
@@ -97,25 +149,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     }
   };
-  data!: {
-    datasets: any[],
-    labels: string[]
-  };
-  @Input({required: true}) dataset: ChartDataset[] = [];
-  @Input({required: true}) labels: string[] = [];
-  chart!: Chart;
-  @ViewChild('chart') chartElement!: ElementRef;
-  legendLabels: DataLabel[] = [];
-
-  subscriptions: Subscription[] = [];
-
-  textColorSecondary = 'rgba(0, 0, 0, 0.54)';
-  surfaceBorder = 'rgba(0, 0, 0, 0.12)';
-
-  activeMembers$ = this.userStore.selectOnly(state => state.activeMembers);
-  totalMembers$ = this.userStore.selectOnly(state => state.totalMembers);
-  showCommunity$ = this.chartStoreService
-    .selectOnly(state => state.selectedChartEntity === ChartEntity.COMMUNITIES);
 
   constructor(
     private chartStoreService: ChartStoreService,
@@ -141,10 +174,112 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    if (window.innerWidth <= 990)
+    if (window.innerWidth <= 990) {
       this.changeToMobile();
-    else
+    } else {
       this.changeToDesktop();
+    }
+  }
+
+  resetChartZoom() {
+    if (!this.chart) {
+      return;
+    }
+    resetZoom(this.chart);
+  }
+
+  changeToDesktop() {
+    const state = this.chartStoreService.snapshot();
+    this.options = {
+      ...this.options,
+      maintainAspectRatio: false,
+      indexAxis: 'x',
+      aspectRatio: 0.8,
+      scales: {
+        x: {
+          stacked: true,
+          ticks: {
+            color: this.textColorSecondary,
+            font: {
+              weight: 500
+            }
+          },
+          grid: {
+            color: this.surfaceBorder,
+          }
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            callback: function (value: never) {
+              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+              return `${value} ${label}`;
+            },
+            color: this.textColorSecondary
+          },
+          grid: {
+            color: this.surfaceBorder,
+          }
+        }
+      }
+    }
+
+    this.refreshChart();
+  }
+
+  changeToMobile() {
+    const state = this.chartStoreService.snapshot();
+    this.options = {
+      ...this.options,
+      maintainAspectRatio: false,
+      aspectRatio: 0.5,
+      indexAxis: 'y',
+      scales: {
+        y: {
+          stacked: true,
+          ticks: {
+            color: this.textColorSecondary,
+            font: {
+              weight: 500
+            },
+          },
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
+          }
+        },
+        x: {
+          stacked: true,
+          ticks: {
+            callback: function (value: never) {
+              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
+              return `${value} ${label}`;
+            },
+            color: this.textColorSecondary
+          },
+          grid: {
+            color: this.surfaceBorder,
+            drawBorder: false
+          }
+        }
+      }
+    }
+
+    this.refreshChart();
+  }
+
+  refreshChart() {
+    if (!this.chart) {
+      return;
+    }
+
+    this.chart.options = this.options;
+    this.chart.data = this.data;
+    this.chart.update();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   private parseInput() {
@@ -195,99 +330,5 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.changeToDesktop();
       }
     });
-  }
-
-  changeToDesktop() {
-    const state = this.chartStoreService.snapshot();
-    this.options = {
-      ...this.options,
-      maintainAspectRatio: false,
-      indexAxis: 'x',
-      aspectRatio: 0.8,
-      scales: {
-        x: {
-          stacked: true,
-          ticks: {
-            color: this.textColorSecondary,
-            font: {
-              weight: 500
-            }
-          },
-          grid: {
-            color: this.surfaceBorder,
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            callback: function (value: never) {
-              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
-              return `${value} ${label}`;
-            },
-            color: this.textColorSecondary
-          },
-          grid: {
-            color: this.surfaceBorder,
-          }
-        }
-      }
-    }
-
-    this.refreshChart();
-  }
-
-  changeToMobile() {
-    const state = this.chartStoreService.snapshot();
-    this.options = {
-      ...this.options,
-      maintainAspectRatio: false,
-      aspectRatio: 0.1,
-      indexAxis: 'y',
-      scales: {
-        y: {
-          stacked: true,
-          ticks: {
-            color: this.textColorSecondary,
-            font: {
-              weight: 500
-            },
-          },
-          grid: {
-            color: this.surfaceBorder,
-            drawBorder: false
-          }
-        },
-        x: {
-          stacked: true,
-          ticks: {
-            callback: function (value: never) {
-              const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
-              return `${value} ${label}`;
-            },
-            color: this.textColorSecondary
-          },
-          grid: {
-            color: this.surfaceBorder,
-            drawBorder: false
-          }
-        }
-      }
-    }
-
-    this.refreshChart();
-  }
-
-  refreshChart() {
-    if (!this.chart) {
-      return;
-    }
-
-    this.chart.options = this.options;
-    this.chart.data = this.data;
-    this.chart.update();
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }
