@@ -1,0 +1,95 @@
+<div class="container-page">
+  <div class="mb-3">
+      <a [routerLink]="'../'" [routerLinkActive]="'active'" class="text-decoration-none">
+        <i class="fa-solid fa-arrow-left me-1"></i> Tornar a propostes
+      </a>
+    <h3 class="fw-bold mt-3">Nova proposta</h3>
+  </div>
+
+  <div>
+    <h5 class="form-label">
+      Afegeix un títol descriptiu
+    </h5>
+
+    <input [(ngModel)]="proposal" class="form-control bg-white shadow-none border-secondary" placeholder="Títol de la proposta">
+  </div>
+  <div class="my-4">
+    <h5 class="form-label">
+      Descriu els aspectes principals de la teva proposta
+    </h5>
+
+    <textarea [(ngModel)]="proposalDescription" class="form-control bg-white border-secondary shadow-none"
+              placeholder="Hola, m'agradaria proposar..." id="description"
+              style="height: 100px"></textarea>
+    <label class="mt-2">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
+  </div>
+
+  <div class="row">
+    <div class="col-6 col-md-2">
+      <label class="form-label">Data d'expiració</label>
+      <p-calendar [(ngModel)]="date"  iconDisplay="input" [showIcon]="true"
+                  [minDate]="minDate" [dateFormat]="'dd-mm-yy'" styleClass="w-100"/>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Minim de vots</label>
+      <div class="input-group mb-3">
+        <input type="number" class="form-control bg-white shadow-none" [(ngModel)]="minVotes" max="100" min="1">
+        <span class="input-group-text bg-primary text-white">%</span>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Estat</label>
+      <select class="form-select bg-white shadow-none" [(ngModel)]="status">
+        <option selected [value]="'active'">Activa</option>
+        <option [value]="'pending'">Pendent</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Tipus</label>
+      <select class="form-select bg-white shadow-none" [(ngModel)]="type">
+        <option selected [value]="'weighted'">Ponderada</option>
+        <option [value]="'equal'">Igualitari</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Transparència</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input bg-white shadow-none" type="checkbox" role="switch"
+               (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
+      </div>
+    </div>
+  </div>
+
+  <hr class="mx-5 my-5">
+
+  <div class="row" >
+    <div class="d-flex mb-3">
+      <label class="form-label d-flex w-100z">Opcions</label>
+
+      <div class="btn btn-sm btn-complementary ms-auto" (click)="addOption()" style="width: 180px">
+        Afegir opció
+      </div>
+    </div>
+    <div *ngFor="let option of options.reverse(), let i = index" class="col-12 col-md-3">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control bg-white shadow-none" [(ngModel)]="option.option" placeholder="Opció {{options.length}}">
+        <button [disabled]="options.length <= 2"
+                [ngbTooltip]="'La proposta és vàlida a partir de 2 opcions.'"
+                class="btn btn-danger text-white border-0 rounded-end-2" type="button" (click)="removeOption(i)" style="min-width: 37px">
+          x
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="my-5">
+    <button class="btn btn-secondary" style="min-width: 100px" (click)="saveProposal()" [disabled]="loading">
+      <span *ngIf="!loading">
+        Desa
+      </span>
+      <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
+    </button>
+  </div>
+
+</div>
