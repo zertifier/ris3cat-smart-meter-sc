@@ -3,6 +3,7 @@ import {Proposal, ProposalsService} from "../../services/proposals.service";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 type ProposalType = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded' | 'defeated' | 'all';
 @Component({
@@ -14,7 +15,8 @@ type ProposalType = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded'
     NgClass,
     NgIf,
     RouterLinkActive,
-    RouterLink
+    RouterLink,
+    FormsModule
   ],
   templateUrl: './proposals-page.component.html',
   styleUrl: './proposals-page.component.scss'
@@ -23,6 +25,9 @@ export class ProposalsPageComponent {
 
   proposals: Proposal[] = []
   proposalType: ProposalType = 'all'
+  filterText!: string
+  currentStatus: ProposalStatus | 'all' = 'all'
+
   constructor(
     private proposalsService: ProposalsService
   ) {
@@ -32,16 +37,28 @@ export class ProposalsPageComponent {
 
 
   getAllProposals(){
-    this.proposalsService.getProposals().subscribe((response) => {
-      this.proposals = response.data
+   //EMPTY NOT WORKING
+    this.proposalsService.getProposalsByFilter(this.filterText || '').subscribe((response) => {
+      this.proposals = response.data.length ? response.data : []
       this.proposalType = 'all'
     })
   }
 
   getProposalsByStatus(status: ProposalStatus){
-    this.proposalsService.getProposalsByStatus(status).subscribe((response) => {
-      this.proposals = response.data
+    this.proposalsService.getProposalsByFilterAndStatus(this.filterText || '', status).subscribe((response) => {
+      this.proposals = response.data.length ? response.data : []
       this.proposalType = status
+    })
+  }
+
+  getProposalsByFilter(){
+    this.proposalsService.getProposalsByFilter(this.filterText).subscribe((response) => {
+      this.proposals = response.data.length ? response.data : []
+    })
+  }
+  getProposalsByFilterAndStatus(){
+    this.proposalsService.getProposalsByFilterAndStatus(this.filterText, 'active').subscribe((response) => {
+      this.proposals = response.data
     })
   }
 

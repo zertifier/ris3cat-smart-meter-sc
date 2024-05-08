@@ -3,8 +3,9 @@
     <h3 class="fw-bold"> Propostes</h3>
 
     <div class="input-group mb-3" style="max-width: 675px">
-      <input type="text" class="form-control bg-white border-secondary border-1 border-end-0">
-      <span class="input-group-text bg-white border-secondary border-1 border-start-0 shadow-none"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <input [(ngModel)]="filterText" (keyup)="getProposalsByFilter()" type="text"
+             class="form-control bg-white border-secondary border-1 border-end-0 shadow-none">
+      <span class="input-group-text bg-white border-secondary border-1 border-start-0"><i class="fa-solid fa-magnifying-glass"></i></span>
     </div>
 
   </div>
