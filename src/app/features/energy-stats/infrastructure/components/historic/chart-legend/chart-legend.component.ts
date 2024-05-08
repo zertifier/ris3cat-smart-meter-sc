@@ -21,6 +21,7 @@ export interface DataLabel {
 })
 export class ChartLegendComponent {
   @Input() labels: DataLabel[] = [];
+  @Input() containerClassList: string = 'd-flex justify-content-around flex-wrap';
   toggleLabel(index: number) {
     const label = this.labels[index];
     this.labels[index] = label.toggle({...label});

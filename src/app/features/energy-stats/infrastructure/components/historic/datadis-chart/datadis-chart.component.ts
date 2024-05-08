@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
@@ -13,6 +13,11 @@ import {DateRange} from "../../../../domain/DateRange";
 import {ChartType} from "../../../../domain/ChartType";
 import {DatadisEnergyStat} from "../../../../../../shared/infrastructure/services/zertipower/DTOs/EnergyStatDTO";
 import {ZertipowerService} from "../../../../../../shared/infrastructure/services/zertipower/zertipower.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {
+  BreakPoints,
+  ScreenBreakPointsService
+} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
 
 @Component({
   selector: 'app-datadis-chart',
@@ -38,15 +43,27 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   datasets: ChartDataset[] = [];
   labels: string[] = [];
   legendLabels: DataLabel[] = [];
+  mobileLabels: DataLabel[] = [];
 
   @ViewChild(DataChartComponent) dataChart!: DataChartComponent;
+  @ViewChild('secondChart') secondChart!: DataChartComponent;
+  @ViewChild('maximizedChart') maximizedChart!: ElementRef;
+  @ViewChild('legendModal') legendModal!: ElementRef;
 
   constructor(
     private readonly chartStoreService: ChartStoreService,
     private readonly userStore: UserStoreService,
     private readonly zertipower: ZertipowerService,
+    private readonly ngbModal: NgbModal,
+    private readonly breakpointsService: ScreenBreakPointsService,
   ) {
   }
+
+  public maximizeChart() {
+    this.ngbModal.open(this.maximizedChart, {fullscreen: true});
+  }
+
+  currentBreakpoint$ = this.breakpointsService.observeBreakpoints();
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -157,11 +174,17 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   }
                 }
             });
+
+            this.mobileLabels = this.legendLabels.map(d => {
+              return {...d, radius: '2.5rem'}
+            })
           }),
     );
   }
 
-
+  public showLegendModal() {
+    this.ngbModal.open(this.legendModal, {size: "xl"});
+  }
 
   async fetchEnergyStats(date: Date, range: DateRange) {
     this.chartStoreService.snapshotOnly(state => state.origin);
@@ -225,4 +248,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
+
+  protected readonly BreakPoints = BreakPoints;
 }

@@ -1,8 +1,6 @@
-<!--<div class="w-100 d-flex justify-content-evenly mt-3">-->
-<div class="w-100 row justify-content-evenly mt-3">
+<div class="w-100" [classList]="this.containerClassList">
   @for (label of labels; track $index) {
-    <!--    <div class="d-flex gap-2 align-items-center">-->
-    <div class="col-12 col-md d-flex align-items-center justify-content-center my-2 px-md-0" (click)="toggleLabel($index)">
+    <div class="d-flex align-items-center" (click)="toggleLabel($index)">
       <div class="me-2" style="border-radius: 50%"
            [ngStyle]="{'background-color': label.color, width: label.radius, height: label.radius}"></div>
       <label
