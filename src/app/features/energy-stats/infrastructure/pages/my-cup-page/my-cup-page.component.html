@@ -1,28 +1,32 @@
 <div class="container-page">
-  <div class="mt-5 d-flex align-items-center justify-content-between">
-    <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> El meu C.U.P.S. <span
-      class="text-secondary">(Cost Unitari de la Potència)</span>
-    </p>
-    <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
-  </div>
-  <div class="w-100 mb-3 d-flex flex-column">
-    <div class="d-flex w-100 justify-content-between">
+  <div class="d-flex justify-content-between flex-wrap-reverse gap-5">
+    <div class="d-flex flex-column">
+      <p class="fw-bold"><span><i class="fa-solid fa-angle-right"></i></span> El meu C.U.P.S. <span
+        class="text-secondary">(Cost Unitari de la Potència)</span>
+      </p>
       <h4 style="font-weight: 600;">Consum i producció</h4>
+    </div>
+
+    <div class="d-flex flex-column">
+      <p class="fst-italic">La teva despesa en viu <span><i class="fa-solid fa-rss fa-fade text-danger"></i></span></p>
       <div class="d-flex justify-content-between">
         @if (lastUpdate$ | async) {
-        <p>Actualitzat a les {{ lastUpdate$ | async }} <span class="text-success" style="font-size: 0.8rem;"><i
-          class="fa-solid fa-circle"></i></span></p>
+          <p>Actualitzat a les {{ lastUpdate$ | async }} <span class="text-success" style="font-size: 0.8rem;"><i
+            class="fa-solid fa-circle"></i></span></p>
         } @else {
-        <p>No s'ha registrat cap dada</p>
+          <p>No s'ha registrat cap dada</p>
         }
       </div>
     </div>
+  </div>
 
+
+  <div class="w-100 mb-3 d-flex flex-column">
     <div>
       <div class="w-100 d-flex" style="max-width: 20rem">
         <select class="form-select" (change)="selectCups($event)">
           @for (cup of (cups$ | async); track $index) {
-          <option [selected]="$index === (selectedCupsIndex$ | async)" [value]="$index">{{ cup.reference }}</option>
+            <option [selected]="$index === (selectedCupsIndex$ | async)" [value]="$index">{{ cup.reference }}</option>
           }
         </select>
       </div>
@@ -85,23 +89,7 @@
   </span>
   </p>
 
-
-  <div class="d-flex justify-content-center align-items-center my-5" style="gap: 4rem;">
-    <div class="d-flex gap-2 align-items-center">
-      <div class="me-2" style="border-radius: 50%"
-           [ngStyle]="{'background-color': StatsColors.VIRTUAL_SURPLUS, width: '1.5rem', height: '1.5rem'}"></div>
-      <h3 class="m-0">Excedent</h3>
-    </div>
-
-    <p-knob [size]="250" [ngModel]="powerFlow().sell" [max]="powerFlow().production"
-            [valueTemplate]="knobValue()" [readonly]="true"
-            [valueColor]="StatsColors.VIRTUAL_SURPLUS" [rangeColor]="StatsColors.CONSUMPTION"></p-knob>
-    <div class="d-flex gap-2 align-items-center">
-      <div class="me-2" style="border-radius: 50%"
-           [ngStyle]="{'background-color': StatsColors.CONSUMPTION, width: '1.5rem', height: '1.5rem'}"></div>
-      <h3 class="m-0">Consum</h3>
-    </div>
-  </div>
+  <app-powerflow-gaus [production]="powerFlow().production" [sell]="powerFlow().sell"/>
 
   <hr>
 
