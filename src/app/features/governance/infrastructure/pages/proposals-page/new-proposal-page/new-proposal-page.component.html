@@ -31,7 +31,14 @@
                   [minDate]="minDate" [dateFormat]="'dd-mm-yy'" styleClass="w-100"/>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label">Minim de vots</label>
+      <label class="form-label">
+        Minim de vots
+        <app-question-badge>
+          <div class="my-3">
+            Elegeix el percentatge de vots necessaris per a l'aprovació. Per exemple: 50%.
+          </div>
+        </app-question-badge>
+      </label>
       <div class="input-group mb-3">
         <input type="number" class="form-control bg-white shadow-none" [(ngModel)]="minVotes" max="100" min="1">
         <span class="input-group-text bg-primary text-white">%</span>
@@ -45,14 +52,35 @@
       </select>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label">Tipus</label>
+      <label class="form-label">
+        Tipus
+        <app-question-badge>
+          <div class="my-3">
+            Sistemes de votacions.
+            <br>
+            <strong>Ponderada:</strong> Cada vot es basa en un factor predefinit, com la quantitat d'aportacions
+            realitzades o l'antiguitat en la comunitat. És a dir, es pondera per la quantitat d'accions.
+            <br>
+            <strong>Igualitaria:</strong> Cada vot té el mateix pes, independentment de qualsevol altre factor.
+          </div>
+
+        </app-question-badge>
+      </label>
       <select class="form-select bg-white shadow-none" [(ngModel)]="type">
         <option selected [value]="'weighted'">Ponderada</option>
         <option [value]="'equal'">Igualitari</option>
       </select>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label">Transparència</label>
+      <label class="form-label">
+        Transparència
+        <app-question-badge>
+          <div class="my-3">
+            Elegeix <strong>SI</strong>, per a veure la votació a temps real, o <strong>NO</strong>,
+            per a veure el resultat finalitzada la data d'expiració.
+          </div>
+        </app-question-badge>
+      </label>
       <div class="form-check form-switch">
         <input class="form-check-input bg-white shadow-none" type="checkbox" role="switch"
                (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">

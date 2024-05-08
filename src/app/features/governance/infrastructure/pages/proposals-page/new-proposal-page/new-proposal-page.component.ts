@@ -10,6 +10,9 @@ import dayjs from "dayjs";
 import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {
+  QuestionBadgeComponent
+} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -22,7 +25,8 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
     NgForOf,
     NgbTooltip,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    QuestionBadgeComponent
   ],
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'
