@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CalendarModule} from "primeng/calendar";
 import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
@@ -14,6 +14,11 @@ import {ChartOrigins} from "../../../../domain/ChartOrigins";
 import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+import {
+  BreakPoints,
+  ScreenBreakPointsService
+} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-historic-chart',
@@ -64,10 +69,13 @@ export class HistoricChartComponent {
   protected readonly ChartOrigins = ChartOrigins;
   protected readonly ChartResource = ChartResource;
   protected readonly ChartType = ChartType;
+  @ViewChild('modalLegend') modalLegend!: ElementRef;
 
   constructor(
     private readonly monitoringService: MonitoringService,
-    private readonly chartStoreService: ChartStoreService
+    private readonly chartStoreService: ChartStoreService,
+    private readonly screenBreakpoints: ScreenBreakPointsService,
+    private readonly ngbModal: NgbModal,
   ) {
   }
 
@@ -101,5 +109,15 @@ export class HistoricChartComponent {
     if (date && date.getTime()){
       this.chartStoreService.setDate(date);
     }
+  }
+
+  showLegend() {
+    const breakpoint = this.screenBreakpoints.getCurrentBreakPoint();
+    if (breakpoint >= BreakPoints.MD) {
+      return;
+    }
+
+    // TODO show modal
+    this.ngbModal.open(this.modalLegend, {size: "lg"});
   }
 }

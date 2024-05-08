@@ -75,6 +75,12 @@
   </div>
 </div>
 
+<ng-template #modalLegend let-modal>
+<!--  TODO show legend-->
+</ng-template>
+
+<span (click)="showLegend()" class="badge text-bg-secondary" style="cursor: pointer">Mostrar llegenda <i class="fa-sharp fa-solid fa-circle-info"></i></span>
+
 @switch (origin$ | async) {
 @case (ChartOrigins.DATADIS) {
 <app-datadis-chart/>
