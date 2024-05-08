@@ -172,10 +172,14 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize() {
-  //   this.changeToDesktop();
-  // }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth <= 990) {
+      this.changeToMobile();
+    } else {
+      this.changeToDesktop();
+    }
+  }
 
   resetChartZoom() {
     if (!this.chart) {
@@ -228,7 +232,7 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.options = {
       ...this.options,
       maintainAspectRatio: false,
-      aspectRatio: 0.1,
+      aspectRatio: 0.5,
       indexAxis: 'y',
       scales: {
         y: {
@@ -319,12 +323,12 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       datasets,
     }
 
-    // this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
-    //   if (window.innerWidth <= 990) {
-    //     this.changeToMobile();
-    //   } else {
-    //     this.changeToDesktop();
-    //   }
-    // });
+    this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
+      if (window.innerWidth <= 990) {
+        this.changeToMobile();
+      } else {
+        this.changeToDesktop();
+      }
+    });
   }
 }

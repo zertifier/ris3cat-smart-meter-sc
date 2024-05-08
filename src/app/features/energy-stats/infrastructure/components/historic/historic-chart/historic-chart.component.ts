@@ -65,6 +65,7 @@ export class HistoricChartComponent {
   chartResource$ = this.chartStoreService.selectOnly(state => state.selectedChartResource);
 
   dateRange$ = this.chartStoreService.selectOnly(state => state.dateRange)
+  currentBreakpoint$ = this.screenBreakpoints.observeBreakpoints();
   protected readonly DateRange = DateRange;
   protected readonly ChartOrigins = ChartOrigins;
   protected readonly ChartResource = ChartResource;
@@ -120,4 +121,6 @@ export class HistoricChartComponent {
     // TODO show modal
     this.ngbModal.open(this.modalLegend, {size: "lg"});
   }
+
+  protected readonly BreakPoints = BreakPoints;
 }
