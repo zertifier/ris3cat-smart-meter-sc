@@ -150,9 +150,10 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   radius: '2.5rem',
                   color: entry.color,
                   hidden: false,
-                  toggle: () => {
+                  toggle: (label) => {
                     this.dataChart.toggleDataset(index);
-                    return !this.dataChart.getDatasetVisibility(index);
+                    label.hidden = !label.hidden;
+                    return label;
                   }
                 }
             });

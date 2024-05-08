@@ -5,7 +5,7 @@ export interface DataLabel {
   label: string;
   color: string;
   radius: string;
-  toggle: () => boolean;
+  toggle: (label: DataLabel) => DataLabel;
   hidden: boolean;
 }
 
@@ -23,6 +23,6 @@ export class ChartLegendComponent {
   @Input() labels: DataLabel[] = [];
   toggleLabel(index: number) {
     const label = this.labels[index];
-    label.hidden = label.toggle();
+    this.labels[index] = label.toggle({...label});
   }
 }
