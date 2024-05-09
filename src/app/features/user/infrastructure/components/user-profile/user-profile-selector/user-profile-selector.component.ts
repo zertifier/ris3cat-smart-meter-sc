@@ -6,14 +6,14 @@ import {
   NgbDropdownModule,
   NgbDropdownToggle
 } from "@ng-bootstrap/ng-bootstrap";
-import {Confirmable} from "../../../decorators/Confirmable";
-import {LogoutActionService} from "../../../../../features/auth/actions/logout-action.service";
-import {UserStoreService} from "../../../../../features/user/infrastructure/services/user-store.service";
+import {Confirmable} from "../../../../../../shared/infrastructure/decorators/Confirmable";
+import {LogoutActionService} from "../../../../../auth/actions/logout-action.service";
+import {UserStoreService} from "../../../services/user-store.service";
 import {map} from "rxjs";
 import {AsyncPipe} from "@angular/common";
-import {TextShorterPipe} from "../../../pipes/wallet-address-shortener.pipe";
+import {TextShorterPipe} from "../../../../../../shared/infrastructure/pipes/wallet-address-shortener.pipe";
 import {RouterLink} from "@angular/router";
-import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-break-points.service";
+import {BreakPoints, ScreenBreakPointsService} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
 
 @Component({
   selector: 'app-user-profile-selector',
@@ -47,9 +47,17 @@ export class UserProfileSelectorComponent {
         return new TextShorterPipe().transform(wallet, 6, 4);
       })
     );
-  firstName = this.userStore.selectOnly(state => state.user?.firstname)
+  firstName$ = this.userStore.selectOnly(state => state.user?.firstname)
     .pipe(
       map(username => username || 'Anònim'),
+      map(username => {
+        const maxSize = 15;
+        const endSize = Math.floor(maxSize / 2);
+        if (username.length > maxSize) {
+          return new TextShorterPipe().transform(username, endSize, endSize);
+        }
+        return username;
+      })
     );
 
   constructor(

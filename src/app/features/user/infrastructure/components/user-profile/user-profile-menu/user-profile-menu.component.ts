@@ -1,12 +1,12 @@
 import {Component, TemplateRef} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {UserStoreService} from "../../../../../features/user/infrastructure/services/user-store.service";
+import {UserStoreService} from "../../../services/user-store.service";
 import {map} from "rxjs";
-import {TextShorterPipe} from "../../../pipes/wallet-address-shortener.pipe";
+import {TextShorterPipe} from "../../../../../../shared/infrastructure/pipes/wallet-address-shortener.pipe";
 import {AsyncPipe} from "@angular/common";
 import {RouterLink} from "@angular/router";
-import {Confirmable} from "../../../decorators/Confirmable";
-import {LogoutActionService} from "../../../../../features/auth/actions/logout-action.service";
+import {Confirmable} from "../../../../../../shared/infrastructure/decorators/Confirmable";
+import {LogoutActionService} from "../../../../../auth/actions/logout-action.service";
 
 @Component({
   selector: 'app-user-profile-menu',
