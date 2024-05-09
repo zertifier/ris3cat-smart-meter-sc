@@ -16,9 +16,10 @@ export interface Proposal {
   firstname: string;
   email: string;
   walletAddress: string;
-  type: string;
+  type: ProposalTypes;
   transparent: number;
   quorum: number;
+  options?: ProposalOption[];
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +38,7 @@ export interface SaveProposal {
 }
 
 export interface ProposalOption {
+  id?: number,
   proposalId: number,
   option: string
 }
@@ -46,8 +48,8 @@ export interface ProposalOption {
 })
 export class ProposalsService {
 
-  // baseUrl = environment.api_url
-  baseUrl= 'http://localhost:3000'
+  baseUrl = environment.api_url
+  // baseUrl= 'http://localhost:3000'
   constructor(
     private httpClient: HttpClient,
   ) { }
@@ -65,6 +67,11 @@ export class ProposalsService {
   getProposalsByFilterAndStatus(word: string, status: ProposalStatus | ''){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}/status/${status}`)
   }
+
+  getProposalById(id: string){
+    return this.httpClient.get<HttpResponse<Proposal>>(`${this.baseUrl}/proposals/${id}`)
+  }
+
   saveProposal(proposal: SaveProposal){
     return this.httpClient.post<HttpResponse<SaveProposal>>(`${this.baseUrl}/proposals`, proposal)
   }
@@ -73,4 +80,22 @@ export class ProposalsService {
   }
 
 
+  statusTranslation(status: ProposalStatus){
+    switch (status.toLowerCase()){
+      case "active": return 'Actiu'
+      case "pending": return 'Pendent'
+      case "succeeded": return 'Acceptada'
+      case "executed": return 'Executada'
+      case "defeated": return 'Vençuda'
+      default: return
+    }
+  }
+
+  typeTranslation(type: ProposalTypes){
+    switch (type.toLowerCase()){
+      case "weighted": return 'Ponderada'
+      case "equal": return 'Igualitaria'
+      default: return
+    }
+  }
 }
