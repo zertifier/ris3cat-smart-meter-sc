@@ -39,15 +39,14 @@
       <div class="mt-5">
         <h5 class="fw-bold">Vota aquí</h5>
 
-        <div *ngFor="let option of proposal.options!.reverse(); let i = index" class="d-flex my-2">
+        <div *ngFor="let option of proposal.options!; let i = index" class="d-flex my-2">
           <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start" [ngClass]="activeOptionIndex == i ? 'active' : ''"
                   (click)="selectOption(option.id!, i)">
             {{ option.option }}
           </button>
         </div>
       </div>
-
-      <div class="mt-5">
+      <div class="mt-5" *ngIf="proposal.transparent != 0">
         <h5 class="fw-bold">Resultat votacions fins ara</h5>
 
         <div *ngFor="let option of proposal.options!" class="my-3">
