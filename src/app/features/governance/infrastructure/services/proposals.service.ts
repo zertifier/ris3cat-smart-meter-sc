@@ -59,7 +59,12 @@ export class ProposalsService {
   getProposalsByStatus(status: ProposalStatus){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/status/${status}`)
   }
-
+  getProposalsByFilter(word: string){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}`)
+  }
+  getProposalsByFilterAndStatus(word: string, status: ProposalStatus | ''){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}/status/${status}`)
+  }
   saveProposal(proposal: SaveProposal){
     return this.httpClient.post<HttpResponse<SaveProposal>>(`${this.baseUrl}/proposals`, proposal)
   }

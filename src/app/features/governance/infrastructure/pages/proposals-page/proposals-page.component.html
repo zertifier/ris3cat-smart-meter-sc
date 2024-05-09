@@ -1,6 +1,13 @@
 <div class="container-page">
-  <div class="my-4 d-flex align-items-center justify-content-between">
+  <div class="my-4">
     <h3 class="fw-bold"> Propostes</h3>
+
+    <div class="input-group mb-3" style="max-width: 675px">
+      <input [(ngModel)]="filterText" (keyup)="proposalType == 'all' ? getAllProposals() : getProposalsByStatus(proposalType)" type="text"
+             class="form-control bg-white border-secondary border-1 border-end-0 shadow-none" placeholder="Buscar proposta">
+      <span class="input-group-text bg-white border-secondary border-1 border-start-0"><i class="fa-solid fa-magnifying-glass"></i></span>
+    </div>
+
   </div>
 
   <div class="d-flex mb-3">
@@ -36,12 +43,9 @@
   </div>
 
 
-  <div class="row justify-content-center mx-0 overflow-y-scroll" style="max-height: 46.2vh">
-    <div *ngFor="let proposal of proposals" class="col-md-12 card mb-3 w-100 bg-white">
+  <div class="row ms-0 overflow-y-scroll" style="max-height: 46.2vh">
+    <div *ngFor="let proposal of proposals" class="col-12 card mb-3 w-100 bg-white border-secondary border-1">
       <div class="row g-0 px-5">
-        <!--<div class="col-md-4">
-          <img src="..." class="img-fluid rounded-start" alt="...">
-        </div>-->
           <div class="card-body py-4">
             <div class="mb-3" *ngIf="proposalType == 'all'">
               <button class="badge text-complementary" disabled>{{statusTranslation(proposal.status)}}</button>
