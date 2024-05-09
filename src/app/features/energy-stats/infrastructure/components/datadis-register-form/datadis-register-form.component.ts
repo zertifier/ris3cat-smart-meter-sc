@@ -5,6 +5,7 @@ import {
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {JsonPipe} from "@angular/common";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-datadis-register-form',
@@ -34,5 +35,15 @@ export class DatadisRegisterFormComponent {
 
   public closeModal() {
     this.ngbActiveModal.close('cross click');
+  }
+
+  public registerCups() {
+    if (this.formData.invalid) {
+      Swal.fire({
+        title: 'Formulari no valid',
+        icon: "error",
+      });
+      return;
+    }
   }
 }
