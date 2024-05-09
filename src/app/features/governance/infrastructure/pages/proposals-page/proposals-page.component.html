@@ -44,11 +44,12 @@
 
 
   <div class="row ms-0 overflow-y-scroll" style="max-height: 46.2vh">
-    <div *ngFor="let proposal of proposals" class="col-12 card mb-3 w-100 bg-white border-secondary border-1">
+    <div *ngFor="let proposal of proposals" class="col-12 card mb-3 w-100 bg-white border-secondary border-1"
+         [routerLink]="'./'+proposal.id" [routerLinkActive]="'active'" style="cursor: pointer">
       <div class="row g-0 px-5">
           <div class="card-body py-4">
             <div class="mb-3" *ngIf="proposalType == 'all'">
-              <button class="badge text-complementary" disabled>{{statusTranslation(proposal.status)}}</button>
+              <button class="badge text-tertiary" disabled>{{statusTranslation(proposal.status)}}</button>
             </div>
             <h5 class="card-title fw-bold" [ngClass]="proposalType != 'all' ? 'text-complementary' : 'text-primary'">{{proposal.proposal}}</h5>
             <p class="card-text text-primary">{{proposal.description}}</p>

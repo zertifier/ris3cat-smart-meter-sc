@@ -22,28 +22,27 @@
 }
 
 .btn-complementary {
-  background-color: $complementary !important;
-  border-color: $complementary !important;
+  background-color: $tertiary !important;
+  border-color: $tertiary !important;
   color: white !important;
 }
 .btn-complementary:hover {
   color: #efefef !important;
 }
 
-.btn-outline-complementary {
-  border-color: $complementary !important;
-  color: $complementary !important;
+.btn-outline-tertiary {
+  border-color: $tertiary !important;
+  color: $tertiary !important;
 }
 
-.btn-outline-complementary:hover {
-  border-color: $active-complementary !important;
-  color: $active-complementary !important;
+.btn-outline-tertiary:hover {
+  border-color: $active-tertiary !important;
+  color: $active-tertiary !important;
 }
 
-.btn-outline-complementary:active {
-  //border-color: $active-complementary !important;
-  background-color: $active-complementary !important;
-  color: $active-complementary !important;
+.btn-outline-tertiary:active {
+  background-color: $active-tertiary !important;
+  color: $active-tertiary !important;
 }
 
 .btn-primary-force {
@@ -55,8 +54,12 @@
   color: white !important;
 }
 
-.text-complementary{
-  color: $complementary !important;
+.text-tertiary{
+  color: $tertiary !important;
+}
+
+.bg-tertiary{
+  background-color: $tertiary !important;
 }
 
 .mi-clase:not(::after) {

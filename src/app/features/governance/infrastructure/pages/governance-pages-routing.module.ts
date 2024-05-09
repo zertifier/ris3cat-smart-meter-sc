@@ -27,6 +27,13 @@ export const routes: Routes = [
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
         }
+      },
+      {
+        path: 'proposals/:id',
+        loadComponent: () => import('./proposals-page/proposal-page/proposal-page.component').then(c => c.ProposalPageComponent),
+        data: {
+          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
+        }
       }
     ]
   }

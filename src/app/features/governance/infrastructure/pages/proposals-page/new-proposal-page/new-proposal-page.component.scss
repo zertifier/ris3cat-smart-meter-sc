@@ -17,15 +17,15 @@
 
 }
 ::ng-deep .p-datepicker table td > span.p-highlight{
-  background: $complementary !important;
+  background: $tertiary !important;
 }
 
 ::ng-deep .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext{
-  border-color: $complementary !important;
+  border-color: $tertiary !important;
 }
 
 ::ng-deep .p-datepicker-year, ::ng-deep .p-datepicker-month, ::ng-deep .p-datepicker-next, ::ng-deep .p-datepicker-prev {
-  color: $complementary !important;
+  color: $tertiary !important;
 }
 ::ng-deep .p-datepicker table td > span,::ng-deep .p-inputtext{
   box-shadow: none;
