@@ -44,7 +44,7 @@ export class NewProposalPageComponent {
   transparentStatus: boolean = false;
   date: Date = dayjs().add(1, 'day').toDate();
   minDate: Date = dayjs().add(1, 'day').toDate();
-  options: any = [{option: 'Abstenir-se'}, {option: 'No'}, {option: 'Sí'}]
+  options: any = [  {option: 'Sí'}, {option: 'No'}, {option: 'Abstenir-se'},]
 
   constructor(
     private proposalsService: ProposalsService,
@@ -73,7 +73,7 @@ export class NewProposalPageComponent {
   }
 
   addOption() {
-    this.options.push()
+    this.options.unshift({})
   }
 
   removeOption(index: number) {

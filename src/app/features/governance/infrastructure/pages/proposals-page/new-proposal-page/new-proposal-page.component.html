@@ -98,9 +98,9 @@
         Afegir opció
       </div>
     </div>
-    <div *ngFor="let option of options.reverse(), let i = index" class="col-12 col-md-3">
+    <div *ngFor="let option of options, let i = index" class="col-12 col-md-3">
       <div class="input-group mb-3">
-        <input type="text" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="option.option" placeholder="Opció {{options.length}}">
+        <input type="text" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="option.option" placeholder="Opció {{options.length - i}}">
         <button [disabled]="options.length <= 2"
                 [ngbTooltip]="'La proposta és vàlida a partir de 2 opcions.'"
                 class="btn btn-danger text-white border-0 rounded-end-2 border-secondary" type="button" (click)="removeOption(i)" style="min-width: 37px">
