@@ -26,7 +26,6 @@ export class ProposalsPageComponent {
   proposals: Proposal[] = []
   proposalType: ProposalType = 'all'
   filterText!: string
-  currentStatus: ProposalStatus | 'all' = 'all'
 
   constructor(
     private proposalsService: ProposalsService
@@ -35,31 +34,32 @@ export class ProposalsPageComponent {
     this.getAllProposals()
   }
 
-
   getAllProposals(){
-   //EMPTY NOT WORKING
-    this.proposalsService.getProposalsByFilter(this.filterText || '').subscribe((response) => {
-      this.proposals = response.data.length ? response.data : []
-      this.proposalType = 'all'
-    })
+    if (this.filterText){
+      this.proposalsService.getProposalsByFilter(this.filterText).subscribe((response) => {
+        this.proposals = response.data.length ? response.data : []
+        this.proposalType = 'all'
+      })
+    }else{
+      this.proposalsService.getProposals().subscribe((response) => {
+        this.proposals = response.data.length ? response.data : []
+        this.proposalType = 'all'
+      })
+    }
   }
 
   getProposalsByStatus(status: ProposalStatus){
-    this.proposalsService.getProposalsByFilterAndStatus(this.filterText || '', status).subscribe((response) => {
-      this.proposals = response.data.length ? response.data : []
-      this.proposalType = status
-    })
-  }
-
-  getProposalsByFilter(){
-    this.proposalsService.getProposalsByFilter(this.filterText).subscribe((response) => {
-      this.proposals = response.data.length ? response.data : []
-    })
-  }
-  getProposalsByFilterAndStatus(){
-    this.proposalsService.getProposalsByFilterAndStatus(this.filterText, 'active').subscribe((response) => {
-      this.proposals = response.data
-    })
+    if(this.filterText){
+      this.proposalsService.getProposalsByFilterAndStatus(this.filterText || '', status).subscribe((response) => {
+        this.proposals = response.data.length ? response.data : []
+        this.proposalType = status
+      })
+    }else{
+      this.proposalsService.getProposalsByStatus(status).subscribe((response) => {
+        this.proposals = response.data.length ? response.data : []
+        this.proposalType = status
+      })
+    }
   }
 
   statusTranslation(status: ProposalStatus){
