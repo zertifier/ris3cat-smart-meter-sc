@@ -4,7 +4,7 @@
 
     <div class="input-group mb-3" style="max-width: 675px">
       <input [(ngModel)]="filterText" (keyup)="proposalType == 'all' ? getAllProposals() : getProposalsByStatus(proposalType)" type="text"
-             class="form-control bg-white border-secondary border-1 border-end-0 shadow-none">
+             class="form-control bg-white border-secondary border-1 border-end-0 shadow-none" placeholder="Buscar proposta">
       <span class="input-group-text bg-white border-secondary border-1 border-start-0"><i class="fa-solid fa-magnifying-glass"></i></span>
     </div>
 
