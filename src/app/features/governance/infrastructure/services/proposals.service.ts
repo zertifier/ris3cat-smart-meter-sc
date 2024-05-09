@@ -48,8 +48,8 @@ export interface ProposalOption {
 })
 export class ProposalsService {
 
-  // baseUrl = environment.api_url
-  baseUrl= 'http://localhost:3000'
+  baseUrl = environment.api_url
+  // baseUrl= 'http://localhost:3000'
   constructor(
     private httpClient: HttpClient,
   ) { }
