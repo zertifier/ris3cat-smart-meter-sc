@@ -31,4 +31,9 @@
   box-shadow: none;
 }
 
-
+::ng-deep .p-inputtext{
+  border: solid 1px $secondary;
+  border-radius: 6px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}

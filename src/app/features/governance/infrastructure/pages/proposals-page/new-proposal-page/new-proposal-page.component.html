@@ -40,13 +40,13 @@
         </app-question-badge>
       </label>
       <div class="input-group mb-3">
-        <input type="number" class="form-control bg-white shadow-none" [(ngModel)]="minVotes" max="100" min="1">
+        <input type="number" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="minVotes" max="100" min="1">
         <span class="input-group-text bg-primary text-white">%</span>
       </div>
     </div>
     <div class="col-6 col-md-2">
       <label class="form-label">Estat</label>
-      <select class="form-select bg-white shadow-none" [(ngModel)]="status">
+      <select class="form-select bg-white shadow-none border-secondary" [(ngModel)]="status">
         <option selected [value]="'active'">Activa</option>
         <option [value]="'pending'">Pendent</option>
       </select>
@@ -66,7 +66,7 @@
 
         </app-question-badge>
       </label>
-      <select class="form-select bg-white shadow-none" [(ngModel)]="type">
+      <select class="form-select bg-white shadow-none border-secondary" [(ngModel)]="type">
         <option selected [value]="'weighted'">Ponderada</option>
         <option [value]="'equal'">Igualitari</option>
       </select>
@@ -82,7 +82,7 @@
         </app-question-badge>
       </label>
       <div class="form-check form-switch">
-        <input class="form-check-input bg-white shadow-none" type="checkbox" role="switch"
+        <input class="form-check-input bg-white shadow-none border-secondary" type="checkbox" role="switch"
                (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
       </div>
     </div>
@@ -100,10 +100,10 @@
     </div>
     <div *ngFor="let option of options.reverse(), let i = index" class="col-12 col-md-3">
       <div class="input-group mb-3">
-        <input type="text" class="form-control bg-white shadow-none" [(ngModel)]="option.option" placeholder="Opció {{options.length}}">
+        <input type="text" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="option.option" placeholder="Opció {{options.length}}">
         <button [disabled]="options.length <= 2"
                 [ngbTooltip]="'La proposta és vàlida a partir de 2 opcions.'"
-                class="btn btn-danger text-white border-0 rounded-end-2" type="button" (click)="removeOption(i)" style="min-width: 37px">
+                class="btn btn-danger text-white border-0 rounded-end-2 border-secondary" type="button" (click)="removeOption(i)" style="min-width: 37px">
           x
         </button>
       </div>
