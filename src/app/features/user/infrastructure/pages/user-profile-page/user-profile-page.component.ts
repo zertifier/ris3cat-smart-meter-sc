@@ -10,7 +10,7 @@ import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angula
 import {ZertipowerService} from "../../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import Swal from "sweetalert2";
 import {EventBus} from "../../../../../shared/domain/EventBus";
-import {UserProfileChanged} from "../../../../auth/domain/UserProfileChanged";
+import {UserProfileChangedEvent} from "../../../../auth/domain/UserProfileChangedEvent";
 
 @Component({
   selector: 'app-user-profile-page',
@@ -69,7 +69,7 @@ export class UserProfilePageComponent implements OnInit {
     await this.zertipower.users.update(id, {
       email, wallet_address, username, role, firstname: firstname!, lastname: lastname!, password: '',
     });
-    await this.eventBus.publishEvents(new UserProfileChanged());
+    await this.eventBus.publishEvents(new UserProfileChangedEvent());
     await Swal.fire({
       title: "User updated successfully"
     });
