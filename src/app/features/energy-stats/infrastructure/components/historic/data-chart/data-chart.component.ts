@@ -97,13 +97,14 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     plugins: {
       zoom: {
         zoom: {
-          wheel: {
-            enabled: true,
-          },
-          pinch: {
-            enabled: true,
-          },
-          mode: 'xy',
+          enabled: false,
+          // wheel: {
+          //   enabled: false,
+          // },
+          // pinch: {
+          //   enabled: true,
+          // },
+          // mode: 'xy',
         }
       },
       legend: {
