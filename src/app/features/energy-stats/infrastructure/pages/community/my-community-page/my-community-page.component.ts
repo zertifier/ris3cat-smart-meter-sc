@@ -1,31 +1,31 @@
 import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
-import {MonitoringService, PowerStats} from "../../services/monitoring.service";
+import {MonitoringService, PowerStats} from "../../../services/monitoring.service";
 import {catchError, map, Subscription, throwError} from "rxjs";
 import {AsyncPipe, JsonPipe, NgClass, NgStyle} from "@angular/common";
-import {StatsColors} from "../../../domain/StatsColors";
+import {StatsColors} from "../../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
 
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
-import {AuthStoreService} from "../../../../auth/infrastructure/services/auth-store.service";
-import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
-import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
-import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
+import {AuthStoreService} from "../../../../../auth/infrastructure/services/auth-store.service";
+import {StatDisplayComponent} from "../../../components/realtime/stat-display/stat-display.component";
+import {ChartLegendComponent} from "../../../components/historic/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../../components/historic/data-chart/data-chart.component";
 import {
   ConsumptionItem,
   ConsumptionItemsComponent
-} from "../../components/realtime/consumption-items/consumption-items.component";
-import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
-import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
-import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
-import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
-import {MonitoringStoreService} from "../../services/monitoring-store.service";
-import {getMonth} from "../../../../../shared/utils/DatesUtils";
+} from "../../../components/realtime/consumption-items/consumption-items.component";
+import {HistoricChartComponent} from "../../../components/historic/historic-chart/historic-chart.component";
+import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+import {NavbarComponent} from "../../../../../../shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "../../../../../../shared/infrastructure/components/footer/footer.component";
+import {MonitoringStoreService} from "../../../services/monitoring-store.service";
+import {getMonth} from "../../../../../../shared/utils/DatesUtils";
 import {KnobModule} from "primeng/knob";
-import {PowerflowGausComponent} from "../../components/powerflow-gaus/powerflow-gaus.component";
+import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 
 dayjs.extend(utc);
 

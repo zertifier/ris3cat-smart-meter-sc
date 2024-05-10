@@ -1,0 +1,20 @@
+<div class="container my-3">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <h3 class="m-0">Datadis</h3>
+          <i class="fa-solid fa-circle fa-fade" [ngClass]="{'text-success': this.active, 'text-danger': !this.active}"></i>
+        </div>
+
+        <span>
+        @if (lastUpdate) {
+          Ultima actualització {{ lastUpdate }}
+        } @else {
+          No hi ha actualitzacions
+        }
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

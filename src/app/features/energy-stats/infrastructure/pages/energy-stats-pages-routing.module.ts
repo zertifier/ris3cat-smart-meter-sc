@@ -4,6 +4,9 @@ import {ChartEntity} from "../../domain/ChartEntity";
 import {hasCupsGuard} from "../guards/has-cups.guard";
 import {hasCommunityGuard} from "../guards/has-community.guard";
 
+// These names are used on the guards
+// Each route has a name, and the guards verify what is the
+// original name. Depending on that redirects the user to a route or another
 export enum ENERGY_STATS_ROUTE_NAMES {
   STATS_COMMUNITY = 'stats-community',
   STATS_CUPS = 'stats-cups',
@@ -19,7 +22,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'community',
-        loadComponent: () => import('./my-community-page/my-community-page.component').then(c => c.MyCommunityPageComponent),
+        loadComponent: () => import('./community/my-community-page/my-community-page.component').then(c => c.MyCommunityPageComponent),
         canActivate: [switchChartEntityGuard(ChartEntity.COMMUNITIES), hasCommunityGuard],
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.STATS_COMMUNITY
@@ -27,7 +30,7 @@ export const routes: Routes = [
       },
       {
         path: 'my-cup',
-        loadComponent: () => import('./my-cup-page/my-cup-page.component').then(c => c.MyCupPageComponent),
+        loadComponent: () => import('./cups/my-cups-page/my-cup-page.component').then(c => c.MyCupPageComponent),
         canActivate: [switchChartEntityGuard(ChartEntity.CUPS), hasCupsGuard],
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.STATS_CUPS
@@ -35,7 +38,7 @@ export const routes: Routes = [
       },
       {
         path: 'community/missing',
-        loadComponent: () => import('./missing-community-page/missing-community-page.component').then(c => c.MissingCommunityPageComponent),
+        loadComponent: () => import('./community/missing-community-page/missing-community-page.component').then(c => c.MissingCommunityPageComponent),
         canActivate: [hasCommunityGuard],
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.MISSING_COMMUNITY
@@ -43,7 +46,7 @@ export const routes: Routes = [
       },
       {
         path: 'my-cup/missing',
-        loadComponent: () => import('./missing-cup-page/missing-cup-page.component').then(c => c.MissingCupPageComponent),
+        loadComponent: () => import('./cups/missing-cups-page/missing-cup-page.component').then(c => c.MissingCupPageComponent),
         canActivate: [hasCupsGuard],
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.MISSING_CUPS
@@ -52,6 +55,10 @@ export const routes: Routes = [
       {
         path: 'share',
         loadComponent: () => import('./share-page/share-page.component').then(c => c.SharePageComponent)
+      },
+      {
+        path: 'data-source-health',
+        loadComponent: () => import('./data-source-health/data-source-health.component').then(c => c.DataSourceHealthComponent)
       },
       {
         path: '',
