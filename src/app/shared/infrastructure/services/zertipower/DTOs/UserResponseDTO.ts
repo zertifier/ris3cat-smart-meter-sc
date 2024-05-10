@@ -4,6 +4,7 @@ export interface UserResponseDTO {
   firstname: string;
   lastname: string;
   email: string;
+  customer_id?: number;
   created_at: number;
   updated_at: number;
   role: string;

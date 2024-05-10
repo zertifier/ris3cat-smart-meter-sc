@@ -103,7 +103,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             // Create data sets
             const datasets: ChartDataset[] = [
               {
-                label: 'Consum actius',
+                label: community ? 'Consum actius' : 'Consum',
                 data: mappedData.map(d => d.consumption),
                 stack: 'Consumption',
                 order: 0,
@@ -114,14 +114,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             if (cce) {
               datasets.push({
                 order: 2,
-                label: 'Excedent actius compartit',
+                label: community ? 'Excedent actius compartit' : 'Excedent compartit',
                 color: StatsColors.VIRTUAL_SURPLUS,
                 data: mappedData.map(d => d.virtualSurplus),
               })
             } else {
               datasets.push({
                 order: 2,
-                label: 'Excedent actius',
+                label: community ? 'Excedent actius' : 'Excedent',
                 color: StatsColors.SURPLUS,
                 data: mappedData.map(d => d.surplus),
                 stack: 'Stack 2',

@@ -17,7 +17,7 @@ export class ProfileUpdaterService {
     private zertipower: ZertipowerService,
     private eventBus: EventBus,
   ) {
-    this.eventBus.subscribe(UserProfileChanged.NAME, async _ => {
+    this.eventBus.subscribe(UserProfileChanged.NAME, async () => {
       const userProfile = this.userStore.snapshotOnly(state => state.user);
       if (!userProfile) {
         throw new Error("User profile not defined");
@@ -27,7 +27,7 @@ export class ProfileUpdaterService {
       this.userStore.patchState({user});
     });
 
-    this.eventBus.subscribe(UserLoggedInEvent.NAME, async (_) => {
+    this.eventBus.subscribe(UserLoggedInEvent.NAME, async () => {
       const authData = this.authStore.snapshotOnly(state => state.authData);
 
       if (!authData) {

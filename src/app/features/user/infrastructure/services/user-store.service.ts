@@ -9,6 +9,7 @@ export interface UserProfile {
   email: string,
   lastname: string,
   wallet_address: string,
+  customer_id?: number,
 }
 
 export interface UserStore {

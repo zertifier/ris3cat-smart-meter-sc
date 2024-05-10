@@ -5,9 +5,9 @@
   <div class="modal-body">
     <app-data-chart #secondChart [dataset]="datasets" [labels]="labels"/>
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-light" type="button" (click)="secondChart.resetChartZoom()">Restableix zoom</button>
-  </div>
+<!--  <div class="modal-footer">-->
+<!--    <button class="btn btn-light" type="button" (click)="secondChart.resetChartZoom()">Restableix zoom</button>-->
+<!--  </div>-->
 </ng-template>
 
 <ng-template #legendModal let-modal>
@@ -41,7 +41,7 @@
   }
 
   <app-data-chart [dataset]="datasets" [labels]="labels"/>
-  <button class="btn btn-light" type="button" (click)="dataChart.resetChartZoom()">Restableix zoom</button>
+<!--  <button class="btn btn-light" type="button" (click)="dataChart.resetChartZoom()">Restableix zoom</button>-->
 
   @if ((currentBreakpoint$ | async)! >= BreakPoints.MD) {
     <p class="mt-4" *ngIf="showCommunity$ | async">
