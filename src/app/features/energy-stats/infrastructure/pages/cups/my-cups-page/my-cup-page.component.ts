@@ -1,34 +1,34 @@
 import {Component, computed, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {AsyncPipe, JsonPipe, NgStyle} from "@angular/common";
-import {MonitoringService, PowerStats} from "../../services/monitoring.service";
-import {StatsColors} from "../../../domain/StatsColors";
+import {MonitoringService, PowerStats} from "../../../services/monitoring.service";
+import {StatsColors} from "../../../../domain/StatsColors";
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
-import {ChartLegendComponent} from "../../components/historic/chart-legend/chart-legend.component";
-import {DataChartComponent} from "../../components/historic/data-chart/data-chart.component";
-import {StatDisplayComponent} from "../../components/realtime/stat-display/stat-display.component";
+import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+import {ChartLegendComponent} from "../../../components/historic/chart-legend/chart-legend.component";
+import {DataChartComponent} from "../../../components/historic/data-chart/data-chart.component";
+import {StatDisplayComponent} from "../../../components/realtime/stat-display/stat-display.component";
 import {
   ConsumptionItem,
   ConsumptionItemsComponent
-} from "../../components/realtime/consumption-items/consumption-items.component";
-import {HistoricChartComponent} from "../../components/historic/historic-chart/historic-chart.component";
+} from "../../../components/realtime/consumption-items/consumption-items.component";
+import {HistoricChartComponent} from "../../../components/historic/historic-chart/historic-chart.component";
 import {map, Subscription} from "rxjs";
-import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
-import {FooterComponent} from "../../../../../shared/infrastructure/components/footer/footer.component";
+import {NavbarComponent} from "../../../../../../shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "../../../../../../shared/infrastructure/components/footer/footer.component";
 import {
   QuestionBadgeComponent
-} from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
-import {MonitoringStoreService} from "../../services/monitoring-store.service";
-import {getMonth} from "../../../../../shared/utils/DatesUtils";
+} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+import {MonitoringStoreService} from "../../../services/monitoring-store.service";
+import {getMonth} from "../../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
 import {KnobModule} from "primeng/knob";
-import {PowerflowGausComponent} from "../../components/powerflow-gaus/powerflow-gaus.component";
+import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 
 
 @Component({
-  selector: 'app-my-cup-page',
+  selector: 'app-my-cups-page',
   standalone: true,
   imports: [
     NavbarComponent,

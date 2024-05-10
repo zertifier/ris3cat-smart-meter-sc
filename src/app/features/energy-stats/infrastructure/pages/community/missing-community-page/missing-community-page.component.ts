@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {
   QuestionBadgeComponent
-} from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
-import {NavbarComponent} from "../../../../../shared/infrastructure/components/navbar/navbar.component";
+} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+import {NavbarComponent} from "../../../../../../shared/infrastructure/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-missing-community-page',
