@@ -4,7 +4,7 @@ import {UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
-import {UserProfileChanged} from "../../../auth/domain/UserProfileChanged";
+import {UserProfileChangedEvent} from "../../../auth/domain/UserProfileChangedEvent";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ProfileUpdaterService {
     private zertipower: ZertipowerService,
     private eventBus: EventBus,
   ) {
-    this.eventBus.subscribe(UserProfileChanged.NAME, async () => {
+    this.eventBus.subscribe(UserProfileChangedEvent.NAME, async () => {
       const userProfile = this.userStore.snapshotOnly(state => state.user);
       if (!userProfile) {
         throw new Error("User profile not defined");
