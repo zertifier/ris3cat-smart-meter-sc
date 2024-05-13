@@ -26,16 +26,21 @@ export class LoginCallbackComponent implements OnInit {
       throw new Error('Code not received from oauth');
     }
 
+    let loggedIn;
     try {
-      await this.loginAction.run(code);
+      loggedIn = await this.loginAction.run(code);
     } catch (err) {
       console.error(err);
       await Swal.fire({
         icon: 'error',
         title: "No s'ha pogut iniciar sessió"
       });
-      this.router.navigate(['/auth/login'])
+      await this.router.navigate(['/auth/login'])
+      return;
     }
-    await this.router.navigate(['/energy-stats']);
+
+    if (loggedIn) {
+      await this.router.navigate(['/energy-stats']);
+    }
   }
 }

@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {triedLoginGuard} from "../guards/tried-login.guard";
 
 export const AUTH_ROUTES: Routes = [
   {
@@ -11,7 +12,8 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'register',
-    loadComponent: () => import('./register-page/register-page.component').then(m => m.RegisterPageComponent)
+    loadComponent: () => import('./register-page/register-page.component').then(m => m.RegisterPageComponent),
+    canActivate: [triedLoginGuard]
   },
   {
     path: '**',

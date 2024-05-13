@@ -13,8 +13,9 @@ export interface AuthState {
     username: string;
     wallet_address: string;
     role: string;
-  },
+  };
   loginTry: boolean;
+  loginData?: {email: string, privateKey: string};
 }
 
 const defaultValues: AuthState = {
