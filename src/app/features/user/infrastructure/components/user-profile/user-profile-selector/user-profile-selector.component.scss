@@ -1,0 +1,18 @@
+@import "styles/colors";
+.custom-dropdown {
+  background-color: $primary;
+}
+
+.custom-dropdown .dropdown-item {
+  color: $white;
+  background: $primary;
+}
+
+.custom-dropdown .dropdown-item:hover {
+  color: $primary;
+  background: $white;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
