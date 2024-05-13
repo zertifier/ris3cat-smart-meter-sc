@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoginActionService} from "../../../actions/login-action.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-login-callback',
@@ -25,7 +26,16 @@ export class LoginCallbackComponent implements OnInit {
       throw new Error('Code not received from oauth');
     }
 
-    await this.loginAction.run(code);
+    try {
+      await this.loginAction.run(code);
+    } catch (err) {
+      console.error(err);
+      await Swal.fire({
+        icon: 'error',
+        title: "No s'ha pogut iniciar sessió"
+      });
+      this.router.navigate(['/auth/login'])
+    }
     await this.router.navigate(['/energy-stats']);
   }
 }

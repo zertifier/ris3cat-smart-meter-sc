@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {JsonPipe} from "@angular/common";
 import Swal from "sweetalert2";
+import {Router, RouterState} from "@angular/router";
+import {AuthStoreService} from "../../services/auth-store.service";
 
 @Component({
   selector: 'app-register-page',
@@ -20,7 +22,11 @@ export class RegisterPageComponent {
     lastname: new FormControl<string>('', [Validators.required]),
   });
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly authStore: AuthStoreService
+  ) {
   }
 
   register() {
@@ -31,5 +37,10 @@ export class RegisterPageComponent {
       });
       return;
     }
+  }
+
+  goBack() {
+    this.authStore.patchState({loginTry: false});
+    this.router.navigate(['/auth/login']);
   }
 }
