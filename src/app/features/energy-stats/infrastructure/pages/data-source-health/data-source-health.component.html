@@ -8,14 +8,14 @@
       <div class="d-flex justify-content-between">
         <div class="d-flex align-items-center gap-2">
           <h3 class="m-0">Datadis</h3>
-          @if (lastUpdate) {
+          @if (lastUpdate$ | async) {
             <i class="fa-solid fa-circle fa-fade" [ngClass]="{'text-success': this.active, 'text-danger': !this.active}"></i>
           }
         </div>
 
         <span class="d-flex align-items-center">
-        @if (lastUpdate) {
-          Ultima actualització {{ lastUpdate }}
+        @if (lastUpdate$ | async) {
+          Ultima actualització {{ lastUpdate | async }}
         } @else {
           No hi ha actualitzacions
         }

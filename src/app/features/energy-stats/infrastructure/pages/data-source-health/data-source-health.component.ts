@@ -2,19 +2,29 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Duration} from "../../../../../shared/utils/Duration";
 import {ZertipowerService} from "../../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
-import {NgClass} from "@angular/common";
+import {AsyncPipe, NgClass} from "@angular/common";
+import {BehaviorSubject, map} from "rxjs";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-data-source-health',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    AsyncPipe
   ],
   templateUrl: './data-source-health.component.html',
   styleUrl: './data-source-health.component.scss'
 })
 export class DataSourceHealthComponent implements OnInit, OnDestroy {
-  lastUpdate?: Date;
+  lastUpdate$ = new BehaviorSubject<Date | undefined>(undefined);
+  lastUpdate = this.lastUpdate$.pipe(map(d => {
+    if (!d) {
+      return 'No hi ha actualitzacions'
+    } else {
+      return dayjs(d).format('YYYY-MM-DD HH:mm');
+    }
+  }))
   timeoutIdentifier!: number
   active: boolean = false;
 
@@ -36,7 +46,7 @@ export class DataSourceHealthComponent implements OnInit, OnDestroy {
     const selectedCups = cups[selectedCupsIndex];
 
     this.active = await this.zertipower.cups.datadisActive(selectedCups.id);
-    this.lastUpdate = new Date();
+    this.lastUpdate$.next(new Date());
   }
 
   ngOnDestroy(): void {
