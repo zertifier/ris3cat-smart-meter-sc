@@ -1,5 +1,5 @@
 <ng-template let-modal #modal>
-  <div class="h-100" style="background-color: rgba(14, 43,76, 0.9)">
+  <div class="h-100" style="background-color: var(--bs-primary)">
     <div class="w-100 d-flex justify-content-end">
       <button type="button" class="btn btn-white text-white" style="font-size: 1.5rem" aria-label="Close"
               (click)="modal.dismiss('Cross click')">
@@ -7,8 +7,8 @@
       </button>
     </div>
 
-    <div class="w-100 text-white d-flex flex-column gap-2 align-items-center">
-      <i class="fa-solid fa-circle-user text-white mb-4" style="font-size: 4rem;"></i>
+    <div class="w-100 h-100 text-white d-flex flex-column gap-2 align-items-center justify-content-center">
+      <i class="fa-solid fa-user text-white mb-4" style="font-size: 4rem;"></i>
       <h3>
         {{ firstname$ | async }}
       </h3>
