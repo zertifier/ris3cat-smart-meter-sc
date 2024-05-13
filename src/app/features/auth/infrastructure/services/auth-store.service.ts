@@ -13,12 +13,14 @@ export interface AuthState {
     username: string;
     wallet_address: string;
     role: string;
-  }
+  },
+  loginTried: boolean;
 }
 
 const defaultValues: AuthState = {
   accessToken: '',
   refreshToken: '',
+  loginTried: false,
 }
 
 export const ACCESS_TOKEN = 'accessToken';

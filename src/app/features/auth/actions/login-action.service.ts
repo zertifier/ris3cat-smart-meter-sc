@@ -20,12 +20,16 @@ export class LoginActionService {
   ) {}
 
   async run(oauthCode: string) {
+    this.authStore.patchState({loginTried: true});
     const response = await firstValueFrom(this.zertiauthApiService.getPrivateKey(oauthCode));
     const wallet = new ethers.Wallet(response.privateKey as string);
 
     // login
+    // This service should be separated into two parts.
+    // 1. Check if user does not exist
     const tokens = await this.apiService.auth.login(wallet.address, wallet.privateKey, response.email);
     this.authStore.setTokens({refreshToken: tokens.refreshToken, accessToken: tokens.accessToken});
     await this.eventBus.publishEvents(new UserLoggedInEvent());
+    this.authStore.patchState({loginTried: false});
   }
 }
