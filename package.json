@@ -21,6 +21,7 @@
     "@angular/router": "^17.0.0",
     "@ng-bootstrap/ng-bootstrap": "16.0.0",
     "@popperjs/core": "^2.11.8",
+    "@tinymce/tinymce-angular": "8.0.0",
     "@zertifier/rx-store": "1.0.0",
     "@zertifier/zertiauthjs": "1.0.0",
     "axios": "1.6.8",
@@ -35,6 +36,7 @@
     "primeng": "^17.10.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "11.10.7",
+    "tinymce": "7.1.0",
     "tslib": "^2.3.0",
     "uuid": "9.0.1",
     "zone.js": "~0.14.2"

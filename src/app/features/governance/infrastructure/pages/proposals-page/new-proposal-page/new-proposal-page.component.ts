@@ -13,6 +13,7 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+import {EditorComponent} from "@tinymce/tinymce-angular";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -26,7 +27,8 @@ import {
     NgbTooltip,
     RouterLink,
     RouterLinkActive,
-    QuestionBadgeComponent
+    QuestionBadgeComponent,
+    EditorComponent
   ],
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'

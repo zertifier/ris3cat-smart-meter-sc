@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
@@ -10,6 +10,7 @@ import {
 import {ReactiveFormsModule} from "@angular/forms";
 import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
+import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 
 @Component({
   selector: 'app-proposal-page',
@@ -33,10 +34,14 @@ export class ProposalPageComponent {
   proposal!: Proposal
   selectedOptionId!: number;
   activeOptionIndex: number | undefined;
+  currentVotes!: VotesWithQty[]
+  optionVoted!: UserVote
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private proposalsService: ProposalsService
+    private proposalsService: ProposalsService,
+    private votesService: VotesService
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id) this.getProposal()
@@ -44,7 +49,7 @@ export class ProposalPageComponent {
   }
 
 
-  getProposal(){
+  getProposal() {
     this.proposalsService.getProposalById(this.id!).subscribe(
       (proposal) => {
         const proposalData = proposal.data
@@ -53,30 +58,60 @@ export class ProposalPageComponent {
         if (!proposalData.id) this.notFoundError()
 
         this.proposal = proposalData
+        this. getVoteFromUser()
+        if (proposal.data.transparent == 1) this.getVotes()
       },
-    (error) =>{
-      Swal.fire({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
-        confirmButtonText: 'Entès',
-        customClass: {
-          confirmButton: 'btn btn-secondary-force'
-        }
-      }).then(() => {
-        console.log("ERRROR", error)
-      })
-    }
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'ERROR',
+          text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
+          confirmButtonText: 'Entès',
+          customClass: {
+            confirmButton: 'btn btn-secondary-force'
+          }
+        }).then(() => {
+          console.log("ERRROR", error)
+        })
+      }
     )
   }
 
-  selectOption(id: number, index: number){
+  getVotes() {
+    this.votesService.getVotesByProposalId(this.proposal.id).subscribe({
+        next: data => {
+          const votes = data.data
+          console.log(votes, "VOTES")
+          this.currentVotes = votes
+        },
+        error: err => {
+
+        }
+      }
+    )
+  }
+
+  getVoteFromUser(){
+    this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, 22).subscribe({
+        next: data => {
+          const vote = data.data
+          console.log(vote, "VOTE")
+          this.optionVoted = vote
+        },
+        error: err => {
+
+        }
+      }
+    )
+  }
+
+  selectOption(id: number, index: number) {
     this.activeOptionIndex = index
     this.selectedOptionId = id
     console.log(id, "id")
   }
 
-  notFoundError(){
+  notFoundError() {
     Swal.fire({
       icon: 'error',
       title: 'ERROR',
@@ -90,21 +125,28 @@ export class ProposalPageComponent {
     })
   }
 
-  statusTranslation(status: ProposalStatus){
+  statusTranslation(status: ProposalStatus) {
     return this.proposalsService.statusTranslation(status)
   }
-  typeTranslation(type: ProposalTypes){
+
+  typeTranslation(type: ProposalTypes) {
     return this.proposalsService.typeTranslation(type)
   }
 
-  getStatusButtonClass(status: ProposalStatus){
-    switch (status.toLowerCase()){
-      case "active": return 'btn-outline-success'
-      case "pending": return 'btn-outline-warning'
-      case "succeeded": return 'btn-outline-success'
-      case "executed": return 'btn-outline-tertiary'
-      case "defeated": return 'btn-outline-danger'
-      default: return 'btn-outline-tertiary'
+  getStatusButtonClass(status: ProposalStatus) {
+    switch (status.toLowerCase()) {
+      case "active":
+        return 'btn-outline-success'
+      case "pending":
+        return 'btn-outline-warning'
+      case "succeeded":
+        return 'btn-outline-success'
+      case "executed":
+        return 'btn-outline-tertiary'
+      case "defeated":
+        return 'btn-outline-danger'
+      default:
+        return 'btn-outline-tertiary'
     }
   }
 }
