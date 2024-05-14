@@ -11,6 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-proposal-page',
@@ -24,7 +25,8 @@ import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.serv
     RouterLink,
     RouterLinkActive,
     NgClass,
-    DatePipe
+    DatePipe,
+    NgbTooltip
   ],
   templateUrl: './proposal-page.component.html',
   styleUrl: './proposal-page.component.scss'
