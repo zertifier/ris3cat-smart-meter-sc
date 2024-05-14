@@ -23,7 +23,6 @@ export class VotesService {
   ) { }
 
   getVotesByProposalId(proposalId: number){
-    console.log(`${this.baseUrl}/votes/proposal/${proposalId}`)
     return this.httpClient.get<HttpResponse<VotesWithQty[]>>(`${this.baseUrl}/votes/proposal/${proposalId}`)
   }
   getVotesByProposalIdAndUserId(proposalId: number, userId: number){
