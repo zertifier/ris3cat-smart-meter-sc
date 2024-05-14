@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="col-12 col-md-4 px-5">
+    <div class="col-12 col-md-4 px-md-5 mt-5 mt-md-0">
       <div>
         <h5 class="fw-bold">Informació</h5>
 
@@ -58,7 +58,12 @@
                  aria-valuemin="0"
                  aria-valuemax="100"
                  [ngbTooltip]="'Vots: ' + (option.percentage ? (totalVotes * option.percentage/ 100) : '0')">
-              <div class="progress-bar bg-tertiary" [style.width.%]="option.percentage || 0">{{option.percentage || 0}}%</div>
+              <div *ngIf="option.percentage" class="progress-bar bg-tertiary text-start ps-2" [style.width.%]="option.percentage || 0">
+                {{option.percentage || 0}}%
+              </div>
+              <div class="ms-2" *ngIf="!option.percentage">
+                {{option.percentage || 0}}%
+              </div>
             </div>
           </i>
         </div>
