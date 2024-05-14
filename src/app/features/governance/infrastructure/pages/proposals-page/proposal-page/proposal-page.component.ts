@@ -34,8 +34,12 @@ export class ProposalPageComponent {
   proposal!: Proposal
   selectedOptionId!: number;
   activeOptionIndex: number | undefined;
+
   currentVotes!: VotesWithQty[]
   optionVoted!: UserVote
+  totalVotes: number = 0;
+  totalMembers: number = 0;
+  alreadyVoted: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,12 +57,12 @@ export class ProposalPageComponent {
     this.proposalsService.getProposalById(this.id!).subscribe(
       (proposal) => {
         const proposalData = proposal.data
-        console.log(proposal.data)
 
         if (!proposalData.id) this.notFoundError()
 
         this.proposal = proposalData
-        this. getVoteFromUser()
+        this.getVoteFromUser()
+        this.getTotalUsersByCommunity(proposalData.communityId)
         if (proposal.data.transparent == 1) this.getVotes()
       },
       (error) => {
@@ -81,11 +85,26 @@ export class ProposalPageComponent {
     this.votesService.getVotesByProposalId(this.proposal.id).subscribe({
         next: data => {
           const votes = data.data
-          console.log(votes, "VOTES")
           this.currentVotes = votes
+          for (const vote of votes) {
+            this.totalVotes += vote.qty
+          }
+
+          this.calculatePercentage()
+
         },
         error: err => {
-
+          Swal.fire({
+            icon: 'error',
+            title: 'ERROR',
+            text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
+            confirmButtonText: 'Entès',
+            customClass: {
+              confirmButton: 'btn btn-secondary-force'
+            }
+          }).then(() => {
+            console.log("ERRROR", err)
+          })
         }
       }
     )
@@ -95,20 +114,68 @@ export class ProposalPageComponent {
     this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, 22).subscribe({
         next: data => {
           const vote = data.data
-          console.log(vote, "VOTE")
           this.optionVoted = vote
+          const optionIndex = this.proposal.options?.findIndex(option => {
+            return option.id == vote.optionId
+          })
+
+          if (optionIndex){
+            this.selectOption(this.optionVoted.optionId, optionIndex)
+          }
+          if (vote) this.alreadyVoted = true
+
         },
         error: err => {
-
+          Swal.fire({
+            icon: 'error',
+            title: 'ERROR',
+            text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
+            confirmButtonText: 'Entès',
+            customClass: {
+              confirmButton: 'btn btn-secondary-force'
+            }
+          }).then(() => {
+            console.log("ERRROR", err)
+          })
         }
       }
     )
   }
 
+  getTotalUsersByCommunity(communityId: number){
+    this.votesService.getTotalCupsByCommunityId(communityId).subscribe({
+      next: value => {
+        this.totalMembers = value.data.total
+      },
+      error: err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'ERROR',
+          text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
+          confirmButtonText: 'Entès',
+          customClass: {
+            confirmButton: 'btn btn-secondary-force'
+          }
+        }).then(() => {
+          console.log("ERRROR", err)
+        })
+      }
+    })
+  }
   selectOption(id: number, index: number) {
     this.activeOptionIndex = index
     this.selectedOptionId = id
-    console.log(id, "id")
+  }
+
+  calculatePercentage(){
+    for (const vote of this.currentVotes) {
+      const votePercentage = (vote.qty * 100) / this.totalVotes
+
+      for (const option of this.proposal.options!) {
+        if (option.id == vote.optionId) option.percentage = votePercentage
+      }
+    }
+
   }
 
   notFoundError() {

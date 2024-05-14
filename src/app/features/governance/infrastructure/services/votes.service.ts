@@ -29,4 +29,8 @@ export class VotesService {
   getVotesByProposalIdAndUserId(proposalId: number, userId: number){
     return this.httpClient.get<HttpResponse<UserVote>>(`${this.baseUrl}/votes/proposal/${proposalId}/user/${userId}`)
   }
+
+  getTotalCupsByCommunityId(communityId: number){
+    return this.httpClient.get<HttpResponse<{total: number}>>(`${this.baseUrl}/cups/community/${communityId}/total/`)
+  }
 }

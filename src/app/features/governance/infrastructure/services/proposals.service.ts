@@ -40,7 +40,8 @@ export interface SaveProposal {
 export interface ProposalOption {
   id?: number,
   proposalId: number,
-  option: string
+  option: string,
+  percentage: number | 0
 }
 
 @Injectable({

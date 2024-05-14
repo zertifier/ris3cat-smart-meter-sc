@@ -31,7 +31,7 @@
       <div>
         <h5 class="fw-bold">Informació</h5>
 
-        <p><strong>Vots:</strong> Han votat membres de</p>
+        <p *ngIf="totalVotes"><strong>Vots:</strong> Han votat {{totalVotes}} membres de {{totalMembers}}</p>
         <p><strong>Data de finalització:</strong> {{proposal.expirationDt | date: 'yy-MM-dd hh:mm'}}</p>
       </div>
 
@@ -40,8 +40,8 @@
         <h5 class="fw-bold">Vota aquí</h5>
 
         <div *ngFor="let option of proposal.options!; let i = index" class="d-flex my-2">
-          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start" [ngClass]="activeOptionIndex == i ? 'active' : ''"
-                  (click)="selectOption(option.id!, i)">
+          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start" [ngClass]="activeOptionIndex == i ? 'active-tertiary' : ''"
+                  (click)="selectOption(option.id!, i)" [disabled]="alreadyVoted">
             {{ option.option }}
           </button>
         </div>
@@ -57,7 +57,7 @@
             <div class="progress" role="progressbar" aria-valuenow="25"
                  aria-valuemin="0"
                  aria-valuemax="100">
-              <div class="progress-bar bg-tertiary" style="width: 25%">25%</div>
+              <div class="progress-bar bg-tertiary" [style.width.%]="option.percentage || 0">{{option.percentage || 0}}%</div>
             </div>
           </i>
         </div>
