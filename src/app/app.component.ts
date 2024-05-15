@@ -4,6 +4,7 @@ import {RouterOutlet} from '@angular/router';
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ProfileUpdaterService} from "./features/user/infrastructure/services/profile-updater.service";
 import {AuthPersistenceProxyService} from "./features/auth/infrastructure/services/auth-persistence-proxy.service";
+import {UserCupsUpdaterService} from "./features/user/infrastructure/services/user-cups-updater.service";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,11 @@ import {AuthPersistenceProxyService} from "./features/auth/infrastructure/servic
 export class AppComponent implements OnInit {
   title = 'smart-meter-frontend';
 
-  constructor(private profileUpdater: ProfileUpdaterService, private authProxy: AuthPersistenceProxyService) {
+  constructor(
+    private profileUpdater: ProfileUpdaterService,
+    private cupsUpdater: UserCupsUpdaterService,
+    private authProxy: AuthPersistenceProxyService
+  ) {
   }
 
   ngOnInit(): void {

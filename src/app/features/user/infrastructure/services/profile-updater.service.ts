@@ -5,6 +5,8 @@ import {ZertipowerService} from "../../../../shared/infrastructure/services/zert
 import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
 import {UserProfileChangedEvent} from "../../../auth/domain/UserProfileChangedEvent";
+import {UpdateUserCupsAction} from "../../actions/update-user-cups-action.service";
+import {UserCupsChangedEvent} from "../../domain/UserCupsChangedEvent";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class ProfileUpdaterService {
     private userStore: UserStoreService,
     private zertipower: ZertipowerService,
     private eventBus: EventBus,
+    private updateCups: UpdateUserCupsAction
   ) {
     this.eventBus.subscribe(UserProfileChangedEvent.NAME, async () => {
       const userProfile = this.userStore.snapshotOnly(state => state.user);
@@ -23,8 +26,7 @@ export class ProfileUpdaterService {
         throw new Error("User profile not defined");
       }
 
-      const user = await this.findUserProfileById(userProfile.id);
-      this.userStore.patchState({user});
+      await this.updateUserData(userProfile.id);
     });
 
     this.eventBus.subscribe(UserLoggedInEvent.NAME, async () => {
@@ -34,24 +36,15 @@ export class ProfileUpdaterService {
         return;
       }
 
-      const user = await this.findUserProfileById(authData.id);
-      const cups = await this.zertipower.users.getCups(user.id);
-      // const cups: CupsResponseDTO[] = [];
-      const surplusDistribution = parseFloat(cups[0]?.surplus_distribution || "0") * 100;
-      this.userStore.patchState({
-        selectedCupsIndex: 0,
-        surplusDistribution,
-        user,
-        cups: cups.map(c => {
-          return {
-            id: c.id,
-            communityId: c.community_id,
-            reference: c.cups,
-            surplusDistribution: parseFloat(c.surplus_distribution),
-          }
-        })
-      })
+      const userId = authData.id;
+      await this.updateUserData(userId);
+      await this.updateCups.run(userId);
     });
+  }
+
+  private async updateUserData(userId: number) {
+    const user = await this.findUserProfileById(userId);
+    this.userStore.patchState({user});
   }
 
   private async findUserProfileById(id: number) {
