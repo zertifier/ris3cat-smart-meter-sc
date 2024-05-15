@@ -1,6 +1,6 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component} from '@angular/core';
 import {
-    QuestionBadgeComponent
+  QuestionBadgeComponent
 } from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -9,7 +9,9 @@ import Swal from "sweetalert2";
 import {ZertipowerService} from "../../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {EventBus} from "../../../../../shared/domain/EventBus";
-import {UserProfileChangedEvent} from "../../../../auth/domain/UserProfileChangedEvent";
+import {filter, first} from "rxjs";
+import {Router} from "@angular/router";
+import {UserCupsChangedEvent} from "../../../../user/domain/UserCupsChangedEvent";
 
 @Component({
   selector: 'app-datadis-register-form',
@@ -24,6 +26,8 @@ import {UserProfileChangedEvent} from "../../../../auth/domain/UserProfileChange
 })
 export class DatadisRegisterFormComponent {
 
+  hidePassword = true;
+
   protected formData = this.formBuilder.group({
     dni: new FormControl<string>('', [Validators.required]),
     username: new FormControl<string>('', [Validators.required]),
@@ -36,8 +40,13 @@ export class DatadisRegisterFormComponent {
     private formBuilder: FormBuilder,
     private zertipower: ZertipowerService,
     private userStore: UserStoreService,
-    private eventBus: EventBus
+    private eventBus: EventBus,
+    private router: Router,
   ) {
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 
   public closeModal() {
@@ -64,8 +73,16 @@ export class DatadisRegisterFormComponent {
       });
       return;
     }
-
-    await this.eventBus.publishEvents(new UserProfileChangedEvent());
-    this.ngbActiveModal.close('finished');
+    // when the handler updates the user data retry to go to /my-cups page
+    this.userStore.selectOnly(state => state.cups)
+      .pipe(
+        filter(cups => cups.length > 0),
+        first()
+      )
+      .subscribe(async () => {
+        await this.router.navigate(['/energy-stats/my-cup']);
+        this.ngbActiveModal.close();
+      });
+    await this.eventBus.publishEvents(new UserCupsChangedEvent());
   }
 }

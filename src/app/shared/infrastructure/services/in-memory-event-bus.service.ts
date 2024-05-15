@@ -13,12 +13,11 @@ export class InMemoryEventBusService implements EventBus {
     for (const event of events) {
       const eventCallbacks = this._eventCallbacks.get(event.name) || [];
 
-      eventCallbacks.map(c => {
+      eventCallbacks.forEach(c => {
         const promise = c.callback(event)
         const id = uuidv4()
         this._routines.set(id, promise);
-        promise.finally(() => this._routines.delete(id));
-        return promise;
+        promise.catch(console.log).finally(() => this._routines.delete(id));
       });
     }
   }

@@ -29,7 +29,16 @@
 
     <div>
       <label for="password">Contrasenya <span class="text-danger">*</span></label>
-      <input type="text" id="password" class="form-control" formControlName="password"/>
+      <div class="input-group">
+        <input [type]="hidePassword ? 'password' : 'text'" id="password" class="form-control" formControlName="password"/>
+        <button (click)="togglePasswordVisibility()" type="button" class="btn btn-dark">
+          @if (hidePassword) {
+            <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+            <i class="fa-solid fa-eye"></i>
+          }
+        </button>
+      </div>
     </div>
 
     <div>
