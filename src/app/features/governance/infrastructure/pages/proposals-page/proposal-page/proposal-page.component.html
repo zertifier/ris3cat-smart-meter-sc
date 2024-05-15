@@ -45,6 +45,13 @@
             {{ option.option }}
           </button>
         </div>
+
+        <div class="mt-3">
+          <button class="btn btn-tertiary rounded-5 py-1 w-100" style="max-width: 150px" [disabled]="!selectedOptionId || alreadyVoted"
+          (click)="vote()">
+            Votar
+          </button>
+        </div>
       </div>
       <div class="mt-5" *ngIf="proposal.transparent != 0">
         <h5 class="fw-bold">Resultat votacions fins ara</h5>

@@ -34,7 +34,7 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 export class ProposalPageComponent {
   id: string | null;
   proposal!: Proposal
-  selectedOptionId!: number;
+  selectedOptionId: number | null = null;
   activeOptionIndex: number | undefined;
 
   currentVotes!: VotesWithQty[]
@@ -56,29 +56,25 @@ export class ProposalPageComponent {
 
 
   getProposal() {
-    this.proposalsService.getProposalById(this.id!).subscribe(
-      (proposal) => {
-        const proposalData = proposal.data
+    this.proposalsService.getProposalById(this.id!).subscribe({
+        next: proposal => {
+          const proposalData = proposal.data
 
-        if (!proposalData.id) this.notFoundError()
+          if (!proposalData.id)
+            this.swalErrorDisplay('Aquesta proposta no existeix.').then(() => {
+              this.router.navigate(['/governance/proposals']);
+            })
 
-        this.proposal = proposalData
-        this.getVoteFromUser()
-        this.getTotalUsersByCommunity(proposalData.communityId)
-        if (proposal.data.transparent == 1) this.getVotes()
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'ERROR',
-          text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
-          confirmButtonText: 'Entès',
-          customClass: {
-            confirmButton: 'btn btn-secondary-force'
-          }
-        }).then(() => {
-          console.log("ERRROR", error)
-        })
+          this.proposal = proposalData
+          this.getVoteFromUser()
+          this.getTotalUsersByCommunity(proposalData.communityId)
+          if (proposal.data.transparent == 1) this.getVotes()
+        },
+        error: (err) => {
+          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
       }
     )
   }
@@ -96,15 +92,7 @@ export class ProposalPageComponent {
 
         },
         error: err => {
-          Swal.fire({
-            icon: 'error',
-            title: 'ERROR',
-            text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
-            confirmButtonText: 'Entès',
-            customClass: {
-              confirmButton: 'btn btn-secondary-force'
-            }
-          }).then(() => {
+          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
             console.log("ERRROR", err)
           })
         }
@@ -112,7 +100,7 @@ export class ProposalPageComponent {
     )
   }
 
-  getVoteFromUser(){
+  getVoteFromUser() {
     this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, 22).subscribe({
         next: data => {
           const vote = data.data
@@ -121,22 +109,15 @@ export class ProposalPageComponent {
             return option.id == vote.optionId
           })
 
-          if (optionIndex){
+          if (optionIndex) {
             this.selectOption(this.optionVoted.optionId, optionIndex)
           }
-          if (vote) this.alreadyVoted = true
+
+          if (vote.optionId) this.alreadyVoted = true
 
         },
         error: err => {
-          Swal.fire({
-            icon: 'error',
-            title: 'ERROR',
-            text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
-            confirmButtonText: 'Entès',
-            customClass: {
-              confirmButton: 'btn btn-secondary-force'
-            }
-          }).then(() => {
+          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
             console.log("ERRROR", err)
           })
         }
@@ -144,32 +125,39 @@ export class ProposalPageComponent {
     )
   }
 
-  getTotalUsersByCommunity(communityId: number){
+  getTotalUsersByCommunity(communityId: number) {
     this.votesService.getTotalCupsByCommunityId(communityId).subscribe({
       next: value => {
         this.totalMembers = value.data.total
       },
       error: err => {
-        Swal.fire({
-          icon: 'error',
-          title: 'ERROR',
-          text: 'Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.',
-          confirmButtonText: 'Entès',
-          customClass: {
-            confirmButton: 'btn btn-secondary-force'
-          }
-        }).then(() => {
+        this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
           console.log("ERRROR", err)
         })
       }
     })
   }
+
+  vote() {
+    this.votesService.postVote(22, this.proposal.id, this.selectedOptionId!).subscribe({
+      next: response => {
+        console.log(response, "vote()")
+        this.alreadyVoted = true;
+      },
+      error: err => {
+        this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+          console.log("ERRROR", err)
+        })
+      }
+    })
+  }
+
   selectOption(id: number, index: number) {
     this.activeOptionIndex = index
     this.selectedOptionId = id
   }
 
-  calculatePercentage(){
+  calculatePercentage() {
     for (const vote of this.currentVotes) {
       const votePercentage = (vote.qty * 100) / this.totalVotes
 
@@ -180,17 +168,15 @@ export class ProposalPageComponent {
 
   }
 
-  notFoundError() {
-    Swal.fire({
+  swalErrorDisplay(message: string) {
+    return Swal.fire({
       icon: 'error',
       title: 'ERROR',
-      text: 'Aquesta proposta no existeix.',
+      text: message,
       confirmButtonText: 'Entès',
       customClass: {
         confirmButton: 'btn btn-secondary-force'
       }
-    }).then(() => {
-      this.router.navigate(['/governance/proposals']);
     })
   }
 
