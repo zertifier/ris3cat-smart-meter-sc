@@ -81,7 +81,9 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                  }]) => {
             // Every time that params change, fetch data and update chart
             // Fetching data
-            const data = await this.fetchEnergyStats(date, dateRange);
+            const cupId = this.userStore.snapshotOnly(this.userStore.$.cupId);
+            const communityId = this.userStore.snapshotOnly(this.userStore.$.cupId);
+            const data = await this.fetchEnergyStats(date, dateRange, cupId, communityId);
             this.chartStoreService.patchState({lastFetchedStats: data});
 
             // Create labels
@@ -209,13 +211,11 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     this.ngbModal.open(this.legendModal, {size: "xl"});
   }
 
-  async fetchEnergyStats(date: Date, range: DateRange) {
+  async fetchEnergyStats(date: Date, range: DateRange, cupId: number, communityId: number) {
     this.chartStoreService.snapshotOnly(state => state.origin);
     this.chartStoreService.fetchingData(true);
     let data: DatadisEnergyStat[];
     try {
-      const cupId = this.userStore.snapshotOnly(this.userStore.$.cupId);
-      const communityId = this.userStore.snapshotOnly(this.userStore.$.communityId);
       const selectedChart = this.chartStoreService.snapshotOnly(state => state.selectedChartEntity);
       if (selectedChart === ChartEntity.CUPS) {
         const response = await this.zertipower.energyStats.getCupEnergyStats(cupId, 'datadis', date, range);
