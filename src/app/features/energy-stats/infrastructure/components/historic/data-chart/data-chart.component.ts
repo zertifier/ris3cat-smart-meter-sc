@@ -49,10 +49,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   };
   @Input({required: true}) dataset: ChartDataset[] = [];
   @Input({required: true}) labels: string[] = [];
-  private chart!: Chart;
   @ViewChild('chart') chartElement!: ElementRef;
+  private chart!: Chart;
   // legendLabels: DataLabel[] = [];
-
   private subscriptions: Subscription[] = [];
 
   private textColorSecondary = 'rgba(0, 0, 0, 0.54)';
@@ -124,18 +123,26 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
               formattedValue = total.toLocaleString();
             }
 
+            if (context.dataset.label === "Consum" && chartEntity.selectedChartEntity === ChartEntity.CUPS) {
+              const showEnergy = this.chartStoreService.snapshot().selectedChartResource === ChartResource.ENERGY;
+              const register = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
+              const consumption = showEnergy ? register.kwhIn : +(register.kwhInPrice * register.kwhIn).toFixed(2);
+              formattedValue = consumption.toLocaleString();
+            }
+
             const unit = chartEntity.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
             const labels: string[] = [`${label}: ${formattedValue} ${unit}`];
 
             if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
-              if (context.datasetIndex === 1) {
+
+              if (context.dataset.label === "Excedent actius") {
+                labels.push(`Membres actius: ${stat.activeMembers}`);
+                labels.push(`----------------`);
+              } else if (context.dataset.label === "Producció") {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 // labels.push(`----------------`);
-              } else if (context.datasetIndex === 3) {
-                labels.push(`Membres actius: ${stat.activeMembers}`);
-                labels.push(`----------------`);
               }
             }
             return labels;
@@ -200,6 +207,20 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   public getDatasetVisibility(index: number): boolean {
     return this.chart.isDatasetVisible(index);
+  }
+
+  public refreshChart() {
+    if (!this.chart) {
+      return;
+    }
+
+    this.chart.options = this.options;
+    this.chart.data = this.data;
+    this.chart.update();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   private changeToDesktop() {
@@ -280,20 +301,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     this.refreshChart();
-  }
-
-  public refreshChart() {
-    if (!this.chart) {
-      return;
-    }
-
-    this.chart.options = this.options;
-    this.chart.data = this.data;
-    this.chart.update();
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   private parseInput() {

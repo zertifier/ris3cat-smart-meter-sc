@@ -118,7 +118,6 @@ export class HistoricChartComponent {
       return;
     }
 
-    // TODO show modal
     this.ngbModal.open(this.modalLegend, {size: "lg"});
   }
 
