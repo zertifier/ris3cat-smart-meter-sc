@@ -76,6 +76,8 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       },
       y: {
         stacked: true,
+        beginAtZero: true,
+        min: 0,
         ticks: {
           callback: (value: never) => {
             const state = this.chartStoreService.snapshot();
@@ -116,10 +118,10 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
             let {formattedValue} = context;
             const chartEntity = this.chartStoreService.snapshotOnly(state => state);
 
-            if (context.datasetIndex === 1 && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
+            if (context.dataset.label === "Producció" && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const value = context.raw;
               const register = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
-              const total = register.productionActives + value;
+              const total = parseFloat(register.productionActives + '') + value;
               formattedValue = total.toLocaleString();
             }
 
@@ -245,6 +247,8 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         },
         y: {
           stacked: true,
+          beginAtZero: true,
+          min: 0,
           ticks: {
             callback: function (value: never) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
@@ -271,7 +275,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       indexAxis: 'y',
       scales: {
         y: {
+          beginAtZero: true,
           stacked: true,
+          min: 0,
           ticks: {
             color: this.textColorSecondary,
             font: {

@@ -235,12 +235,20 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     return data.map(d => {
       const consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
       const surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
-      const productionActives = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
+      let productionActives = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
       const virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
-      const production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
+      let production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
       let gridConsumption = consumption - production;
-      if (gridConsumption < 0) {
+      if (gridConsumption < 0 || isNaN(gridConsumption)) {
         gridConsumption = 0;
+      }
+
+      if (production === undefined) {
+        production = 0;
+      }
+
+      if (productionActives === undefined) {
+        productionActives = 0;
       }
 
       // TODO make calculations for CCE
