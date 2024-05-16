@@ -51,8 +51,8 @@ export class UserProfileSelectorComponent {
     .pipe(
       map(username => username || 'Anònim'),
       map(username => {
-        const maxSize = 15;
-        const endSize = Math.floor(maxSize / 2);
+        const maxSize = 30;
+        const endSize = Math.floor(maxSize / 3);
         if (username.length > maxSize) {
           return new TextShorterPipe().transform(username, endSize, endSize);
         }
