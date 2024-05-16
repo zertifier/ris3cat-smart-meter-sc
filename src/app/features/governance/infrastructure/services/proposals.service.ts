@@ -41,7 +41,7 @@ export interface ProposalOption {
   id?: number,
   proposalId: number,
   option: string,
-  percentage: number | 0
+  percentage: number | 0 | undefined
 }
 
 @Injectable({
@@ -49,8 +49,8 @@ export interface ProposalOption {
 })
 export class ProposalsService {
 
-  baseUrl = environment.zertipower_url
-  // baseUrl= 'http://localhost:3000'
+  // baseUrl = environment.zertipower_url
+  baseUrl= 'http://localhost:3000'
   constructor(
     private httpClient: HttpClient,
   ) { }

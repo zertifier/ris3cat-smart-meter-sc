@@ -66,7 +66,7 @@
                  aria-valuemax="100"
                  [ngbTooltip]="'Vots: ' + (option.percentage ? (totalVotes * option.percentage/ 100) : '0')">
               <div *ngIf="option.percentage" class="progress-bar bg-tertiary text-start ps-2" [style.width.%]="option.percentage || 0">
-                {{option.percentage || 0}}%
+                {{option.percentage| number:'1.2-2'  }}%
               </div>
               <div class="ms-2" *ngIf="!option.percentage">
                 {{option.percentage || 0}}%

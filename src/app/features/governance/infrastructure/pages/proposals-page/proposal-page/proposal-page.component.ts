@@ -3,7 +3,7 @@ import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/rou
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
 import {CalendarModule} from "primeng/calendar";
-import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, DecimalPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
@@ -12,6 +12,7 @@ import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 
 @Component({
   selector: 'app-proposal-page',
@@ -26,7 +27,8 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
     RouterLinkActive,
     NgClass,
     DatePipe,
-    NgbTooltip
+    NgbTooltip,
+    DecimalPipe
   ],
   templateUrl: './proposal-page.component.html',
   styleUrl: './proposal-page.component.scss'
@@ -42,15 +44,25 @@ export class ProposalPageComponent {
   totalVotes: number = 0;
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
+  userId!: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private proposalsService: ProposalsService,
-    private votesService: VotesService
+    private votesService: VotesService,
+    private userStore: UserStoreService
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id) this.getProposal()
+    this.userStore
+      .selectOnly(state => state).subscribe((data) => {
+      if (data.user) {
+        this.userId = data.user.id
+        if (this.id) this.getProposal()
+
+      }
+    })
+
 
   }
 
@@ -101,7 +113,7 @@ export class ProposalPageComponent {
   }
 
   getVoteFromUser() {
-    this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, 22).subscribe({
+    this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, this.userId).subscribe({
         next: data => {
           const vote = data.data
           this.optionVoted = vote
@@ -139,10 +151,11 @@ export class ProposalPageComponent {
   }
 
   vote() {
-    this.votesService.postVote(22, this.proposal.id, this.selectedOptionId!).subscribe({
+    this.votesService.postVote(this.userId, this.proposal.id, this.selectedOptionId!).subscribe({
       next: response => {
         console.log(response, "vote()")
         this.alreadyVoted = true;
+        this.getVotes()
         Swal.fire({
           icon: 'success',
           title: 'Votació realitzada amb èxit',

@@ -104,7 +104,7 @@ export class NewProposalPageComponent {
           proposalOptions.push({
             option: option.option,
             proposalId: savedProposal.data.id!,
-            percentage: 0
+            percentage: undefined
           })
         }
         this.proposalsService.saveProposalOption(proposalOptions).subscribe(
