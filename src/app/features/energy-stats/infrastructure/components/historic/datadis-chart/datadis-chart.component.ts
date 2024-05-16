@@ -3,7 +3,7 @@ import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
-import {Subscription} from "rxjs";
+import {combineLatest, Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
@@ -66,17 +66,19 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    const chartParametrs$ = this.chartStoreService
+      .selectOnly(this.chartStoreService.$.params);
+    const selectedCups$ = this.userStore.selectOnly(state => ({selectedCupsIndex: state.selectedCupsIndex}))
     this.subscriptions.push(
-      this.chartStoreService
-        .selectOnly(this.chartStoreService.$.params)
+      combineLatest([chartParametrs$, selectedCups$])
         .subscribe(
-          async ({
+          async ([{
                    date,
                    dateRange,
                    selectedChartResource,
                    selectedChartEntity,
                    chartType,
-                 }) => {
+                 }]) => {
             // Every time that params change, fetch data and update chart
             // Fetching data
             const data = await this.fetchEnergyStats(date, dateRange);
@@ -199,7 +201,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               return {...d, radius: '2.5rem'}
             })
           }),
-    );
+    )
+    ;
   }
 
   public showLegendModal() {
