@@ -3,7 +3,7 @@ import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
-import {Subscription} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
@@ -104,7 +104,13 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             const datasets: ChartDataset[] = [
               {
                 label: community ? 'Consum actius' : 'Consum',
-                data: mappedData.map(d => d.consumption),
+                data: mappedData.map(d => {
+                  if (community) {
+                    return d.consumption;
+                  }
+
+                  return d.consumption - d.gridConsumption
+                }),
                 stack: 'Consumption',
                 order: 0,
                 color: StatsColors.CONSUMPTION
@@ -151,6 +157,14 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 },
               )
             } else {
+              datasets.unshift({
+                label: 'Consum xarxa',
+                color: StatsColors.SELF_CONSUMPTION,
+                data: mappedData.map(d => {
+                  return d.gridConsumption
+                }),
+                stack: 'Consumption',
+              })
               datasets.unshift({
                 label: 'Producció',
                 color: StatsColors.COMMUNITY_PRODUCTION,
@@ -224,23 +238,20 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       const productionActives = showEnergy ? d.productionActives : +(d.kwhInPrice * d.productionActives).toFixed(2);
       const virtualSurplus = showEnergy ? d.kwhOutVirtual : +(d.kwhOutPriceCommunity * d.kwhOutVirtual).toFixed(2);
       const production = showEnergy ? d.production : +(d.kwhInPrice * d.production).toFixed(2);
-
-      if (!cce) {
-        return {
-          consumption,
-          surplus,
-          virtualSurplus,
-          production,
-          productionActives
-        }
+      let gridConsumption = consumption - production;
+      if (gridConsumption < 0) {
+        gridConsumption = 0;
       }
+
+      // TODO make calculations for CCE
 
       return {
         consumption,
         surplus,
         virtualSurplus,
         production,
-        productionActives
+        productionActives,
+        gridConsumption,
       }
     })
   }
