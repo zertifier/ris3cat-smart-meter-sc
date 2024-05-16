@@ -1,10 +1,17 @@
 <div class="w-100" [classList]="this.containerClassList">
   @for (label of labels; track $index) {
-    <div class="d-flex align-items-center" (click)="toggleLabel($index)">
-      <div class="me-2" style="border-radius: 50%"
+    <div class="d-flex align-items-center gap-2" (click)="toggleLabel($index)">
+      <div style="border-radius: 50%"
            [ngStyle]="{'background-color': label.color, width: label.radius, height: label.radius}"></div>
       <label
-        [ngClass]="{'text-decoration-line-through': label.hidden}">{{ label.label }}</label>
+        [ngClass]="{'text-decoration-line-through': label.hidden}">{{ label.label }}
+      </label>
+
+      @if (label.tooltipText) {
+        <app-question-badge>
+          {{label.tooltipText}}
+        </app-question-badge>
+      }
     </div>
   }
 </div>

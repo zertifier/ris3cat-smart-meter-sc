@@ -3,7 +3,7 @@ import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
-import {map, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
@@ -49,6 +49,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   @ViewChild('secondChart') secondChart!: DataChartComponent;
   @ViewChild('maximizedChart') maximizedChart!: ElementRef;
   @ViewChild('legendModal') legendModal!: ElementRef;
+  currentBreakpoint$ = this.breakpointsService.observeBreakpoints();
+  protected readonly BreakPoints = BreakPoints;
 
   constructor(
     private readonly chartStoreService: ChartStoreService,
@@ -62,8 +64,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   public maximizeChart() {
     this.ngbModal.open(this.maximizedChart, {fullscreen: true});
   }
-
-  currentBreakpoint$ = this.breakpointsService.observeBreakpoints();
 
   async ngOnInit(): Promise<void> {
     this.subscriptions.push(
@@ -111,6 +111,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
                   return d.consumption - d.gridConsumption
                 }),
+                tooltipText: 'Quantitat total d\'energia que gastem. Aquesta energia es mesura en quilowatts hora (kWh).',
                 stack: 'Consumption',
                 order: 0,
                 color: StatsColors.CONSUMPTION
@@ -121,6 +122,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               datasets.push({
                 order: 2,
                 label: community ? 'Excedent actius compartit' : 'Excedent compartit',
+                tooltipText: 'Energia que pots compartir o vendre a un altre membre de la comunitat.',
                 color: StatsColors.VIRTUAL_SURPLUS,
                 data: mappedData.map(d => d.virtualSurplus),
               })
@@ -128,6 +130,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               datasets.push({
                 order: 2,
                 label: community ? 'Excedent actius' : 'Excedent',
+                tooltipText: 'Quantitat d\'energia que es produeix i no es consumeix. Això ocorre quan la generació d\'energia (per exemple, mitjançant panells solars) supera la demanda.',
                 color: StatsColors.SURPLUS,
                 data: mappedData.map(d => d.surplus),
                 stack: 'Stack 2',
@@ -139,6 +142,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 {
                   order: 0,
                   label: 'Producció actius',
+                  tooltipText: 'És la conversió de l\'energia que guarden les plaques solars en energia utilitzable per a les nostres llars.',
                   color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
                   data: mappedData.map(d => d.productionActives),
                   stack: 'Excedent',
@@ -147,6 +151,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   order: 3,
                   color: StatsColors.COMMUNITY_PRODUCTION,
                   label: 'Producció',
+                  tooltipText: 'És la conversió de l\'energia que guarden les plaques solars en energia utilitzable per a les nostres llars.',
                   data: mappedData.map(d => {
                     if (!d.production) {
                       return 0;
@@ -177,16 +182,17 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             this.datasets = datasets;
             this.legendLabels = datasets.map((entry, index) => {
               return {
-                  label: entry.label,
-                  radius: '2.5rem',
-                  color: entry.color,
-                  hidden: false,
-                  toggle: (label) => {
-                    this.dataChart.toggleDataset(index);
-                    label.hidden = !label.hidden;
-                    return label;
-                  }
+                tooltipText: entry.tooltipText,
+                label: entry.label,
+                radius: '2.5rem',
+                color: entry.color,
+                hidden: false,
+                toggle: (label) => {
+                  this.dataChart.toggleDataset(index);
+                  label.hidden = !label.hidden;
+                  return label;
                 }
+              }
             });
 
             this.mobileLabels = this.legendLabels.map(d => {
@@ -267,6 +273,4 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
-
-  protected readonly BreakPoints = BreakPoints;
 }

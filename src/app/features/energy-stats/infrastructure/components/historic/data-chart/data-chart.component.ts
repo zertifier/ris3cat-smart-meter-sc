@@ -28,6 +28,7 @@ export interface ChartDataset {
   order?: number,
   stack?: string,
   data: unknown[],
+  tooltipText?: string,
 }
 
 @Component({
