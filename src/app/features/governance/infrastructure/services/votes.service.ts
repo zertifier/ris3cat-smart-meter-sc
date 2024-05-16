@@ -32,7 +32,7 @@ export class VotesService {
     return this.httpClient.get<HttpResponse<{total: number}>>(`${this.baseUrl}/cups/community/${communityId}/total/`)
   }
   postVote(userId: number, proposalId: number, proposalOptionId: number){
-    const body = {userId, proposalId, proposalOptionId}
+    const body = {userId, proposalId, optionId: proposalOptionId}
 
     return this.httpClient.post<HttpResponse<any>>(`${this.baseUrl}/votes`, body)
   }

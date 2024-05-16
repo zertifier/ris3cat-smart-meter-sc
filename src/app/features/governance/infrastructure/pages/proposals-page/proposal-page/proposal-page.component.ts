@@ -143,6 +143,14 @@ export class ProposalPageComponent {
       next: response => {
         console.log(response, "vote()")
         this.alreadyVoted = true;
+        Swal.fire({
+          icon: 'success',
+          title: 'Votació realitzada amb èxit',
+          confirmButtonText: 'Entès',
+          customClass: {
+            confirmButton: 'btn btn-secondary-force'
+          }
+        })
       },
       error: err => {
         this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
