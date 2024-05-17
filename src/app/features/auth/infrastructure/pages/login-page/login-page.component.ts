@@ -4,7 +4,7 @@ import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from 
 import {WebWalletLoginComponent} from "../../components/web-wallet-login/web-wallet-login.component";
 import {LoginImagesService} from "../../services/login-images.service";
 import {NgClass, NgOptimizedImage} from "@angular/common";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {ZertiauthApiService} from "../../services/zertiauth-api.service";
 import {
   BreakPoints,
@@ -23,7 +23,8 @@ import {
     NgbNavContent,
     NgbNavOutlet,
     NgOptimizedImage,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
