@@ -115,7 +115,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
                   return d.consumption - d.gridConsumption
                 }),
-                tooltipText: 'Quantitat total d\'energia que gastem. Aquesta energia es mesura en quilowatts hora (kWh).',
+                tooltipText: community ? 'Consum dels participants actius' : 'Quantitat total d\'energia que gastem',
                 stack: 'Consumption',
                 order: 0,
                 color: StatsColors.CONSUMPTION
@@ -134,7 +134,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               datasets.push({
                 order: 2,
                 label: community ? 'Excedent actius' : 'Excedent',
-                tooltipText: 'Quantitat d\'energia que es produeix i no es consumeix. Això ocorre quan la generació d\'energia (per exemple, mitjançant panells solars) supera la demanda.',
+                tooltipText: 'Quantitat d\'energia que es produeix i no es consumeix.',
                 color: StatsColors.SURPLUS,
                 data: mappedData.map(d => d.surplus),
                 stack: 'Stack 2',
@@ -146,7 +146,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 {
                   order: 0,
                   label: 'Producció actius',
-                  tooltipText: 'És la conversió de l\'energia que guarden les plaques solars en energia utilitzable per a les nostres llars.',
+                  tooltipText: 'Producció dels participants actius',
                   color: StatsColors.ACTIVE_COMMUNITY_PRODUCTION,
                   data: mappedData.map(d => d.productionActives),
                   stack: 'Excedent',
@@ -155,7 +155,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   order: 3,
                   color: StatsColors.COMMUNITY_PRODUCTION,
                   label: 'Producció',
-                  tooltipText: 'És la conversió de l\'energia que guarden les plaques solars en energia utilitzable per a les nostres llars.',
+                  tooltipText: 'Producció total comunitaria',
                   data: mappedData.map(d => {
                     if (!d.production) {
                       return 0;
@@ -172,10 +172,12 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                 data: mappedData.map(d => {
                   return d.gridConsumption
                 }),
+                tooltipText: 'Consum que facturarà la companyia elèctrica',
                 stack: 'Consumption',
               })
               datasets.unshift({
                 label: 'Producció',
+                tooltipText: 'Producció proporcional comunitaria',
                 color: StatsColors.COMMUNITY_PRODUCTION,
                 data: mappedData.map(d => d.production),
                 stack: 'Production',
