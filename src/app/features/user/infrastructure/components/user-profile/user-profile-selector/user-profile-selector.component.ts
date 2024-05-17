@@ -13,7 +13,10 @@ import {map} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {TextShorterPipe} from "../../../../../../shared/infrastructure/pipes/wallet-address-shortener.pipe";
 import {RouterLink} from "@angular/router";
-import {BreakPoints, ScreenBreakPointsService} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
+import {
+  BreakPoints,
+  ScreenBreakPointsService
+} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
 
 @Component({
   selector: 'app-user-profile-selector',

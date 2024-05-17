@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserCupsChangedEvent} from "../../domain/UserCupsChangedEvent";
 import {UpdateUserCupsAction} from "../../actions/update-user-cups-action.service";

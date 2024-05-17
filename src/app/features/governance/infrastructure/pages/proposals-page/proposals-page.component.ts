@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Proposal, ProposalsService} from "../../services/proposals.service";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";

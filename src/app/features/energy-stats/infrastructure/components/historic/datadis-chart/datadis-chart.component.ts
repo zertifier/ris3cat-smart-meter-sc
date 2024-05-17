@@ -115,7 +115,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
                   return d.consumption - d.gridConsumption
                 }),
-                tooltipText: community ? 'Consum dels participants actius' : 'Quantitat total d\'energia que gastem',
+                tooltipText: community ? 'Consum dels participants actius' : 'Quantitat d\'energia que gastem',
                 stack: 'Consumption',
                 order: 0,
                 color: StatsColors.CONSUMPTION
@@ -125,8 +125,8 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             if (cce) {
               datasets.push({
                 order: 2,
-                label: community ? 'Excedent actius compartit' : 'Excedent compartit',
-                tooltipText: 'Energia que pots compartir o vendre a un altre membre de la comunitat.',
+                label: 'Excedent actius compartit',
+                tooltipText: community ? 'Quantitat d’energia per compartir que es produeix i no es consumeix dels participans actius.' : 'Quantitat d’energia per compartir que es produeix i no es consumeix dels participans actius.',
                 color: StatsColors.VIRTUAL_SURPLUS,
                 data: mappedData.map(d => d.virtualSurplus),
               })
@@ -134,7 +134,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               datasets.push({
                 order: 2,
                 label: community ? 'Excedent actius' : 'Excedent',
-                tooltipText: 'Quantitat d\'energia que es produeix i no es consumeix.',
+                tooltipText: community ? 'Quantitat d’energia que es produeix i no es consumeix dels participans actius.' : 'Quantitat d\'energia que es produeix i no es consumeix.',
                 color: StatsColors.SURPLUS,
                 data: mappedData.map(d => d.surplus),
                 stack: 'Stack 2',
@@ -155,7 +155,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                   order: 3,
                   color: StatsColors.COMMUNITY_PRODUCTION,
                   label: 'Producció',
-                  tooltipText: 'Producció total comunitaria',
+                  tooltipText: 'Producció total de la comunitat',
                   data: mappedData.map(d => {
                     if (!d.production) {
                       return 0;
@@ -167,7 +167,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               )
             } else {
               datasets.unshift({
-                label: 'Consum xarxa',
+                label: 'Consum de la xarxa',
                 color: StatsColors.SELF_CONSUMPTION,
                 data: mappedData.map(d => {
                   return d.gridConsumption

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AsyncPipe} from "@angular/common";
 import {UserStoreService} from "../../services/user-store.service";
 

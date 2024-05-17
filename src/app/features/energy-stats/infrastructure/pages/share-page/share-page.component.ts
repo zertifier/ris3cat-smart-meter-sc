@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgbModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {EnergyPrice, SharingUsersService} from "../../services/sharing-users.service";
 import {MonitoringService} from "../../services/monitoring.service";

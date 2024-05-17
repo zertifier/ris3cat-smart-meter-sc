@@ -1,7 +1,7 @@
 import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../../services/monitoring.service";
-import {catchError, map, Subscription, throwError} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {AsyncPipe, JsonPipe, NgClass, NgStyle} from "@angular/common";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from "@ng-bootstrap/ng-bootstrap";
