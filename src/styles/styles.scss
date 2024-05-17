@@ -6,16 +6,19 @@
 
 @layer reset, primeng, bootstrap, app;
 
-@import "colors";
 @import "font-face";
-@import "effects";
-@import "components/component-states";
-@import "components/component-styles";
-@import "components/scrollbar";
-@import "building-blocks/containers";
+@import "colors";
 
-/* Importing Bootstrap SCSS file. */
-@import '../../node_modules/bootstrap/scss/bootstrap';
+@layer app {
+  @import "building-blocks/containers";
+  @import "components/index";
+}
+
+
+@layer bootstrap {
+  /* Importing Bootstrap SCSS file. */
+  @import '../../node_modules/bootstrap/scss/bootstrap';
+}
 
 @layer app {
   :root {

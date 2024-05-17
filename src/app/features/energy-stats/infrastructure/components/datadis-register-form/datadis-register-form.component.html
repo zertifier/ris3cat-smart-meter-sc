@@ -18,19 +18,26 @@
     </div>
 
     <div>
-      <label for="dni">DNI/NIE <span class="text-danger">*</span></label>
+      <label for="dni">DNI/NIE</label>
       <input type="text" id="dni" class="form-control" formControlName="dni"/>
+      <app-validation-hint [condition]="formData.controls.dni.invalid && !!formData.value.dni?.trim()">
+        NIF no vàlid
+      </app-validation-hint>
     </div>
 
     <div>
       <label for="user">Usuari <span class="text-danger">*</span></label>
       <input type="text" id="user" class="form-control" formControlName="username"/>
+      <app-validation-hint [condition]="formData.controls.username.invalid">
+        Usuari no vàlid
+      </app-validation-hint>
     </div>
 
     <div>
       <label for="password">Contrasenya <span class="text-danger">*</span></label>
       <div class="input-group">
-        <input [type]="hidePassword ? 'password' : 'text'" id="password" class="form-control" formControlName="password"/>
+        <input [type]="hidePassword ? 'password' : 'text'" id="password" class="form-control"
+               formControlName="password"/>
         <button (click)="togglePasswordVisibility()" type="button" class="btn btn-dark">
           @if (hidePassword) {
             <i class="fa-solid fa-eye-slash"></i>
@@ -39,15 +46,23 @@
           }
         </button>
       </div>
+      <app-validation-hint [condition]="formData.controls.password.invalid">
+        Contrassenya no vàlida
+      </app-validation-hint>
     </div>
 
     <div>
       <label for="cups">C.U.P.S. <span class="text-danger">*</span></label>
       <input type="text" id="cups" class="form-control" formControlName="cups"/>
+      <app-validation-hint [condition]="formData.controls.cups.invalid">
+        C.U.P.S. no vàlid
+      </app-validation-hint>
     </div>
 
     <div class="d-flex justify-content-center">
-      <button type="button" class="btn btn-primary" style="background-color: #0E5496; border-color: #0E5496;" (click)="registerCups()">Afegir dades</button>
+      <button type="button" class="btn btn-primary" style="background-color: #0E5496; border-color: #0E5496;"
+              (click)="registerCups()" [disabled]="formData.invalid">Afegir dades
+      </button>
     </div>
   </form>
 

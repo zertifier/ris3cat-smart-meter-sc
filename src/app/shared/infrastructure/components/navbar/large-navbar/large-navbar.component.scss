@@ -12,6 +12,12 @@
   border-color: $white !important;
 }
 
+.nav-link {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white !important;
+}
+
 .active {
   //text-decoration: $active-hover underline !important;
   color: $active-hover !important;
@@ -19,11 +25,6 @@
 
 .navbar-toggler-icon::before {
   color: $white !important;
-}
-
-.nav-link {
-  font-size: 1.1rem;
-  font-weight: 600;
 }
 
 .navbar-container {

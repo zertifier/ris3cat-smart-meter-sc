@@ -12,6 +12,10 @@ import {EventBus} from "../../../../../shared/domain/EventBus";
 import {filter, first} from "rxjs";
 import {Router} from "@angular/router";
 import {UserCupsChangedEvent} from "../../../../user/domain/UserCupsChangedEvent";
+import {
+  ValidationHintComponent
+} from "../../../../../shared/infrastructure/components/validation-hint/validation-hint.component";
+import {nifValidator} from "../../../../../shared/infrastructure/form-validators/nif-validator";
 
 @Component({
   selector: 'app-datadis-register-form',
@@ -19,7 +23,8 @@ import {UserCupsChangedEvent} from "../../../../user/domain/UserCupsChangedEvent
   imports: [
     QuestionBadgeComponent,
     ReactiveFormsModule,
-    JsonPipe
+    JsonPipe,
+    ValidationHintComponent
   ],
   templateUrl: './datadis-register-form.component.html',
   styleUrl: './datadis-register-form.component.scss'
@@ -29,7 +34,7 @@ export class DatadisRegisterFormComponent {
   hidePassword = true;
 
   protected formData = this.formBuilder.group({
-    dni: new FormControl<string>('', [Validators.required]),
+    dni: new FormControl<string>('', [nifValidator]),
     username: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [Validators.required]),
     cups: new FormControl<string>('', [Validators.required]),
@@ -55,10 +60,6 @@ export class DatadisRegisterFormComponent {
 
   public async registerCups() {
     if (this.formData.invalid) {
-      Swal.fire({
-        title: 'Formulari no valid',
-        icon: "error",
-      });
       return;
     }
 
