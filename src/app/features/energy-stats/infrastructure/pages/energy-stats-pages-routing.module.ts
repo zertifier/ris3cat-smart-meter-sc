@@ -18,7 +18,7 @@ export enum ENERGY_STATS_ROUTE_NAMES {
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('../../../../core/layouts/navbar-layout/navbar-layout.component').then(c => c.NavbarLayoutComponent),
+    loadComponent: () => import('../../../../core/layouts/navbar-footer-layout/navbar-layout.component').then(c => c.NavbarLayoutComponent),
     children: [
       {
         path: 'community',
