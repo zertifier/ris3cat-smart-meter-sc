@@ -53,10 +53,20 @@ export class DatadisRegisterFormComponent {
     this.ngbActiveModal.close('cross click');
   }
 
-  public async registerCups() {
+  private validateForm(): string[] {
+    const errors: string[] = [];
     if (this.formData.invalid) {
+      errors.push("Invalid form")
+    }
+    return errors;
+  }
+
+  public async registerCups() {
+    const errors = this.validateForm();
+    if (errors.length) {
       Swal.fire({
         title: 'Formulari no valid',
+        text: errors.map(err => `- ${err}`).join("\n"),
         icon: "error",
       });
       return;

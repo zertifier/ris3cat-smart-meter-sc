@@ -1,0 +1,9 @@
+@import "styles/colors";
+
+.btn-navbar {
+  color: white !important;
+}
+
+.btn-navbar:hover {
+  color: $active-hover !important;
+}
