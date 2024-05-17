@@ -58,15 +58,27 @@ export class ProposalsService {
   getProposals(){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals`)
   }
-
+  getProposalsByCommunity(communityId: number){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}`)
+  }
   getProposalsByStatus(status: ProposalStatus){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/status/${status}`)
+  }
+  getProposalsByStatusAndCommunity(communityId: number, status: ProposalStatus){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/status/${status}`)
   }
   getProposalsByFilter(word: string){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}`)
   }
-  getProposalsByFilterAndStatus(word: string, status: ProposalStatus | ''){
+  getProposalsByFilterAndCommunity(communityId:number ,word: string){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/filter/${word}`)
+  }
+  getProposalsByFilterStatus(word: string, status: ProposalStatus | ''){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}/status/${status}`)
+  }
+
+  getProposalsByFilterStatusCommunity(communityId: number, word: string, status: ProposalStatus | ''){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/filter/${word}/status/${status}`)
   }
 
   getProposalById(id: string){
@@ -87,7 +99,8 @@ export class ProposalsService {
       case "pending": return 'Pendent'
       case "succeeded": return 'Acceptada'
       case "executed": return 'Executada'
-      case "defeated": return 'Vençuda'
+      case "expired": return 'Finalitzada'
+      case "denied": return 'Denegada'
       default: return
     }
   }

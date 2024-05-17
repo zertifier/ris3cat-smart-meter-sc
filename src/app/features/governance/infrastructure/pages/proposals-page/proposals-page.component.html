@@ -17,23 +17,24 @@
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('active')"> Actiu </button>
+              (click)="getProposalsByStatus('active')"> Actives </button>
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('pending')"> Pendent </button>
+              (click)="getProposalsByStatus('pending')"> Pendents </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('succeeded')"> Acceptades </button>
+      <button class="btn" [ngClass]="proposalType == 'expired' ? 'btn-complementary' : 'btn-outline-complementary'"
+              (click)="getProposalsByStatus('expired')"> Finalitzades </button>
+
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'executed' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('executed')"> Executades </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('finished')"> Vençudes </button>
+      <button class="btn" [ngClass]="proposalType == 'denied' ? 'btn-complementary' : 'btn-outline-complementary'"
+              (click)="getProposalsByStatus('denied')"> Denegades </button>
     </div>
 
 

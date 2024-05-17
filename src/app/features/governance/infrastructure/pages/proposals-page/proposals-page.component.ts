@@ -4,8 +4,9 @@ import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 
-type ProposalType = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded' | 'defeated' | 'all';
+type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' |  'all';
 @Component({
   selector: 'app-proposals-page',
   standalone: true,
@@ -25,23 +26,40 @@ export class ProposalsPageComponent {
 
   proposals: Proposal[] = []
   proposalType: ProposalType = 'all'
+  communityId!: number
+  userRole: string | undefined = ''
   filterText!: string
 
   constructor(
-    private proposalsService: ProposalsService
+    private proposalsService: ProposalsService,
+    private userStore: UserStoreService
   ) {
 
-    this.getAllProposals()
+    this.userStore.selectOnly(this.userStore.$.communityId).subscribe((community) => {
+      this.communityId = community
+      this.getAllProposals()
+    })
+
+
+
+    this.userStore
+      .selectOnly(state => state).subscribe((data) => {
+      if (data.user) {
+        this.userRole = data.user?.role;
+      }
+    })
+
+
   }
 
   getAllProposals(){
     if (this.filterText){
-      this.proposalsService.getProposalsByFilter(this.filterText).subscribe((response) => {
+      this.proposalsService.getProposalsByFilterAndCommunity(this.communityId, this.filterText).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = 'all'
       })
     }else{
-      this.proposalsService.getProposals().subscribe((response) => {
+      this.proposalsService.getProposalsByCommunity(this.communityId).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = 'all'
       })
@@ -50,12 +68,12 @@ export class ProposalsPageComponent {
 
   getProposalsByStatus(status: ProposalStatus){
     if(this.filterText){
-      this.proposalsService.getProposalsByFilterAndStatus(this.filterText || '', status).subscribe((response) => {
+      this.proposalsService.getProposalsByFilterStatusCommunity(this.communityId ,this.filterText || '', status).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = status
       })
     }else{
-      this.proposalsService.getProposalsByStatus(status).subscribe((response) => {
+      this.proposalsService.getProposalsByStatusAndCommunity(this.communityId, status).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = status
       })

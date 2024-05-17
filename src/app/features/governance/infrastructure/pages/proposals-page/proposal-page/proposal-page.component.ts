@@ -59,7 +59,6 @@ export class ProposalPageComponent {
       if (data.user) {
         this.userId = data.user.id
         if (this.id) this.getProposal()
-
       }
     })
 
@@ -121,7 +120,7 @@ export class ProposalPageComponent {
             return option.id == vote.optionId
           })
 
-          if (optionIndex) {
+          if (optionIndex || optionIndex == 0) {
             this.selectOption(this.optionVoted.optionId, optionIndex)
           }
 

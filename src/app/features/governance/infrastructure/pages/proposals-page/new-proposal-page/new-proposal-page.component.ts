@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {ProposalOption, ProposalsService, SaveProposal} from "../../../services/proposals.service";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -13,7 +13,7 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
-import {EditorComponent} from "@tinymce/tinymce-angular";
+import {EditorComponent, EditorModule} from "@tinymce/tinymce-angular";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -28,12 +28,13 @@ import {EditorComponent} from "@tinymce/tinymce-angular";
     RouterLink,
     RouterLinkActive,
     QuestionBadgeComponent,
-    EditorComponent
+    EditorComponent,
+    EditorModule
   ],
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'
 })
-export class NewProposalPageComponent {
+export class NewProposalPageComponent implements AfterViewInit{
 
   proposal!: string;
   proposalDescription!: string;
@@ -48,6 +49,7 @@ export class NewProposalPageComponent {
   minDate: Date = dayjs().add(1, 'day').toDate();
   options: any = [  {option: 'Sí'}, {option: 'No'}, {option: 'Abstenir-se'},]
 
+  @ViewChild('editor') editorTextArea!: ElementRef;
   constructor(
     private proposalsService: ProposalsService,
     private router: Router,
@@ -62,14 +64,12 @@ export class NewProposalPageComponent {
         this.userId = data.user.id
       }
     })
-
-
   }
 
-  /* setDate(date: Date){
-     // this.selectedDate = dayjs(date).format('YYYY-MM-DD HH:mm:ss')
-     this.selectedDate = dayjs(date).format('YYYY-MM-DD')
-   }*/
+  ngAfterViewInit(): void {
+  }
+
+
   setTransparentStatus() {
     this.transparentStatus = !this.transparentStatus
   }
@@ -154,5 +154,7 @@ export class NewProposalPageComponent {
 
       })
   }
+
+
 
 }

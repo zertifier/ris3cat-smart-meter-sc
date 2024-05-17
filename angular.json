@@ -37,9 +37,12 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/tinymce/skins/ui/oxide/content.min.css",
+              "node_modules/tinymce/skins/ui/oxide/skin.min.css",
               "src/styles/styles.scss"
             ],
             "scripts": [
+              "node_modules/tinymce/tinymce.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "stylePreprocessorOptions": {
