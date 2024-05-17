@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AppLogoComponent} from "../../app-logo/app-logo.component";
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {UserProfileSelectorComponent} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
+import {
+  UserProfileSelectorComponent
+} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
 import {BreakPoints, ScreenBreakPointsService} from "../../../services/screen-break-points.service";
 import {AsyncPipe, NgStyle} from "@angular/common";
 import {map} from "rxjs";
-import {UserProfileButtonComponent} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-button/user-profile-button.component";
+import {
+  UserProfileButtonComponent
+} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-button/user-profile-button.component";
 import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
