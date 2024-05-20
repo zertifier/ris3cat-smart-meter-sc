@@ -16,12 +16,13 @@
 
         <br>
         <div class="mt-5">
-          <button class="btn me-4 bg-white" [ngClass]="getStatusButtonClass(proposal.status)">
+          <button class="btn me-4 bg-white" [ngClass]="getStatusButtonClass(proposal.status)" style="cursor: default">
             {{ statusTranslation(proposal.status) }}
           </button>
-          <button class="btn btn-outline-tertiary bg-white">
+          <button class="btn btn-outline-tertiary bg-white" style="cursor: default">
             {{ typeTranslation(proposal.type) }}
           </button>
+
         </div>
 
       </div>

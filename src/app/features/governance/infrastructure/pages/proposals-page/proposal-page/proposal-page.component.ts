@@ -229,4 +229,5 @@ export class ProposalPageComponent {
         return 'btn-outline-tertiary'
     }
   }
+
 }
