@@ -8,7 +8,7 @@ export const routes: Routes = [
     loadComponent: () => import('../../../../core/layouts/navbar-footer-layout/navbar-layout.component').then(c => c.NavbarLayoutComponent),
     children: [
       {
-        path: 'governance',
+        path: '',
         loadComponent: () => import('./governance-page/governance-page.component').then(c => c.GovernancePageComponent),
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
