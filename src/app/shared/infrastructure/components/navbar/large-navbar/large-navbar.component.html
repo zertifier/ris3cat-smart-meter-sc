@@ -24,17 +24,14 @@
     <li>
 
       <div ngbDropdown class="d-inline-block">
-        <button type="button" class="btn btn-primary px-0 bg-transparent" id="governDropdown" ngbDropdownToggle>
+        <button type="button" class="nav-item" id="governDropdown" ngbDropdownToggle>
           Governança
         </button>
         <div class="bg-primary px-2" ngbDropdownMenu aria-labelledby="governDropdown">
-          <a ngbDropdownItem class="nav-link text-white bg-transparent" [routerLink]="'/governance/proposals'"
+          <a ngbDropdownItem class="nav-link bg-transparent" [routerLink]="'/governance/proposals'"
              [routerLinkActive]="'active'">Propostes</a>
-          <a ngbDropdownItem class="nav-link text-white bg-transparent" [routerLink]="'/governance/governance'"
+          <a ngbDropdownItem class="nav-link bg-transparent" [routerLink]="'/governance/governance'"
              [routerLinkActive]="'active'">Participants</a>
-          <!--<button ngbDropdownItem>Propostes</button>
-          <button ngbDropdownItem>Another Action</button>
-          <button ngbDropdownItem>Something else is here</button>-->
         </div>
 
       </div>
