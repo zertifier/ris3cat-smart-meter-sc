@@ -13,7 +13,7 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
-import {EditorComponent, EditorModule} from "@tinymce/tinymce-angular";
+import {EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC} from "@tinymce/tinymce-angular";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -29,7 +29,10 @@ import {EditorComponent, EditorModule} from "@tinymce/tinymce-angular";
     RouterLinkActive,
     QuestionBadgeComponent,
     EditorComponent,
-    EditorModule
+
+  ],
+  providers: [
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'
@@ -48,6 +51,23 @@ export class NewProposalPageComponent implements AfterViewInit{
   date: Date = dayjs().add(1, 'day').toDate();
   minDate: Date = dayjs().add(1, 'day').toDate();
   options: any = [  {option: 'Sí'}, {option: 'No'}, {option: 'Abstenir-se'},]
+
+  tinymceConfig = {
+    base_url: '/tinymce',
+    suffix: '.min',
+    height: 500,
+    menubar: false,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount', 'table'
+    ],
+    toolbar:
+      'undo redo | formatselect | bold italic backcolor \
+      alignleft aligncenter alignright alignjustify | \
+      bullist numlist outdent indent | removeformat | \ \
+      table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol\''
+  }
 
   @ViewChild('editor') editorTextArea!: ElementRef;
   constructor(

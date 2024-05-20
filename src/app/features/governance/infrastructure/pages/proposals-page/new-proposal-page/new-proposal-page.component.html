@@ -119,18 +119,10 @@
       <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
     </button>
   </div>
-
+  <h1>TinyMCE 7 Angular Demo</h1>
+  <editor
+    [init]="tinymceConfig"
+  ></editor>
 </div>
 
-<!--<h1>TinyMCE 7 Angular Demo</h1>
-<editor
-  [init]="{
-    height: 500,
-    menubar: false,
-    plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste code help wordcount'
-    ],
-  }"
-></editor>-->
+
