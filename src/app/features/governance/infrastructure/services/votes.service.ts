@@ -5,7 +5,8 @@ import {HttpResponse} from "../../../../shared/infrastructure/services/HttpRespo
 
 export interface VotesWithQty {
   optionId: number,
-  qty: number
+  qty: number,
+  votes: number
 }
 
 export interface UserVote{

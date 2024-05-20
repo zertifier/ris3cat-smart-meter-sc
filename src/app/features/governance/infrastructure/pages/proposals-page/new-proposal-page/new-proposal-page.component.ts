@@ -89,7 +89,7 @@ export class NewProposalPageComponent implements AfterViewInit{
       userId: this.userId,
       communityId: this.communityId || 0,
       expirationDt: dayjs(this.date).format('YYYY-MM-DD'),
-      status: 'active',
+      status: this.status,
       proposal: this.proposal,
       description: this.proposalDescription,
       quorum: this.minVotes / 100,

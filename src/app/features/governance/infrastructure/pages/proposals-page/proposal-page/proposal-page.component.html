@@ -20,7 +20,7 @@
             {{ statusTranslation(proposal.status) }}
           </button>
           <button class="btn btn-outline-tertiary bg-white">
-            {{typeTranslation(proposal.type)}}
+            {{ typeTranslation(proposal.type) }}
           </button>
         </div>
 
@@ -31,8 +31,10 @@
       <div>
         <h5 class="fw-bold">Informació</h5>
 
-        <p *ngIf="totalVotes"><strong>Vots:</strong> Han votat {{totalVotes}} membres de {{totalMembers}}</p>
-        <p><strong>Data de finalització:</strong> {{proposal.expirationDt | date: 'yy-MM-dd hh:mm'}}</p>
+        <p *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
+          <strong>Vots:</strong> Han votat {{ totalVotes }} membres de {{ totalMembers }}
+        </p>
+        <p><strong>Data de finalització:</strong> {{ proposal.expirationDt | date: 'yy-MM-dd hh:mm' }}</p>
       </div>
 
 
@@ -40,20 +42,26 @@
         <h5 class="fw-bold">Vota aquí</h5>
 
         <div *ngFor="let option of proposal.options!; let i = index" class="d-flex my-2">
-          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start" [ngClass]="activeOptionIndex == i ? 'active-tertiary' : ''"
+          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start"
+                  [ngClass]="activeOptionIndex == i ? 'active-tertiary' : ''"
                   (click)="selectOption(option.id!, i)" [disabled]="alreadyVoted">
             {{ option.option }}
           </button>
         </div>
 
         <div class="mt-3">
-          <button class="btn btn-tertiary rounded-5 py-1 w-100" style="max-width: 150px" [disabled]="!selectedOptionId || alreadyVoted"
-          (click)="vote()">
+          <button *ngIf="proposal.status.toLowerCase() == 'active'" class="btn btn-tertiary rounded-5 py-1 w-100"
+                  style="max-width: 150px" [disabled]="!selectedOptionId || alreadyVoted"
+                  (click)="vote()">
             Votar
           </button>
+
+          <small *ngIf="proposal.status.toLowerCase() == 'expired'" class="text-danger fw-bold">
+            La votació ja ha finalitzat
+          </small>
         </div>
       </div>
-      <div class="mt-5" *ngIf="proposal.transparent != 0">
+      <div class="mt-5" *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
         <h5 class="fw-bold">Resultat votacions fins ara</h5>
 
         <div *ngFor="let option of proposal.options!" class="my-3">
@@ -65,11 +73,12 @@
                  aria-valuemin="0"
                  aria-valuemax="100"
                  [ngbTooltip]="'Vots: ' + (option.percentage ? (totalVotes * option.percentage/ 100) : '0')">
-              <div *ngIf="option.percentage" class="progress-bar bg-tertiary text-start ps-2" [style.width.%]="option.percentage || 0">
-                {{option.percentage| number:'1.2-2'  }}%
+              <div *ngIf="option.percentage" class="progress-bar bg-tertiary text-start ps-2"
+                   [style.width.%]="option.percentage || 0">
+                {{ option.percentage| number:'1.2-2' }}%
               </div>
               <div class="ms-2" *ngIf="!option.percentage">
-                {{option.percentage || 0}}%
+                {{ option.percentage || 0 }}%
               </div>
             </div>
           </i>
@@ -79,3 +88,4 @@
     </div>
   </div>
 </div>
+

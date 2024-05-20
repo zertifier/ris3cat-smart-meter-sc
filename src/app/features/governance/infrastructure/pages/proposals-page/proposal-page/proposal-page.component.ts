@@ -42,6 +42,7 @@ export class ProposalPageComponent {
   currentVotes!: VotesWithQty[]
   optionVoted!: UserVote
   totalVotes: number = 0;
+  totalWeightVotes: number = 0;
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
   userId!: number;
@@ -58,7 +59,7 @@ export class ProposalPageComponent {
       .selectOnly(state => state).subscribe((data) => {
       if (data.user) {
         this.userId = data.user.id
-        if (this.id) this.getProposal()
+        if (this.id && !this.proposal) this.getProposal()
       }
     })
 
@@ -79,7 +80,7 @@ export class ProposalPageComponent {
           this.proposal = proposalData
           this.getVoteFromUser()
           this.getTotalUsersByCommunity(proposalData.communityId)
-          if (proposal.data.transparent == 1) this.getVotes()
+          if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
         },
         error: (err) => {
           this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
@@ -95,8 +96,11 @@ export class ProposalPageComponent {
         next: data => {
           const votes = data.data
           this.currentVotes = votes
+          this.totalVotes = 0
+          this.totalWeightVotes = 0
           for (const vote of votes) {
             this.totalVotes += vote.qty
+            this.totalWeightVotes += vote.votes
           }
 
           this.calculatePercentage()
@@ -179,7 +183,8 @@ export class ProposalPageComponent {
 
   calculatePercentage() {
     for (const vote of this.currentVotes) {
-      const votePercentage = (vote.qty * 100) / this.totalVotes
+      const votePercentage =
+        ((this.proposal.type == 'weighted' ? vote.votes : vote.qty ) * 100) / (this.proposal.type == 'weighted' ? this.totalWeightVotes : this.totalVotes)
 
       for (const option of this.proposal.options!) {
         if (option.id == vote.optionId) option.percentage = votePercentage
