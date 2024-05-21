@@ -1,5 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {NgClass, NgStyle} from "@angular/common";
+import {
+  QuestionBadgeComponent
+} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 
 export interface DataLabel {
   label: string;
@@ -7,6 +10,7 @@ export interface DataLabel {
   radius: string;
   toggle: (label: DataLabel) => DataLabel;
   hidden: boolean;
+  tooltipText?: string;
 }
 
 @Component({
@@ -14,7 +18,8 @@ export interface DataLabel {
   standalone: true,
   imports: [
     NgStyle,
-    NgClass
+    NgClass,
+    QuestionBadgeComponent
   ],
   templateUrl: './chart-legend.component.html',
   styleUrl: './chart-legend.component.scss'

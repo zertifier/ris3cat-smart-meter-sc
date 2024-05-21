@@ -24,6 +24,10 @@ export const routes: Routes = [
     canActivate: [LoggedInGuard]
   },
   {
+    path: 'help',
+    loadChildren: () => import('./features/help/pages/help-routing.module').then(m => m.routes)
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'auth'

@@ -6,7 +6,6 @@ import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
 import {UserProfileChangedEvent} from "../../../auth/domain/UserProfileChangedEvent";
 import {UpdateUserCupsAction} from "../../actions/update-user-cups-action.service";
-import {UserCupsChangedEvent} from "../../domain/UserCupsChangedEvent";
 
 @Injectable({
   providedIn: 'root'

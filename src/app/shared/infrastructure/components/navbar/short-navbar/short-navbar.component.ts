@@ -1,8 +1,12 @@
 import {Component, TemplateRef} from '@angular/core';
-import {UserProfileSelectorComponent} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
+import {
+  UserProfileSelectorComponent
+} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {UserProfileButtonComponent} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-button/user-profile-button.component";
+import {
+  UserProfileButtonComponent
+} from "../../../../../features/user/infrastructure/components/user-profile/user-profile-button/user-profile-button.component";
 
 @Component({
   selector: 'app-short-navbar',

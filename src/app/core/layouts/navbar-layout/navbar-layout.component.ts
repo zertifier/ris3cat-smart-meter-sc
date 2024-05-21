@@ -1,15 +1,15 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
+import {FooterComponent} from "../../../shared/infrastructure/components/footer/footer.component";
 import {NavbarComponent} from "../../../shared/infrastructure/components/navbar/navbar.component";
 import {RouterOutlet} from "@angular/router";
-import {FooterComponent} from "../../../shared/infrastructure/components/footer/footer.component";
 
 @Component({
   selector: 'app-navbar-layout',
   standalone: true,
   imports: [
+    FooterComponent,
     NavbarComponent,
-    RouterOutlet,
-    FooterComponent
+    RouterOutlet
   ],
   templateUrl: './navbar-layout.component.html',
   styleUrl: './navbar-layout.component.scss'

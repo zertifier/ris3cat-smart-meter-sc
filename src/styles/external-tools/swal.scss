@@ -1,0 +1,7 @@
+@import "styles/colors";
+@import "sweetalert2/src/variables";
+
+$swal2-outline-color: #375981 !important;
+$swal2-confirm-button-background-color: $primary !important;
+
+@import "sweetalert2/src/sweetalert2";

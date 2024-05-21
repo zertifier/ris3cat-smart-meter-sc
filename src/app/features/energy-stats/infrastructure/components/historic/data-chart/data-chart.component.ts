@@ -28,6 +28,7 @@ export interface ChartDataset {
   order?: number,
   stack?: string,
   data: unknown[],
+  tooltipText?: string,
 }
 
 @Component({
@@ -49,10 +50,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   };
   @Input({required: true}) dataset: ChartDataset[] = [];
   @Input({required: true}) labels: string[] = [];
-  private chart!: Chart;
   @ViewChild('chart') chartElement!: ElementRef;
+  private chart!: Chart;
   // legendLabels: DataLabel[] = [];
-
   private subscriptions: Subscription[] = [];
 
   private textColorSecondary = 'rgba(0, 0, 0, 0.54)';
@@ -77,6 +77,8 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       },
       y: {
         stacked: true,
+        beginAtZero: true,
+        min: 0,
         ticks: {
           callback: (value: never) => {
             const state = this.chartStoreService.snapshot();
@@ -117,11 +119,18 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
             let {formattedValue} = context;
             const chartEntity = this.chartStoreService.snapshotOnly(state => state);
 
-            if (context.datasetIndex === 1 && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
+            if (context.dataset.label === "Producció" && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const value = context.raw;
               const register = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
-              const total = register.productionActives + value;
+              const total = parseFloat(register.productionActives + '') + value;
               formattedValue = total.toLocaleString();
+            }
+
+            if (context.dataset.label === "Consum" && chartEntity.selectedChartEntity === ChartEntity.CUPS) {
+              const showEnergy = this.chartStoreService.snapshot().selectedChartResource === ChartResource.ENERGY;
+              const register = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
+              const consumption = showEnergy ? register.kwhIn : +(register.kwhInPrice * register.kwhIn).toFixed(2);
+              formattedValue = consumption.toLocaleString();
             }
 
             const unit = chartEntity.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
@@ -129,13 +138,14 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
             if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
-              if (context.datasetIndex === 1) {
+
+              if (context.dataset.label === "Excedent actius") {
+                labels.push(`Membres actius: ${stat.activeMembers}`);
+                labels.push(`----------------`);
+              } else if (context.dataset.label === "Producció") {
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 // labels.push(`----------------`);
-              } else if (context.datasetIndex === 3) {
-                labels.push(`Membres actius: ${stat.activeMembers}`);
-                labels.push(`----------------`);
               }
             }
             return labels;
@@ -202,6 +212,20 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     return this.chart.isDatasetVisible(index);
   }
 
+  public refreshChart() {
+    if (!this.chart) {
+      return;
+    }
+
+    this.chart.options = this.options;
+    this.chart.data = this.data;
+    this.chart.update();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
   private changeToDesktop() {
     const state = this.chartStoreService.snapshot();
     this.options = {
@@ -224,6 +248,8 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
         },
         y: {
           stacked: true,
+          beginAtZero: true,
+          min: 0,
           ticks: {
             callback: function (value: never) {
               const label = state.selectedChartResource === ChartResource.ENERGY ? 'kWh' : '€'
@@ -250,7 +276,9 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       indexAxis: 'y',
       scales: {
         y: {
+          beginAtZero: true,
           stacked: true,
+          min: 0,
           ticks: {
             color: this.textColorSecondary,
             font: {
@@ -280,20 +308,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     this.refreshChart();
-  }
-
-  public refreshChart() {
-    if (!this.chart) {
-      return;
-    }
-
-    this.chart.options = this.options;
-    this.chart.data = this.data;
-    this.chart.update();
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   private parseInput() {

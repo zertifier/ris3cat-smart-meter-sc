@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {UserStoreService} from "../infrastructure/services/user-store.service";
 import {ZertipowerService} from "../../../shared/infrastructure/services/zertipower/zertipower.service";
 
