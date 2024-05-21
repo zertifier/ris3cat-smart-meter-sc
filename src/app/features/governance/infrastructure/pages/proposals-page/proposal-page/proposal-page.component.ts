@@ -158,16 +158,23 @@ export class ProposalPageComponent {
   vote() {
     this.votesService.postVote(this.userId, this.proposal.id, this.selectedOptionId!).subscribe({
       next: response => {
-        console.log(response, "vote()")
         this.alreadyVoted = true;
         this.getVotes()
-        Swal.fire({
-          icon: 'success',
-          title: 'Votació realitzada amb èxit',
-          confirmButtonText: 'Entès',
-          customClass: {
-            confirmButton: 'btn btn-secondary-force'
-          }
+        this.swalSuccessDisplay("Votació realitzada amb èxit")
+      },
+      error: err => {
+        this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+          console.log("ERRROR", err)
+        })
+      }
+    })
+  }
+
+  updateProposalStatus(status: ProposalStatus) {
+    this.proposalsService.updateStatus(this.proposal.id, status).subscribe({
+      next: value => {
+        this.swalSuccessDisplay("L'estat de la proposta s'ha modificiat correctament").then(() => {
+          this.getProposal()
         })
       },
       error: err => {
@@ -178,6 +185,35 @@ export class ProposalPageComponent {
     })
   }
 
+  deleteProposal() {
+    Swal.fire({
+      icon: 'info',
+      title: "Segur que vols descartar la proposta?",
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      showCancelButton: true,
+      customClass: {
+        confirmButton: 'btn btn-secondary-force',
+        cancelButton: 'btn btn-danger'
+      }
+    }).then((result) => {
+      if (result.isConfirmed)
+        this.proposalsService.deleteProposal(this.proposal.id).subscribe({
+        next: value => {
+          this.swalSuccessDisplay("La proposta s'ha borrat correctament").then(() => {
+            this.router.navigate(['/governance/proposals']);
+          })
+        },
+        error: err => {
+          this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
+      })
+    })
+
+  }
+
   selectOption(id: number, index: number) {
     this.activeOptionIndex = index
     this.selectedOptionId = id
@@ -186,7 +222,7 @@ export class ProposalPageComponent {
   calculatePercentage() {
     for (const vote of this.currentVotes) {
       const votePercentage =
-        ((this.proposal.type == 'weighted' ? vote.votes : vote.qty ) * 100) / (this.proposal.type == 'weighted' ? this.totalWeightVotes : this.totalVotes)
+        ((this.proposal.type == 'weighted' ? vote.votes : vote.qty) * 100) / (this.proposal.type == 'weighted' ? this.totalWeightVotes : this.totalVotes)
 
       for (const option of this.proposal.options!) {
         if (option.id == vote.optionId) option.percentage = votePercentage
@@ -195,6 +231,16 @@ export class ProposalPageComponent {
 
   }
 
+  swalSuccessDisplay(message: string) {
+    return Swal.fire({
+      icon: 'success',
+      title: message,
+      confirmButtonText: 'Entès',
+      customClass: {
+        confirmButton: 'btn btn-secondary-force'
+      }
+    })
+  }
   swalErrorDisplay(message: string) {
     return Swal.fire({
       icon: 'error',

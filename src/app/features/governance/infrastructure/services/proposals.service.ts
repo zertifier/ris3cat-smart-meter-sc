@@ -92,6 +92,13 @@ export class ProposalsService {
     return this.httpClient.post<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals-options`, proposalOption)
   }
 
+  updateStatus(proposalId: number, status: ProposalStatus){
+    return this.httpClient.put<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals/${proposalId}/status`, {status})
+  }
+
+  deleteProposal(proposalId: number){
+    return this.httpClient.delete<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals/${proposalId}`)
+  }
 
   statusTranslation(status: ProposalStatus){
     switch (status.toLowerCase()){
