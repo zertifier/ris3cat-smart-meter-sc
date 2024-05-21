@@ -53,7 +53,7 @@
               <button class="badge text-tertiary" disabled>{{statusTranslation(proposal.status)}}</button>
             </div>
             <h5 class="card-title fw-bold" [ngClass]="proposalType != 'all' ? 'text-complementary' : 'text-primary'">{{proposal.proposal}}</h5>
-            <p class="card-text text-primary">{{proposal.description}}</p>
+            <p class="card-text text-primary">{{getDescriptionText(proposal.description)}}</p>
             <div class="d-flex w-100">
                 <span class="card-text"><small class="text-body-secondary">Feta per: {{proposal.firstname}}</small></span>
                 <span class="card-text ms-auto"><small class="text-body-secondary">Expiració: {{proposal.expirationDt | date: 'yyyy-MM-dd hh:mm' : 'es'}}</small></span>

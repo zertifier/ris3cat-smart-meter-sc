@@ -18,9 +18,13 @@
       Descriu els aspectes principals de la teva proposta
     </h5>
 
-    <textarea [(ngModel)]="proposalDescription" class="form-control bg-white border-secondary shadow-none"
+    <!--<textarea [(ngModel)]="proposalDescription" class="form-control bg-white border-secondary shadow-none"
               placeholder="Hola, m'agradaria proposar..." id="description"
-              style="height: 100px"></textarea>
+              style="height: 100px"></textarea>-->
+
+    <editor
+      [init]="tinymceConfig"
+    ></editor>
     <label class="mt-2">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
   </div>
 
@@ -119,10 +123,4 @@
       <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
     </button>
   </div>
-  <h1>TinyMCE 7 Angular Demo</h1>
-  <editor
-    [init]="tinymceConfig"
-  ></editor>
 </div>
-
-

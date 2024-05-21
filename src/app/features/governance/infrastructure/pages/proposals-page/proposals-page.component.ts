@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Proposal, ProposalsService} from "../../services/proposals.service";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
+import {htmlToText} from "html-to-text";
 
-type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' |  'all';
+type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' | 'all';
+
 @Component({
   selector: 'app-proposals-page',
   standalone: true,
@@ -41,7 +43,6 @@ export class ProposalsPageComponent {
     })
 
 
-
     this.userStore
       .selectOnly(state => state).subscribe((data) => {
       if (data.user) {
@@ -52,13 +53,13 @@ export class ProposalsPageComponent {
 
   }
 
-  getAllProposals(){
-    if (this.filterText){
+  getAllProposals() {
+    if (this.filterText) {
       this.proposalsService.getProposalsByFilterAndCommunity(this.communityId, this.filterText).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = 'all'
       })
-    }else{
+    } else {
       this.proposalsService.getProposalsByCommunity(this.communityId).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = 'all'
@@ -66,13 +67,13 @@ export class ProposalsPageComponent {
     }
   }
 
-  getProposalsByStatus(status: ProposalStatus){
-    if(this.filterText){
-      this.proposalsService.getProposalsByFilterStatusCommunity(this.communityId ,this.filterText || '', status).subscribe((response) => {
+  getProposalsByStatus(status: ProposalStatus) {
+    if (this.filterText) {
+      this.proposalsService.getProposalsByFilterStatusCommunity(this.communityId, this.filterText || '', status).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = status
       })
-    }else{
+    } else {
       this.proposalsService.getProposalsByStatusAndCommunity(this.communityId, status).subscribe((response) => {
         this.proposals = response.data.length ? response.data : []
         this.proposalType = status
@@ -80,7 +81,11 @@ export class ProposalsPageComponent {
     }
   }
 
-  statusTranslation(status: ProposalStatus){
+  getDescriptionText(htmlText: string) {
+    return htmlToText(htmlText, {wordwrap: 150, baseElements: {selectors: ['p']}})
+  }
+
+  statusTranslation(status: ProposalStatus) {
     return this.proposalsService.statusTranslation(status)
   }
 

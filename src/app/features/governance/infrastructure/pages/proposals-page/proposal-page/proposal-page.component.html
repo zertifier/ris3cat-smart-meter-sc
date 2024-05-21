@@ -10,7 +10,7 @@
 
       <div>
         <h5 class="fw-bold">{{ proposal.proposal }}</h5>
-        <p>{{ proposal.description }}</p>
+        <div class="my-4" [innerHTML]="sanitized.bypassSecurityTrustHtml(proposal.description)"></div>
 
         <small class="text-body-secondary">Feta per: {{ proposal.firstname }}</small>
 

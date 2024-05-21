@@ -14,6 +14,7 @@ import {
   QuestionBadgeComponent
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 import {EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC} from "@tinymce/tinymce-angular";
+import {Editor} from "tinymce";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -37,7 +38,7 @@ import {EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC} from "@tinymce/tinymc
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'
 })
-export class NewProposalPageComponent implements AfterViewInit{
+export class NewProposalPageComponent{
 
   proposal!: string;
   proposalDescription!: string;
@@ -57,6 +58,16 @@ export class NewProposalPageComponent implements AfterViewInit{
     suffix: '.min',
     height: 500,
     menubar: false,
+    setup: (editor: Editor) => {
+      editor.on('NodeChange', (e) => {
+        const tableElm = editor.dom.getParent(e.element, 'table');
+        if (tableElm) {
+          this.applyTableStyles(tableElm);
+        }
+      });
+      this.editor = editor;
+      console.log(editor)
+    },
     plugins: [
       'advlist autolink lists link image charmap print preview anchor',
       'searchreplace visualblocks code fullscreen',
@@ -66,10 +77,11 @@ export class NewProposalPageComponent implements AfterViewInit{
       'undo redo | formatselect | bold italic backcolor \
       alignleft aligncenter alignright alignjustify | \
       bullist numlist outdent indent | removeformat | \ \
-      table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol\''
+      table tabledelete ',
+
   }
 
-  @ViewChild('editor') editorTextArea!: ElementRef;
+  editor!: Editor;
   constructor(
     private proposalsService: ProposalsService,
     private router: Router,
@@ -86,13 +98,22 @@ export class NewProposalPageComponent implements AfterViewInit{
     })
   }
 
-  ngAfterViewInit(): void {
+  applyTableStyles(table: any) {
+    table.style.borderCollapse = 'collapse';
+    table.style.width = '100%';
+    const cells = table.querySelectorAll('th, td');
+    cells.forEach((cell: any) => {
+      cell.style.border = '1px solid black';
+      cell.style.paddingLeft = '10px'
+      cell.style.paddingRight = '10px'
+    });
   }
-
 
   setTransparentStatus() {
     this.transparentStatus = !this.transparentStatus
   }
+
+
 
   addOption() {
     this.options.unshift({})
@@ -105,6 +126,7 @@ export class NewProposalPageComponent implements AfterViewInit{
 
   saveProposal() {
     this.loading = true;
+    this.proposalDescription = this.editor ? this.editor.getContent() : ''
     const proposal: SaveProposal = {
       userId: this.userId,
       communityId: this.communityId || 0,

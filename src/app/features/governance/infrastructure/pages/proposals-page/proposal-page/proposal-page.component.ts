@@ -13,6 +13,7 @@ import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-proposal-page',
@@ -52,7 +53,8 @@ export class ProposalPageComponent {
     private router: Router,
     private proposalsService: ProposalsService,
     private votesService: VotesService,
-    private userStore: UserStoreService
+    private userStore: UserStoreService,
+    public sanitized: DomSanitizer
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.userStore
