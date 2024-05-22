@@ -13,7 +13,7 @@ import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
-import {DomSanitizer} from "@angular/platform-browser";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {Subscription} from "rxjs";
 
 
@@ -50,7 +50,8 @@ export class ProposalPageComponent implements OnDestroy {
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
   userId!: number;
-
+  isSanitized: boolean = false
+  sanitizedHtml!: SafeHtml;
   subscriptions: Subscription[] = [];
   @ViewChild("proposalContent") proposalContent!: ElementRef;
   constructor(
@@ -97,7 +98,7 @@ export class ProposalPageComponent implements OnDestroy {
               })
 
             this.proposal = proposalData
-
+            this.sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
             this.getVoteFromUser()
             this.getTotalUsersByCommunity(proposalData.communityId)
             if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
@@ -147,10 +148,6 @@ export class ProposalPageComponent implements OnDestroy {
             const optionIndex = this.proposal.options?.findIndex(option => {
               return option.id == vote.optionId
             })
-
-            const sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
-            console.log(this.proposalContent, "this.proposalContent")
-            this.renderer.setProperty(this.proposalContent.nativeElement, "innerHTML", sanitizedHtml);
 
             if (optionIndex || optionIndex == 0) {
               this.selectOption(this.optionVoted.optionId, optionIndex)
@@ -314,6 +311,17 @@ export class ProposalPageComponent implements OnDestroy {
         return 'btn-outline-tertiary'
     }
   }
+
+/*  sanitizeHtml(){
+    if (!this.sanitizedHtml){
+      console.log(this.sanitizedHtml, "this.sanitizedHtml")
+
+      this.sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
+    }
+      return this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
+
+    return
+  }*/
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe())
