@@ -50,7 +50,6 @@ export class ProposalPageComponent implements OnDestroy {
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
   userId!: number;
-  isSanitized: boolean = false
   sanitizedHtml!: SafeHtml;
   subscriptions: Subscription[] = [];
   @ViewChild("proposalContent") proposalContent!: ElementRef;
@@ -69,7 +68,6 @@ export class ProposalPageComponent implements OnDestroy {
       return
     }
 
-    console.log(user)
     this.userId = user.id
     if (this.id && !this.proposal) this.getProposal()
 
@@ -99,6 +97,7 @@ export class ProposalPageComponent implements OnDestroy {
 
             this.proposal = proposalData
             this.sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
+
             this.getVoteFromUser()
             this.getTotalUsersByCommunity(proposalData.communityId)
             if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
@@ -215,7 +214,6 @@ export class ProposalPageComponent implements OnDestroy {
         }
       })
     )
-
   }
 
   deleteProposal() {
@@ -311,17 +309,6 @@ export class ProposalPageComponent implements OnDestroy {
         return 'btn-outline-tertiary'
     }
   }
-
-/*  sanitizeHtml(){
-    if (!this.sanitizedHtml){
-      console.log(this.sanitizedHtml, "this.sanitizedHtml")
-
-      this.sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
-    }
-      return this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
-
-    return
-  }*/
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe())
