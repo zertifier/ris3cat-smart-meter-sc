@@ -11,8 +11,8 @@
       <div>
         <h5 class="fw-bold">{{ proposal.proposal }}</h5>
 <!--        <div #proposalContent class="my-4">{{sanitizedHtml}}</div>-->
-<!--        <div #proposalContent class="my-4">{{proposal.description}}</div>-->
-        <iframe class="w-100" [srcdoc]="sanitizedHtml"></iframe>
+        <div *ngIf="sanitizedHtml"  [innerHTML]="sanitizedHtml" class="my-4"></div>
+<!--        <iframe class="w-100" [srcdoc]="sanitizedHtml"></iframe>-->
 
         <small class="text-body-secondary">Feta per: {{ proposal.firstname }}</small>
 
