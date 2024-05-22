@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {ProposalOption, ProposalsService, SaveProposal} from "../../../services/proposals.service";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -15,6 +15,7 @@ import {
 } from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
 import {EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC} from "@tinymce/tinymce-angular";
 import {Editor} from "tinymce";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-new-proposal-page',
@@ -38,7 +39,7 @@ import {Editor} from "tinymce";
   templateUrl: './new-proposal-page.component.html',
   styleUrl: './new-proposal-page.component.scss'
 })
-export class NewProposalPageComponent{
+export class NewProposalPageComponent implements OnDestroy{
 
   proposal!: string;
   proposalDescription!: string;
@@ -69,9 +70,12 @@ export class NewProposalPageComponent{
       console.log(editor)
     },
     plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste code help wordcount', 'table'
+      // 'lists advlist autolink lists link image charmap print preview anchor',
+      // 'searchreplace visualblocks code fullscreen',
+      // 'insertdatetime media table paste code help wordcount',
+      'table',
+      'lists',
+
     ],
     toolbar:
       'undo redo | formatselect | bold italic backcolor \
@@ -82,20 +86,24 @@ export class NewProposalPageComponent{
   }
 
   editor!: Editor;
+
+  subscriptions: Subscription[] = [];
   constructor(
     private proposalsService: ProposalsService,
     private router: Router,
     private readonly userStore: UserStoreService,
   ) {
-    this.userStore
-      .selectOnly(state => state).subscribe((data) => {
-      if (data.cups.length) {
-        this.communityId = data.cups[0].communityId
-      }
-      if (data.user) {
-        this.userId = data.user.id
-      }
-    })
+    this.subscriptions.push(
+      this.userStore
+        .selectOnly(state => state).subscribe((data) => {
+        if (data.cups.length) {
+          this.communityId = data.cups[0].communityId
+        }
+        if (data.user) {
+          this.userId = data.user.id
+        }
+      })
+    )
   }
 
   applyTableStyles(table: any) {
@@ -138,65 +146,71 @@ export class NewProposalPageComponent{
       transparent: this.transparentStatus ? 1 : 0,
       type: this.type
     }
-    this.proposalsService.saveProposal(proposal).subscribe(
-      (savedProposal) => {
-        let proposalOptions: ProposalOption[] = [];
+    this.subscriptions.push(
+      this.proposalsService.saveProposal(proposal).subscribe(
+        (savedProposal) => {
+          let proposalOptions: ProposalOption[] = [];
 
-        for (const option of this.options) {
-          proposalOptions.push({
-            option: option.option,
-            proposalId: savedProposal.data.id!,
-            percentage: undefined
-          })
-        }
-        this.proposalsService.saveProposalOption(proposalOptions).subscribe(
-          (savedProposalOption) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Proposta guardada correctament',
-              confirmButtonText: 'Entès',
-              customClass: {
-                confirmButton: 'btn btn-secondary-force'
-              }
-            }).then(() => {
-              console.log(savedProposalOption)
-              console.log(proposal, "proposal")
-              this.loading = false
-              this.router.navigate(['/governance/proposals']);
-            });
-          },
-          (error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'ERROR',
-              text: 'Hi ha hagut un error creant la proposta, revisa que tots els camps estiguin complets',
-              confirmButtonText: 'Entès',
-              customClass: {
-                confirmButton: 'btn btn-secondary-force'
-              }
-            }).then(() => {
-              this.loading = false
-              console.log("ERRROR", error)
+          for (const option of this.options) {
+            proposalOptions.push({
+              option: option.option,
+              proposalId: savedProposal.data.id!,
+              percentage: undefined
             })
-          })
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'ERROR',
-          text: 'Hi ha hagut un error creant la proposta, revisa que tots els camps estiguin complets',
-          confirmButtonText: 'Entès',
-          customClass: {
-            confirmButton: 'btn btn-secondary-force'
           }
-        }).then(() => {
-          this.loading = false
-          console.log("ERRROR", error)
-        });
 
-      })
+          this.proposalsService.saveProposalOption(proposalOptions).subscribe(
+            (savedProposalOption) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Proposta guardada correctament',
+                confirmButtonText: 'Entès',
+                customClass: {
+                  confirmButton: 'btn btn-secondary-force'
+                }
+              }).then(() => {
+                console.log(savedProposalOption)
+                console.log(proposal, "proposal")
+                this.loading = false
+                this.router.navigate(['/governance/proposals']);
+              });
+            },
+            (error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'ERROR',
+                text: 'Hi ha hagut un error creant la proposta, revisa que tots els camps estiguin complets',
+                confirmButtonText: 'Entès',
+                customClass: {
+                  confirmButton: 'btn btn-secondary-force'
+                }
+              }).then(() => {
+                this.loading = false
+                console.log("ERRROR", error)
+              })
+            })
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'ERROR',
+            text: 'Hi ha hagut un error creant la proposta, revisa que tots els camps estiguin complets',
+            confirmButtonText: 'Entès',
+            customClass: {
+              confirmButton: 'btn btn-secondary-force'
+            }
+          }).then(() => {
+            this.loading = false
+            console.log("ERRROR", error)
+          });
+
+        })
+    )
+
   }
 
-
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe())
+  }
 
 }

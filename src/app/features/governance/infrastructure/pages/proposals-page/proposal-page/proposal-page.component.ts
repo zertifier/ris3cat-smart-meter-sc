@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
@@ -14,6 +14,7 @@ import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.serv
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-proposal-page',
@@ -34,7 +35,8 @@ import {DomSanitizer} from "@angular/platform-browser";
   templateUrl: './proposal-page.component.html',
   styleUrl: './proposal-page.component.scss'
 })
-export class ProposalPageComponent {
+export class ProposalPageComponent implements OnDestroy {
+
   id: string | null;
   proposal!: Proposal
   selectedOptionId: number | null = null;
@@ -48,6 +50,8 @@ export class ProposalPageComponent {
   alreadyVoted: boolean = false;
   userId!: number;
 
+  subscriptions: Subscription[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -57,132 +61,155 @@ export class ProposalPageComponent {
     public sanitized: DomSanitizer
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.userStore
-      .selectOnly(state => state).subscribe((data) => {
-      if (data.user) {
-        this.userId = data.user.id
-        if (this.id && !this.proposal) this.getProposal()
-      }
-    })
+    const user = this.userStore.snapshotOnly(state => state.user);
+    if (!user) {
+      return
+    }
 
+    console.log(user)
+    this.userId = user.id
+    if (this.id && !this.proposal) this.getProposal()
 
+    // this.subscriptions.push(this.userStore
+    //   .selectOnly(state => state).subscribe((data) => {
+    //     if (data.user) {
+    //       console.log(data.user)
+    //       this.userId = data.user.id
+    //       if (this.id && !this.proposal) this.getProposal()
+    //     }
+    //   }))
   }
 
 
   getProposal() {
-    this.proposalsService.getProposalById(this.id!).subscribe({
-        next: proposal => {
-          const proposalData = proposal.data
+    this.subscriptions.push(
+      this.proposalsService.getProposalById(this.id!).subscribe({
+          next: proposal => {
+            const proposalData = proposal.data
 
-          if (!proposalData.id)
-            this.swalErrorDisplay('Aquesta proposta no existeix.').then(() => {
-              this.router.navigate(['/governance/proposals']);
+            if (!proposalData.id)
+              this.swalErrorDisplay('Aquesta proposta no existeix.').then(() => {
+                this.router.navigate(['/governance/proposals']);
+              })
+
+            this.proposal = proposalData
+            this.getVoteFromUser()
+            this.getTotalUsersByCommunity(proposalData.communityId)
+            if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
+          },
+          error: (err) => {
+            this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+              console.log("ERRROR", err)
             })
-
-          this.proposal = proposalData
-          this.getVoteFromUser()
-          this.getTotalUsersByCommunity(proposalData.communityId)
-          if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
-        },
-        error: (err) => {
-          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
-            console.log("ERRROR", err)
-          })
+          }
         }
-      }
+      )
     )
   }
 
   getVotes() {
-    this.votesService.getVotesByProposalId(this.proposal.id).subscribe({
-        next: data => {
-          const votes = data.data
-          this.currentVotes = votes
-          this.totalVotes = 0
-          this.totalWeightVotes = 0
-          for (const vote of votes) {
-            this.totalVotes += vote.qty
-            this.totalWeightVotes += vote.votes
+    this.subscriptions.push(
+      this.votesService.getVotesByProposalId(this.proposal.id).subscribe({
+          next: data => {
+            const votes = data.data
+            this.currentVotes = votes
+            this.totalVotes = 0
+            this.totalWeightVotes = 0
+            for (const vote of votes) {
+              this.totalVotes += vote.qty
+              this.totalWeightVotes += vote.votes
+            }
+
+            this.calculatePercentage()
+
+          },
+          error: err => {
+            this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+              console.log("ERRROR", err)
+            })
           }
-
-          this.calculatePercentage()
-
-        },
-        error: err => {
-          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
-            console.log("ERRROR", err)
-          })
         }
-      }
+      )
     )
   }
 
   getVoteFromUser() {
-    this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, this.userId).subscribe({
-        next: data => {
-          const vote = data.data
-          this.optionVoted = vote
-          const optionIndex = this.proposal.options?.findIndex(option => {
-            return option.id == vote.optionId
-          })
+    this.subscriptions.push(
+      this.votesService.getVotesByProposalIdAndUserId(this.proposal.id, this.userId).subscribe({
+          next: data => {
+            const vote = data.data
+            this.optionVoted = vote
+            const optionIndex = this.proposal.options?.findIndex(option => {
+              return option.id == vote.optionId
+            })
 
-          if (optionIndex || optionIndex == 0) {
-            this.selectOption(this.optionVoted.optionId, optionIndex)
+            if (optionIndex || optionIndex == 0) {
+              this.selectOption(this.optionVoted.optionId, optionIndex)
+            }
+
+            if (vote.optionId) this.alreadyVoted = true
+
+          },
+          error: err => {
+            this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+              console.log("ERRROR", err)
+            })
           }
+        }
+      )
+    )
+  }
 
-          if (vote.optionId) this.alreadyVoted = true
-
+  getTotalUsersByCommunity(communityId: number) {
+    this.subscriptions.push(
+      this.votesService.getTotalCupsByCommunityId(communityId).subscribe({
+        next: value => {
+          this.totalMembers = value.data.total
         },
         error: err => {
           this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
             console.log("ERRROR", err)
           })
         }
-      }
+      })
     )
-  }
 
-  getTotalUsersByCommunity(communityId: number) {
-    this.votesService.getTotalCupsByCommunityId(communityId).subscribe({
-      next: value => {
-        this.totalMembers = value.data.total
-      },
-      error: err => {
-        this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
-          console.log("ERRROR", err)
-        })
-      }
-    })
   }
 
   vote() {
-    this.votesService.postVote(this.userId, this.proposal.id, this.selectedOptionId!).subscribe({
-      next: response => {
-        this.alreadyVoted = true;
-        this.getVotes()
-        this.swalSuccessDisplay("Votació realitzada amb èxit")
-      },
-      error: err => {
-        this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
-          console.log("ERRROR", err)
-        })
-      }
-    })
+    this.subscriptions.push(
+      this.votesService.postVote(this.userId, this.proposal.id, this.selectedOptionId!).subscribe({
+        next: response => {
+          this.alreadyVoted = true;
+          this.getVotes()
+          this.swalSuccessDisplay("Votació realitzada amb èxit")
+        },
+        error: err => {
+          this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
+      })
+    )
+
   }
 
   updateProposalStatus(status: ProposalStatus) {
-    this.proposalsService.updateStatus(this.proposal.id, status).subscribe({
-      next: value => {
-        this.swalSuccessDisplay("L'estat de la proposta s'ha modificiat correctament").then(() => {
-          this.getProposal()
-        })
-      },
-      error: err => {
-        this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
-          console.log("ERRROR", err)
-        })
-      }
-    })
+    this.subscriptions.push(
+      this.proposalsService.updateStatus(this.proposal.id, status).subscribe({
+        next: value => {
+          this.swalSuccessDisplay("L'estat de la proposta s'ha modificiat correctament").then(() => {
+            this.getProposal()
+          })
+        },
+        error: err => {
+          this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
+      })
+    )
+
   }
 
   deleteProposal() {
@@ -199,17 +226,17 @@ export class ProposalPageComponent {
     }).then((result) => {
       if (result.isConfirmed)
         this.proposalsService.deleteProposal(this.proposal.id).subscribe({
-        next: value => {
-          this.swalSuccessDisplay("La proposta s'ha borrat correctament").then(() => {
-            this.router.navigate(['/governance/proposals']);
-          })
-        },
-        error: err => {
-          this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
-            console.log("ERRROR", err)
-          })
-        }
-      })
+          next: value => {
+            this.swalSuccessDisplay("La proposta s'ha borrat correctament").then(() => {
+              this.router.navigate(['/governance/proposals']);
+            })
+          },
+          error: err => {
+            this.swalErrorDisplay('Hi ha hagut votant. Espera uns minuts i torna-ho a intentar.').then(() => {
+              console.log("ERRROR", err)
+            })
+          }
+        })
     })
 
   }
@@ -241,6 +268,7 @@ export class ProposalPageComponent {
       }
     })
   }
+
   swalErrorDisplay(message: string) {
     return Swal.fire({
       icon: 'error',
@@ -278,4 +306,7 @@ export class ProposalPageComponent {
     }
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe())
+  }
 }
