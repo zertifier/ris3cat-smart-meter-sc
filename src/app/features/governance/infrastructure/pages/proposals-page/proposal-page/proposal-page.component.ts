@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
@@ -15,6 +15,7 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Subscription} from "rxjs";
+
 
 @Component({
   selector: 'app-proposal-page',
@@ -51,14 +52,15 @@ export class ProposalPageComponent implements OnDestroy {
   userId!: number;
 
   subscriptions: Subscription[] = [];
-
+  @ViewChild("proposalContent") proposalContent!: ElementRef;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private proposalsService: ProposalsService,
     private votesService: VotesService,
     private userStore: UserStoreService,
-    public sanitized: DomSanitizer
+    public sanitized: DomSanitizer,
+    private renderer: Renderer2
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     const user = this.userStore.snapshotOnly(state => state.user);
@@ -69,6 +71,7 @@ export class ProposalPageComponent implements OnDestroy {
     console.log(user)
     this.userId = user.id
     if (this.id && !this.proposal) this.getProposal()
+
 
     // this.subscriptions.push(this.userStore
     //   .selectOnly(state => state).subscribe((data) => {
@@ -88,11 +91,13 @@ export class ProposalPageComponent implements OnDestroy {
             const proposalData = proposal.data
 
             if (!proposalData.id)
-              this.swalErrorDisplay('Aquesta proposta no existeix.').then(() => {
-                this.router.navigate(['/governance/proposals']);
+              this.swalErrorDisplay('Aquesta proposta no existeix.').then(async () => {
+                await this.router.navigate(['/governance/proposals']);
+                return
               })
 
             this.proposal = proposalData
+
             this.getVoteFromUser()
             this.getTotalUsersByCommunity(proposalData.communityId)
             if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
@@ -142,6 +147,10 @@ export class ProposalPageComponent implements OnDestroy {
             const optionIndex = this.proposal.options?.findIndex(option => {
               return option.id == vote.optionId
             })
+
+            const sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
+            console.log(this.proposalContent, "this.proposalContent")
+            this.renderer.setProperty(this.proposalContent.nativeElement, "innerHTML", sanitizedHtml);
 
             if (optionIndex || optionIndex == 0) {
               this.selectOption(this.optionVoted.optionId, optionIndex)
@@ -309,4 +318,5 @@ export class ProposalPageComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe())
   }
+
 }
