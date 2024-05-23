@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {Proposal, ProposalsService} from "../../../services/proposals.service";
 import Swal from "sweetalert2";
@@ -13,8 +13,9 @@ import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
-import {DomSanitizer} from "@angular/platform-browser";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {Subscription} from "rxjs";
+
 
 @Component({
   selector: 'app-proposal-page',
@@ -46,19 +47,22 @@ export class ProposalPageComponent implements OnDestroy {
   optionVoted!: UserVote
   totalVotes: number = 0;
   totalWeightVotes: number = 0;
+  voteWeight: number = 0;
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
   userId!: number;
-
+  customerId?: number;
+  sanitizedHtml!: SafeHtml;
   subscriptions: Subscription[] = [];
-
+  @ViewChild("proposalContent") proposalContent!: ElementRef;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private proposalsService: ProposalsService,
     private votesService: VotesService,
     private userStore: UserStoreService,
-    public sanitized: DomSanitizer
+    public sanitized: DomSanitizer,
+    private renderer: Renderer2
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     const user = this.userStore.snapshotOnly(state => state.user);
@@ -66,9 +70,10 @@ export class ProposalPageComponent implements OnDestroy {
       return
     }
 
-    console.log(user)
     this.userId = user.id
+    this.customerId = user.customer_id
     if (this.id && !this.proposal) this.getProposal()
+
 
     // this.subscriptions.push(this.userStore
     //   .selectOnly(state => state).subscribe((data) => {
@@ -88,13 +93,17 @@ export class ProposalPageComponent implements OnDestroy {
             const proposalData = proposal.data
 
             if (!proposalData.id)
-              this.swalErrorDisplay('Aquesta proposta no existeix.').then(() => {
-                this.router.navigate(['/governance/proposals']);
+              this.swalErrorDisplay('Aquesta proposta no existeix.').then(async () => {
+                await this.router.navigate(['/governance/proposals']);
+                return
               })
 
             this.proposal = proposalData
+            this.sanitizedHtml = this.sanitized.bypassSecurityTrustHtml(this.proposal.description)
+
             this.getVoteFromUser()
             this.getTotalUsersByCommunity(proposalData.communityId)
+            this.getVoteWeight(proposalData.communityId)
             if (proposalData.transparent == 1 || proposalData.status != 'active' || 'pending') this.getVotes()
           },
           error: (err) => {
@@ -173,7 +182,22 @@ export class ProposalPageComponent implements OnDestroy {
         }
       })
     )
+  }
 
+  getVoteWeight(communityId: number){
+    if (this.customerId)
+    this.subscriptions.push(
+      this.votesService.getCustomerSharesByCommunityAndCustomer(communityId, this.customerId).subscribe({
+        next: value => {
+          this.voteWeight = value.data.shares
+        },
+        error: err => {
+          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
+      })
+    )
   }
 
   vote() {
@@ -209,7 +233,6 @@ export class ProposalPageComponent implements OnDestroy {
         }
       })
     )
-
   }
 
   deleteProposal() {
@@ -250,12 +273,20 @@ export class ProposalPageComponent implements OnDestroy {
     for (const vote of this.currentVotes) {
       const votePercentage =
         ((this.proposal.type == 'weighted' ? vote.votes : vote.qty) * 100) / (this.proposal.type == 'weighted' ? this.totalWeightVotes : this.totalVotes)
+        // (vote.qty * 100) / this.totalVotes
 
       for (const option of this.proposal.options!) {
         if (option.id == vote.optionId) option.percentage = votePercentage
       }
     }
 
+  }
+
+  getVoteByOptionId(optionId: number){
+    if (this.currentVotes)
+      return this.currentVotes.find((vote) => vote.optionId == optionId)
+    else
+      return {qty: 0}
   }
 
   swalSuccessDisplay(message: string) {
@@ -292,21 +323,32 @@ export class ProposalPageComponent implements OnDestroy {
   getStatusButtonClass(status: ProposalStatus) {
     switch (status.toLowerCase()) {
       case "active":
-        return 'btn-outline-success'
+        return 'text-bg-success'
+      /*case "active":
+        return 'btn-outline-success'*/
+      /*case "pending":
+        return 'btn-outline-warning'*/
       case "pending":
-        return 'btn-outline-warning'
+        return 'text-bg-warning'
       case "succeeded":
-        return 'btn-outline-success'
+        return 'text-bg-success'
+      /*case "succeeded":
+        return 'btn-outline-success'*/
       case "executed":
-        return 'btn-outline-tertiary'
+        return 'tertiary-badge'
+      /*case "executed":
+        return 'btn-outline-tertiary'*/
       case "defeated":
-        return 'btn-outline-danger'
+        return 'text-bg-danger'
+     /* case "defeated":
+        return 'btn-outline-danger'*/
       default:
-        return 'btn-outline-tertiary'
+        return 'tertiary-badge'
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe())
   }
+
 }

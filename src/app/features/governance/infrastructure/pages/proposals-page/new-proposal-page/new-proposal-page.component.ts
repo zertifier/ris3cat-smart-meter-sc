@@ -48,7 +48,7 @@ export class NewProposalPageComponent implements OnDestroy{
   communityId!: number;
   status: ProposalStatus = 'active';
   type: ProposalTypes = 'weighted';
-  minVotes: number = 50;
+  minVotes: number = 0;
   transparentStatus: boolean = false;
   date: Date = dayjs().add(1, 'day').toDate();
   minDate: Date = dayjs().add(1, 'day').toDate();
