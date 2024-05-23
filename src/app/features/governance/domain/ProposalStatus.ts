@@ -1,1 +1,1 @@
-export type ProposalStatus = 'active' | 'pending' | 'finished' | 'executed' | 'succeeded' | 'defeated';
+export type ProposalStatus = 'active' | 'pending' | 'expired' | 'executed' | 'denied';

@@ -17,23 +17,24 @@
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'active' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('active')"> Actiu </button>
+              (click)="getProposalsByStatus('active')"> Actives </button>
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'pending' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('pending')"> Pendent </button>
+              (click)="getProposalsByStatus('pending')"> Pendents </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'succeeded' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('succeeded')"> Acceptades </button>
+      <button class="btn" [ngClass]="proposalType == 'expired' ? 'btn-complementary' : 'btn-outline-complementary'"
+              (click)="getProposalsByStatus('expired')"> Finalitzades </button>
+
     </div>
     <div class="me-3">
       <button class="btn" [ngClass]="proposalType == 'executed' ? 'btn-complementary' : 'btn-outline-complementary'"
               (click)="getProposalsByStatus('executed')"> Executades </button>
     </div>
     <div class="me-3">
-      <button class="btn" [ngClass]="proposalType == 'finished' ? 'btn-complementary' : 'btn-outline-complementary'"
-              (click)="getProposalsByStatus('finished')"> Vençudes </button>
+      <button class="btn" [ngClass]="proposalType == 'denied' ? 'btn-complementary' : 'btn-outline-complementary'"
+              (click)="getProposalsByStatus('denied')"> Denegades </button>
     </div>
 
 
@@ -52,7 +53,7 @@
               <button class="badge text-tertiary" disabled>{{statusTranslation(proposal.status)}}</button>
             </div>
             <h5 class="card-title fw-bold" [ngClass]="proposalType != 'all' ? 'text-complementary' : 'text-primary'">{{proposal.proposal}}</h5>
-            <p class="card-text text-primary">{{proposal.description}}</p>
+            <p class="card-text text-primary text-truncate">{{getDescriptionText(proposal.description)}}</p>
             <div class="d-flex w-100">
                 <span class="card-text"><small class="text-body-secondary">Feta per: {{proposal.firstname}}</small></span>
                 <span class="card-text ms-auto"><small class="text-body-secondary">Expiració: {{proposal.expirationDt | date: 'yyyy-MM-dd hh:mm' : 'es'}}</small></span>

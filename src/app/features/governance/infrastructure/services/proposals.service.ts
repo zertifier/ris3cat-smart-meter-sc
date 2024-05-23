@@ -40,7 +40,8 @@ export interface SaveProposal {
 export interface ProposalOption {
   id?: number,
   proposalId: number,
-  option: string
+  option: string,
+  percentage: number | 0 | undefined
 }
 
 @Injectable({
@@ -48,8 +49,8 @@ export interface ProposalOption {
 })
 export class ProposalsService {
 
-  baseUrl = environment.zertipower_url
-  // baseUrl= 'http://localhost:3000'
+  // baseUrl = environment.zertipower_url
+  baseUrl= 'http://localhost:3000'
   constructor(
     private httpClient: HttpClient,
   ) { }
@@ -57,15 +58,27 @@ export class ProposalsService {
   getProposals(){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals`)
   }
-
+  getProposalsByCommunity(communityId: number){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}`)
+  }
   getProposalsByStatus(status: ProposalStatus){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/status/${status}`)
+  }
+  getProposalsByStatusAndCommunity(communityId: number, status: ProposalStatus){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/status/${status}`)
   }
   getProposalsByFilter(word: string){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}`)
   }
-  getProposalsByFilterAndStatus(word: string, status: ProposalStatus | ''){
+  getProposalsByFilterAndCommunity(communityId:number ,word: string){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/filter/${word}`)
+  }
+  getProposalsByFilterStatus(word: string, status: ProposalStatus | ''){
    return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/filter/${word}/status/${status}`)
+  }
+
+  getProposalsByFilterStatusCommunity(communityId: number, word: string, status: ProposalStatus | ''){
+   return this.httpClient.get<HttpResponse<Proposal[]>>(`${this.baseUrl}/proposals/community/${communityId}/filter/${word}/status/${status}`)
   }
 
   getProposalById(id: string){
@@ -79,6 +92,13 @@ export class ProposalsService {
     return this.httpClient.post<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals-options`, proposalOption)
   }
 
+  updateStatus(proposalId: number, status: ProposalStatus){
+    return this.httpClient.put<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals/${proposalId}/status`, {status})
+  }
+
+  deleteProposal(proposalId: number){
+    return this.httpClient.delete<HttpResponse<ProposalOption[]>>(`${this.baseUrl}/proposals/${proposalId}`)
+  }
 
   statusTranslation(status: ProposalStatus){
     switch (status.toLowerCase()){
@@ -86,7 +106,8 @@ export class ProposalsService {
       case "pending": return 'Pendent'
       case "succeeded": return 'Acceptada'
       case "executed": return 'Executada'
-      case "defeated": return 'Vençuda'
+      case "expired": return 'Finalitzada'
+      case "denied": return 'Denegada'
       default: return
     }
   }
