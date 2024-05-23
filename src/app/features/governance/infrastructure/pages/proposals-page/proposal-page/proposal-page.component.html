@@ -10,29 +10,46 @@
 
       <div>
         <h5 class="fw-bold">{{ proposal.proposal }}</h5>
-        <p>{{ proposal.description }}</p>
+        <div class="my-4" [innerHTML]="sanitized.bypassSecurityTrustHtml(proposal.description)"></div>
 
         <small class="text-body-secondary">Feta per: {{ proposal.firstname }}</small>
 
         <br>
         <div class="mt-5">
-          <button class="btn me-4 bg-white" [ngClass]="getStatusButtonClass(proposal.status)">
+          <button class="btn me-4 bg-white" [ngClass]="getStatusButtonClass(proposal.status)" style="cursor: default">
             {{ statusTranslation(proposal.status) }}
           </button>
-          <button class="btn btn-outline-tertiary bg-white">
-            {{typeTranslation(proposal.type)}}
+          <button class="btn btn-outline-tertiary bg-white" style="cursor: default">
+            {{ typeTranslation(proposal.type) }}
           </button>
+
+        </div>
+
+        <div *ngIf="proposal.status.toLowerCase() == 'pending'">
+          <hr class="my-5" style="max-width: 750px">
+          <p>Fes clic a activar si acceptes la proposta o Descartar si vols eliminar-la</p>
+
+          <div class="row">
+            <div class="col-12 col-md-3 my-3">
+              <button class="btn btn-secondary rounded-5 w-100" (click)="updateProposalStatus('active')">Activar</button>
+            </div>
+            <div class="col-12 col-md-3 my-3">
+              <button class="btn btn-secondary rounded-5 w-100" (click)="deleteProposal()">Descartar</button>
+            </div>
+          </div>
         </div>
 
       </div>
     </div>
 
-    <div class="col-12 col-md-4 px-5">
+    <div class="col-12 col-md-4 px-md-5 mt-5 mt-md-0">
       <div>
         <h5 class="fw-bold">Informació</h5>
 
-        <p><strong>Vots:</strong> Han votat membres de</p>
-        <p><strong>Data de finalització:</strong> {{proposal.expirationDt | date: 'yy-MM-dd hh:mm'}}</p>
+        <p *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
+          <strong>Vots:</strong> Han votat {{ totalVotes }} membres de {{ totalMembers }}
+        </p>
+        <p><strong>Data de finalització:</strong> {{ proposal.expirationDt | date: 'yy-MM-dd hh:mm' }}</p>
       </div>
 
 
@@ -40,13 +57,26 @@
         <h5 class="fw-bold">Vota aquí</h5>
 
         <div *ngFor="let option of proposal.options!; let i = index" class="d-flex my-2">
-          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start" [ngClass]="activeOptionIndex == i ? 'active' : ''"
-                  (click)="selectOption(option.id!, i)">
+          <button class="btn btn-outline-secondary px-3 py-1 rounded-5 w-100 text-start"
+                  [ngClass]="activeOptionIndex == i ? 'active-tertiary' : ''"
+                  (click)="selectOption(option.id!, i)" [disabled]="alreadyVoted">
             {{ option.option }}
           </button>
         </div>
+
+        <div class="mt-3">
+          <button *ngIf="proposal.status.toLowerCase() == 'active'" class="btn btn-tertiary rounded-5 py-1 w-100"
+                  style="max-width: 150px" [disabled]="!selectedOptionId || alreadyVoted"
+                  (click)="vote()">
+            Votar
+          </button>
+
+          <small *ngIf="proposal.status.toLowerCase() == 'expired'" class="text-danger fw-bold">
+            La votació ja ha finalitzat
+          </small>
+        </div>
       </div>
-      <div class="mt-5" *ngIf="proposal.transparent != 0">
+      <div class="mt-5" *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
         <h5 class="fw-bold">Resultat votacions fins ara</h5>
 
         <div *ngFor="let option of proposal.options!" class="my-3">
@@ -56,8 +86,15 @@
           <i class="fa-regular-calendar">
             <div class="progress" role="progressbar" aria-valuenow="25"
                  aria-valuemin="0"
-                 aria-valuemax="100">
-              <div class="progress-bar bg-tertiary" style="width: 25%">25%</div>
+                 aria-valuemax="100"
+                 [ngbTooltip]="'Vots: ' + (option.percentage ? (totalVotes * option.percentage/ 100) : '0')">
+              <div *ngIf="option.percentage" class="progress-bar bg-tertiary text-start ps-2"
+                   [style.width.%]="option.percentage || 0">
+                {{ option.percentage| number:'1.2-2' }}%
+              </div>
+              <div class="ms-2" *ngIf="!option.percentage">
+                {{ option.percentage || 0 }}%
+              </div>
             </div>
           </i>
         </div>
@@ -66,3 +103,4 @@
     </div>
   </div>
 </div>
+
