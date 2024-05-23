@@ -53,14 +53,14 @@
       <div>
         <h5 class="fw-bold">Informació</h5>
 
-        <p *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
+        <p *ngIf="proposal.transparent != 0 || proposal.status.toLowerCase() != 'active' || 'pending'">
           <strong>Vots:</strong> Han votat {{ totalVotes }} membres de {{ totalMembers }}
         </p>
         <p><strong>Data de finalització:</strong> {{ proposal.expirationDt | date: 'yy-MM-dd hh:mm' }}</p>
       </div>
 
 
-      <div class="mt-5">
+      <div *ngIf="proposal.status.toLowerCase() != 'pending'" class="mt-5">
         <h5 class="fw-bold">Vota aquí</h5>
 
         <div *ngFor="let option of proposal.options!; let i = index" class="d-flex my-2">
@@ -87,7 +87,7 @@
           </small>
         </div>
       </div>
-      <div class="mt-5" *ngIf="proposal.transparent != 0 || proposal.status != 'active' || 'pending'">
+      <div class="mt-5" *ngIf="proposal.transparent != 0 || proposal.status.toLowerCase() != 'active' || 'pending'">
         <h5 class="fw-bold">Resultat votacions fins ara</h5>
 
         <div *ngFor="let option of proposal.options!" class="my-3">
