@@ -102,7 +102,7 @@ export class ProposalsService {
 
   statusTranslation(status: ProposalStatus){
     switch (status.toLowerCase()){
-      case "active": return 'Actiu'
+      case "active": return 'Activa'
       case "pending": return 'Pendent'
       case "succeeded": return 'Acceptada'
       case "executed": return 'Executada'
