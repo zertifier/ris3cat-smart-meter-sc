@@ -32,6 +32,11 @@ export class VotesService {
   getTotalCupsByCommunityId(communityId: number){
     return this.httpClient.get<HttpResponse<{total: number}>>(`${this.baseUrl}/cups/community/${communityId}/total/`)
   }
+
+  getCustomerSharesByCommunityAndCustomer(communityId: number, customerId: number){
+    return this.httpClient.get<HttpResponse<{shares: number}>>(`${this.baseUrl}/shares/community/${communityId}/customer/${customerId}`)
+  }
+
   postVote(userId: number, proposalId: number, proposalOptionId: number){
     const body = {userId, proposalId, optionId: proposalOptionId}
 
