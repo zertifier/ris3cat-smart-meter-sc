@@ -16,8 +16,8 @@ export interface UserVote{
   providedIn: 'root'
 })
 export class VotesService {
-  // baseUrl = environment.zertipower_url
-  baseUrl= 'http://localhost:3000'
+  baseUrl = environment.zertipower_url
+  // baseUrl= 'http://localhost:3000'
 
   constructor(
     private httpClient: HttpClient,
