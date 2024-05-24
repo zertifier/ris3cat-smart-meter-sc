@@ -46,6 +46,7 @@ export class NewProposalPageComponent implements OnDestroy{
   loading: boolean = false
   userId!: number;
   communityId!: number;
+  userRole!: string;
   status: ProposalStatus = 'active';
   type: ProposalTypes = 'weighted';
   minVotes: number = 0;
@@ -67,7 +68,6 @@ export class NewProposalPageComponent implements OnDestroy{
         }
       });
       this.editor = editor;
-      console.log(editor)
     },
     plugins: [
       // 'lists advlist autolink lists link image charmap print preview anchor',
@@ -101,6 +101,9 @@ export class NewProposalPageComponent implements OnDestroy{
         }
         if (data.user) {
           this.userId = data.user.id
+          this.userRole = data.user.role
+
+          if (this.userRole == 'USER') this.status = 'pending'
         }
       })
     )
@@ -128,7 +131,6 @@ export class NewProposalPageComponent implements OnDestroy{
   }
 
   removeOption(index: number) {
-    console.log(this.options)
     this.options.splice(index, 1)
   }
 
