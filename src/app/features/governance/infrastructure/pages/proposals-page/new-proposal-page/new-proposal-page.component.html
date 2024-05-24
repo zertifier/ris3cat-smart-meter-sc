@@ -25,7 +25,7 @@
     <editor
       [init]="tinymceConfig"
     ></editor>
-    <label class="mt-2" style="font-size: 14px">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
+    <label class="mt-2" style="font-size: 0.9rem">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
   </div>
 
   <div class="row">
@@ -86,8 +86,12 @@
         </app-question-badge>
       </label>
       <div class="form-check form-switch">
-        <input class="form-check-input bg-white shadow-none border-secondary" type="checkbox" role="switch"
+        <input class="form-check-input shadow-none border-secondary" type="checkbox" role="switch"
                (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
+        <div class="pt-1">
+          <span class="ms-2">{{transparentStatus ? 'Sí' : 'No'}}</span>
+
+        </div>
       </div>
     </div>
   </div>
