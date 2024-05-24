@@ -25,16 +25,16 @@
     <editor
       [init]="tinymceConfig"
     ></editor>
-    <label class="mt-2" style="font-size: 14px">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
+    <label class="mt-2" style="font-size: 0.9rem">Recorda usar un llenguatge respectuós, un text breu, clar i descriptiu de la teva proposta</label>
   </div>
 
   <div class="row">
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">Data de finalització</label>
       <p-calendar [(ngModel)]="date"  iconDisplay="input" [showIcon]="true"
                   [minDate]="minDate" [dateFormat]="'dd-mm-yy'" styleClass="w-100"/>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">
         Cens de vots minim
         <app-question-badge>
@@ -43,19 +43,19 @@
           </div>
         </app-question-badge>
       </label>
-      <div class="input-group mb-3">
+      <div class="input-group">
         <input type="number" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="minVotes" max="100" min="0">
         <span class="input-group-text bg-primary text-white">%</span>
       </div>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">Estat</label>
       <select class="form-select bg-white shadow-none border-secondary" [(ngModel)]="status">
         <option selected [value]="'active'">Activa</option>
         <option [value]="'pending'">Pendent</option>
       </select>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">
         Tipus
         <app-question-badge>
@@ -75,7 +75,7 @@
         <option [value]="'equal'">Igualitari</option>
       </select>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">
         Transparència
         <app-question-badge>
@@ -86,8 +86,12 @@
         </app-question-badge>
       </label>
       <div class="form-check form-switch">
-        <input class="form-check-input bg-white shadow-none border-secondary" type="checkbox" role="switch"
+        <input class="form-check-input shadow-none border-secondary" type="checkbox" role="switch"
                (click)="setTransparentStatus()" [(ngModel)]="transparentStatus">
+        <div class="pt-1">
+          <span class="ms-2">{{transparentStatus ? 'Sí' : 'No'}}</span>
+
+        </div>
       </div>
     </div>
   </div>
@@ -96,12 +100,21 @@
 
   <div class="row" >
     <div class="d-flex mb-3">
-      <label class="form-label d-flex w-100z">Opcions</label>
+      <label class="form-label d-flex w-100 mb-0">Opcions</label>
 
-      <div class="btn btn-sm btn-complementary ms-auto" (click)="addOption()" style="width: 180px">
+      <div class="btn btn-sm btn-complementary ms-auto d-none d-md-block" (click)="addOption()" style="width: 180px">
         Afegir opció
       </div>
     </div>
+
+    <div class="d-block d-md-none mb-3" >
+      <button class="btn btn-sm btn-complementary w-100" (click)="addOption()">
+        Afegir opció
+
+      </button>
+    </div>
+
+
     <div *ngFor="let option of options, let i = index" class="col-12 col-md-3">
       <div class="input-group mb-3">
         <input type="text" class="form-control bg-white shadow-none border-secondary" [(ngModel)]="option.option" placeholder="Opció {{options.length - i}}">
