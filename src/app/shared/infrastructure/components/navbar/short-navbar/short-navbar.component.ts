@@ -2,7 +2,16 @@ import {Component, TemplateRef} from '@angular/core';
 import {
   UserProfileSelectorComponent
 } from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbAccordionBody,
+  NgbAccordionButton, NgbAccordionCollapse,
+  NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem,
+  NgbDropdown,
+  NgbDropdownItem,
+  NgbDropdownMenu,
+  NgbDropdownToggle,
+  NgbModal
+} from "@ng-bootstrap/ng-bootstrap";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {
   UserProfileButtonComponent
@@ -15,7 +24,17 @@ import {
     UserProfileSelectorComponent,
     RouterLink,
     RouterLinkActive,
-    UserProfileButtonComponent
+    UserProfileButtonComponent,
+    NgbDropdown,
+    NgbDropdownItem,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
+    NgbAccordionDirective,
+    NgbAccordionItem,
+    NgbAccordionHeader,
+    NgbAccordionButton,
+    NgbAccordionCollapse,
+    NgbAccordionBody
   ],
   templateUrl: './short-navbar.component.html',
   styleUrl: './short-navbar.component.scss'
@@ -25,7 +44,7 @@ export class ShortNavbarComponent {
     {route: '/energy-stats/community', label: 'La meva comunitat'},
     {route: '/energy-stats/my-cup', label: 'El meu CUPS'},
     {route: '/energy-stats/share', label: 'Compartir energia'},
-    {route: '/energy-stats/governance', label: 'Governança'},
+    // {route: '/energy-stats/governance', label: 'Governança'},
     {route: '/energy-stats/data-source-health', label: 'Status'}
   ]
 
