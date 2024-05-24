@@ -24,7 +24,7 @@
           </button>
         </div>
 
-        <div *ngIf="proposal.status.toLowerCase() == ('pending' || 'expired')">
+        <div *ngIf="proposal.status.toLowerCase() == ('pending' || 'expired') && userRole != 'USER'">
           <hr class="my-5" style="max-width: 750px">
           <p *ngIf="proposal.status.toLowerCase() == 'pending'">
             Fes clic a Activar si acceptes la proposta o Descartar si vols eliminar-la

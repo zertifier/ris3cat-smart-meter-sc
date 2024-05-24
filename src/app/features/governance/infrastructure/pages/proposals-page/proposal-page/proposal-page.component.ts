@@ -51,6 +51,7 @@ export class ProposalPageComponent implements OnDestroy {
   totalMembers: number = 0;
   alreadyVoted: boolean = false;
   userId!: number;
+  userRole!: string;
   customerId?: number;
   sanitizedHtml!: SafeHtml;
   subscriptions: Subscription[] = [];
@@ -72,6 +73,7 @@ export class ProposalPageComponent implements OnDestroy {
 
     this.userId = user.id
     this.customerId = user.customer_id
+    this.userRole = user.role
     if (this.id && !this.proposal) this.getProposal()
 
 

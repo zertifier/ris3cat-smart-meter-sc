@@ -48,7 +48,7 @@
         <span class="input-group-text bg-primary text-white">%</span>
       </div>
     </div>
-    <div class="col-12 col-md-2 mt-3 mt-md-0">
+    <div *ngIf="userRole != 'USER'"  class="col-12 col-md-2 mt-3 mt-md-0">
       <label class="form-label">Estat</label>
       <select class="form-select bg-white shadow-none border-secondary" [(ngModel)]="status">
         <option selected [value]="'active'">Activa</option>
