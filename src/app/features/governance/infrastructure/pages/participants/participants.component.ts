@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {PaginatorModule} from "primeng/paginator";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {Subscription} from "rxjs";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Participant, ParticipantsService, ParticipantStatus} from "../../services/participants.service";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-participants',
@@ -26,8 +27,8 @@ export class ParticipantsComponent {
   communityId?: number;
   loading: boolean = true
 
-  participants: Participant[] = [
-  ]
+  participants: Participant[] = []
+
   constructor(
     private participantsService: ParticipantsService,
     private userStore: UserStoreService,
@@ -37,7 +38,7 @@ export class ParticipantsComponent {
       this.userStore.selectOnly(this.userStore.$.communityId).subscribe((community) => {
         this.communityId = community
         console.log(community)
-        this.getParticipantsByStatus('active')
+        this.getParticipantsByStatus(this.participantStatus)
       })
     )
   }
@@ -54,7 +55,6 @@ export class ParticipantsComponent {
           },
           error: err => {
             this.participants = []
-            console.log(this.participants.length)
             this.loading = false
           }
         })
@@ -68,7 +68,6 @@ export class ParticipantsComponent {
           },
           error: err => {
             this.participants = []
-            console.log(this.participants.length)
             this.loading = false
           }
         })
@@ -76,4 +75,41 @@ export class ParticipantsComponent {
     }
   }
 
+  activateParticipant(id: number) {
+    this.subscriptions.push(
+      this.participantsService.activateParticipant(id).subscribe({
+        next: resutl => {
+
+          Swal.fire({
+            icon: "success",
+            title: "El participant s'ha activat correctament",
+            confirmButtonText: 'Entès',
+            customClass: {
+              confirmButton: 'btn btn-secondary-force'
+            }
+          }).then(() => {
+            this.getParticipantsByStatus(this.participantStatus)
+          })
+        },
+        error: err => {
+          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+            console.log("ERRROR", err)
+          })
+        }
+      })
+    )
+  }
+
+
+  swalErrorDisplay(message: string) {
+    return Swal.fire({
+      icon: 'error',
+      title: 'ERROR',
+      text: message,
+      confirmButtonText: 'Entès',
+      customClass: {
+        confirmButton: 'btn btn-secondary-force'
+      }
+    })
+  }
 }
