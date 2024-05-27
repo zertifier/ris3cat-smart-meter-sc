@@ -1,0 +1,37 @@
+import { Injectable } from '@angular/core';
+import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../../../environments/environment";
+
+export interface Participant  {
+  name: string,
+  email: string,
+  customerId?: number,
+  id?: number,
+  shares?: string,
+  status: ParticipantStatus
+}
+
+export type ParticipantStatus = 'active' | 'pending'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ParticipantsService {
+  // baseUrl = environment.zertipower_url
+  baseUrl= 'http://localhost:3000'
+
+  constructor(
+    private httpClient: HttpClient
+  ) { }
+
+
+  getParticipants(communityId: number, status: ParticipantStatus){
+    return this.httpClient.get<HttpResponse<Participant[]>>(`${this.baseUrl}/shares/participants/community/${communityId}/status/${status}`)
+  }
+  getParticipantsFilter(communityId: number, status: ParticipantStatus, filterWord: string){
+    return this.httpClient.get<HttpResponse<Participant[]>>(`${this.baseUrl}/shares/participants/community/${communityId}/status/${status}/filter/${filterWord}`)
+  }
+
+
+}

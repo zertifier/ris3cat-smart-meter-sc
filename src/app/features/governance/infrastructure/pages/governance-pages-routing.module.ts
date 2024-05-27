@@ -34,6 +34,13 @@ export const routes: Routes = [
         data: {
           name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
         }
+      },
+      {
+        path: 'participants',
+        loadComponent: () => import('./participants/participants.component').then(c => c.ParticipantsComponent),
+        data: {
+          name: ENERGY_STATS_ROUTE_NAMES.GOVERNANCE,
+        }
       }
     ]
   }
