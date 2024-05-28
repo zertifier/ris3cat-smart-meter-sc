@@ -37,6 +37,10 @@ export class ParticipantsService {
     return this.httpClient.put<HttpResponse<Participant>>(`${this.baseUrl}/shares/participants/${id}/activate`,{shares})
   }
 
+  updateParticipant(participant: Participant){
+    return this.httpClient.put<HttpResponse<Participant>>(`${this.baseUrl}/shares/participants/${participant.id}`, participant)
+  }
+
   removeParticipant(id: number){
     return this.httpClient.delete<HttpResponse<Participant>>(`${this.baseUrl}/shares/participants/${id}`)
   }

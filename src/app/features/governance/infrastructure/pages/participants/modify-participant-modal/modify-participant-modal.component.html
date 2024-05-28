@@ -1,0 +1,23 @@
+<div class="modal-header border-0">
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body pt-0">
+
+  <div class="mb-3">
+    <label class="form-label">Nom i Cognoms</label>
+    <input class="form-control" placeholder="nom" [(ngModel)]="participant.name">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input class="form-control" placeholder="email" [(ngModel)]="participant.email">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Pes de vot</label>
+    <input class="form-control" placeholder="Pes de vot" [(ngModel)]="participant.shares">
+  </div>
+
+</div>
+<div class="modal-footer border-0 justify-content-center">
+  <button type="button" class="btn btn-outline-dark" (click)="saveParticipant()">Guardar</button>
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Tancar</button>
+</div>

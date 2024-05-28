@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {PaginatorModule} from "primeng/paginator";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {Subscription} from "rxjs";
@@ -6,6 +6,8 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Participant, ParticipantsService, ParticipantStatus} from "../../services/participants.service";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import Swal from "sweetalert2";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModifyParticipantModalComponent} from "./modify-participant-modal/modify-participant-modal.component";
 
 @Component({
   selector: 'app-participants',
@@ -19,19 +21,22 @@ import Swal from "sweetalert2";
   templateUrl: './participants.component.html',
   styleUrl: './participants.component.scss'
 })
-export class ParticipantsComponent {
+export class ParticipantsComponent implements OnDestroy{
 
   filterText!: string
-  subscriptions: Subscription[] = [];
   participantStatus: ParticipantStatus = "active";
   communityId?: number;
   loading: boolean = true
 
   participants: Participant[] = []
 
+  subscriptions: Subscription[] = [];
+
+
   constructor(
     private participantsService: ParticipantsService,
     private userStore: UserStoreService,
+    private modalService: NgbModal
   ) {
 
     this.subscriptions.push(
@@ -152,6 +157,17 @@ export class ParticipantsComponent {
   }
 
 
+  openModifyModal(participant: Participant){
+    const modalRef = this.modalService.open(ModifyParticipantModalComponent)
+    modalRef.componentInstance.participant = {...participant};
+
+    this.subscriptions.push(
+      modalRef.closed.subscribe(() => {
+        this.getParticipantsByStatus(this.participantStatus)
+      })
+    )
+  }
+
   swalErrorDisplay(message: string) {
     return Swal.fire({
       icon: 'error',
@@ -162,5 +178,10 @@ export class ParticipantsComponent {
         confirmButton: 'btn btn-secondary-force'
       }
     })
+  }
+
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe())
   }
 }

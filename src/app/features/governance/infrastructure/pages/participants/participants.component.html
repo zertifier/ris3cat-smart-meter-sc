@@ -44,7 +44,7 @@
              class="fa-solid fa-check me-2 p-2 text-white rounded-5 bg-tertiary"></i>
           <i class="fa-solid fa-xmark p-2 text-white rounded-5 bg-tertiary"></i>-->
 
-          <button *ngIf="participantStatus == 'active'" class="btn bg-tertiary text-white rounded-5 me-2">
+          <button *ngIf="participantStatus == 'active'" class="btn bg-tertiary text-white rounded-5 me-2" (click)="openModifyModal(participant)">
             <i style="font-size: 15px" class="fa-solid fa-pencil"></i>
           </button>
           <button *ngIf="participantStatus == 'pending'" class="btn bg-tertiary text-white rounded-5 me-2" (click)="activateParticipant(participant.id!)">
