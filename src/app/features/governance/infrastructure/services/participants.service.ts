@@ -18,8 +18,8 @@ export type ParticipantStatus = 'active' | 'pending'
   providedIn: 'root'
 })
 export class ParticipantsService {
-  // baseUrl = environment.zertipower_url
-  baseUrl= 'http://localhost:3000'
+  baseUrl = environment.zertipower_url
+  // baseUrl= 'http://localhost:3000'
 
   constructor(
     private httpClient: HttpClient
