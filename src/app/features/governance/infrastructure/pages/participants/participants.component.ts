@@ -37,7 +37,6 @@ export class ParticipantsComponent {
     this.subscriptions.push(
       this.userStore.selectOnly(this.userStore.$.communityId).subscribe((community) => {
         this.communityId = community
-        console.log(community)
         this.getParticipantsByStatus(this.participantStatus)
       })
     )
@@ -45,13 +44,14 @@ export class ParticipantsComponent {
 
 
   getParticipantsByStatus(status: ParticipantStatus) {
-    this.participantStatus = status
     if (this.filterText) {
       this.subscriptions.push(
         this.participantsService.getParticipantsFilter(this.communityId!, status, this.filterText || '').subscribe({
           next: response => {
             this.participants = response.data
             this.loading = false
+            this.participantStatus = status
+
           },
           error: err => {
             this.participants = []
@@ -65,6 +65,8 @@ export class ParticipantsComponent {
           next: response => {
             this.participants = response.data
             this.loading = false
+            this.participantStatus = status
+
           },
           error: err => {
             this.participants = []
@@ -76,28 +78,77 @@ export class ParticipantsComponent {
   }
 
   activateParticipant(id: number) {
-    this.subscriptions.push(
-      this.participantsService.activateParticipant(id).subscribe({
-        next: resutl => {
-
-          Swal.fire({
-            icon: "success",
-            title: "El participant s'ha activat correctament",
-            confirmButtonText: 'Entès',
-            customClass: {
-              confirmButton: 'btn btn-secondary-force'
+    Swal.fire({
+      title: "Acceptar aquest participant?",
+      icon: "question",
+      input: "number",
+      inputPlaceholder: "Pes de vot",
+      showCancelButton: true,
+      confirmButtonText: "Acceptar",
+      cancelButtonText: 'Tancar',
+      preConfirm : (shares: any) => {
+        this.subscriptions.push(
+          this.participantsService.activateParticipant(id, shares || 0).subscribe({
+            next: result => {
+              Swal.fire({
+                icon: "success",
+                title: "El participant s'ha activat correctament",
+                confirmButtonText: 'Entès',
+                customClass: {
+                  confirmButton: 'btn btn-secondary-force'
+                }
+              }).then(() => {
+                this.getParticipantsByStatus(this.participantStatus)
+              })
+            },
+            error: err => {
+              this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+                console.log("ERRROR", err)
+              })
             }
-          }).then(() => {
-            this.getParticipantsByStatus(this.participantStatus)
           })
-        },
-        error: err => {
-          this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
-            console.log("ERRROR", err)
+        )
+      }
+    })
+
+  }
+
+  removeParticipant(id: number) {
+    Swal.fire({
+      icon: "warning",
+      title: "El participant s'eliminarà permanentment",
+      confirmButtonText: 'Entès',
+      cancelButtonText: 'Tancar',
+      showCancelButton: true,
+      customClass: {
+        confirmButton: 'btn btn-secondary-force'
+      }
+    }).then((swalResult) => {
+      if (swalResult.isConfirmed)
+        this.subscriptions.push(
+          this.participantsService.removeParticipant(id).subscribe({
+            next: result => {
+
+              Swal.fire({
+                icon: "success",
+                title: "El participant s'ha eliminat correctament",
+                confirmButtonText: 'Entès',
+                customClass: {
+                  confirmButton: 'btn btn-secondary-force'
+                }
+              }).then(() => {
+                this.getParticipantsByStatus(this.participantStatus)
+              })
+            },
+            error: err => {
+              this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+                console.log("ERRROR", err)
+              })
+            }
           })
-        }
-      })
-    )
+        )
+    })
+
   }
 
 
