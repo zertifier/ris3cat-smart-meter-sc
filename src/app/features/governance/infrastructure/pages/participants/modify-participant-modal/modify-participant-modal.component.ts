@@ -25,7 +25,6 @@ export class ModifyParticipantModalComponent implements OnDestroy{
   }
 
   saveParticipant() {
-    console.log(this.participant)
     this.subscriptions.push(
       this.participantsService.updateParticipant(this.participant).subscribe({
         next: res => {

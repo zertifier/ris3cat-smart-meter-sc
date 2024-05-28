@@ -33,6 +33,10 @@ export class ParticipantsService {
     return this.httpClient.get<HttpResponse<Participant[]>>(`${this.baseUrl}/shares/participants/community/${communityId}/status/${status}/filter/${filterWord}`)
   }
 
+  getPendingQty(communityId: number){
+    return this.httpClient.get<HttpResponse<{qty: number}>>(`${this.baseUrl}/shares/participants/community/${communityId}/quantity`)
+  }
+
   activateParticipant(id: number, shares: number){
     return this.httpClient.put<HttpResponse<Participant>>(`${this.baseUrl}/shares/participants/${id}/activate`,{shares})
   }

@@ -26,7 +26,8 @@ export class ParticipantsComponent implements OnDestroy{
   filterText!: string
   participantStatus: ParticipantStatus = "active";
   communityId?: number;
-  loading: boolean = true
+  loading: boolean = true;
+  pendingQty: number = 0
 
   participants: Participant[] = []
 
@@ -43,6 +44,8 @@ export class ParticipantsComponent implements OnDestroy{
       this.userStore.selectOnly(this.userStore.$.communityId).subscribe((community) => {
         this.communityId = community
         this.getParticipantsByStatus(this.participantStatus)
+        this.getPendingQty(this.communityId!)
+
       })
     )
   }
@@ -56,7 +59,6 @@ export class ParticipantsComponent implements OnDestroy{
             this.participants = response.data
             this.loading = false
             this.participantStatus = status
-
           },
           error: err => {
             this.participants = []
@@ -82,12 +84,26 @@ export class ParticipantsComponent implements OnDestroy{
     }
   }
 
+  getPendingQty(communityId: number){
+    this.participantsService.getPendingQty(communityId).subscribe({
+      next: response => {
+        this.pendingQty = response.data.qty
+      },
+      error: err => {
+        this.swalErrorDisplay('Hi ha hagut un error amb la proposta. Espera uns minuts i torna-ho a intentar.').then(() => {
+          console.log("ERRROR", err)
+        })
+      }
+    })
+  }
+
   activateParticipant(id: number) {
     Swal.fire({
       title: "Acceptar aquest participant?",
       icon: "question",
       input: "number",
-      inputPlaceholder: "Pes de vot",
+      inputLabel: "Poder de vot",
+      inputPlaceholder: "p.e.: 5000",
       showCancelButton: true,
       confirmButtonText: "Acceptar",
       cancelButtonText: 'Tancar',
@@ -104,6 +120,8 @@ export class ParticipantsComponent implements OnDestroy{
                 }
               }).then(() => {
                 this.getParticipantsByStatus(this.participantStatus)
+                this.getPendingQty(this.communityId!)
+
               })
             },
             error: err => {
@@ -143,6 +161,8 @@ export class ParticipantsComponent implements OnDestroy{
                 }
               }).then(() => {
                 this.getParticipantsByStatus(this.participantStatus)
+                this.getPendingQty(this.communityId!)
+
               })
             },
             error: err => {
