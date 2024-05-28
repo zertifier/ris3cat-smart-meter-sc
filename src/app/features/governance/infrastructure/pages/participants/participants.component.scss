@@ -1,0 +1,34 @@
+@import '../../../../../../styles/colors';
+
+:host {
+  flex-grow: 1;
+}
+
+
+.delete-button{
+  padding: 4px 10px;
+}
+
+.icon-rounded {
+  background-color: $tertiary;
+  color: white; /* Assuming you want the icon color to be white */
+  border-radius: 50%;
+  padding: 10px; /* Adjust padding to your liking */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .icon-rounded {
+    background-color: $tertiary;
+    color: white; /* Assuming you want the icon color to be white */
+    border-radius: 50%;
+    padding: 8px; /* Adjust padding to your liking */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+}
