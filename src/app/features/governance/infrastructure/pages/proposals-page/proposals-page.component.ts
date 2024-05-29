@@ -7,7 +7,6 @@ import {FormsModule} from "@angular/forms";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import {htmlToText} from "html-to-text";
 import {Subscription} from "rxjs";
-import {state} from "@angular/animations";
 
 type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' | 'all';
 
