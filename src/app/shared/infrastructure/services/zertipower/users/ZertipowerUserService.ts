@@ -9,7 +9,7 @@ export class ZertipowerUserService {
   constructor(private readonly axios: Axios) {
   }
 
-  async getCups(id: number): Promise<CupsResponseDTO[]> {
+  async getCups(id: number): Promise<CupsResponseDTO[] | undefined> {
     const response = await this.axios.get<HttpResponse<CupsResponseDTO[]>>(`/users/${id}/cups`);
     return response.data.data;
   }
