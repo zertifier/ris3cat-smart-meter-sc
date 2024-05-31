@@ -16,6 +16,8 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 import {
   UserProfileButtonComponent
 } from "../../../../../features/user/infrastructure/components/user-profile/user-profile-button/user-profile-button.component";
+import {UserStoreService} from "../../../../../features/user/infrastructure/services/user-store.service";
+import {NgClass, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-short-navbar',
@@ -34,7 +36,9 @@ import {
     NgbAccordionHeader,
     NgbAccordionButton,
     NgbAccordionCollapse,
-    NgbAccordionBody
+    NgbAccordionBody,
+    NgIf,
+    NgClass
   ],
   templateUrl: './short-navbar.component.html',
   styleUrl: './short-navbar.component.scss'
@@ -48,7 +52,12 @@ export class ShortNavbarComponent {
     {route: '/energy-stats/data-source-health', label: 'Status'}
   ]
 
-  constructor(private readonly ngbModalService: NgbModal) {
+  userRole!: string | undefined
+  constructor(private readonly ngbModalService: NgbModal, private userStore: UserStoreService,) {
+    const user = this.userStore.snapshotOnly(state => state.user);
+
+    this.userRole = user?.role
+
 
   }
 
