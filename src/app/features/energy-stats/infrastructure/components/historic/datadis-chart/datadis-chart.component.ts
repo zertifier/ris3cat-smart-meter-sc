@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
-import {ChartDataset, DataChartComponent} from "../data-chart/data-chart.component";
+import {DataChartComponent} from "../data-chart/data-chart.component";
 import dayjs from "dayjs";
 import {combineLatest, Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
@@ -11,13 +11,14 @@ import {ChartResource} from "../../../../domain/ChartResource";
 import {ChartEntity} from "../../../../domain/ChartEntity";
 import {DateRange} from "../../../../domain/DateRange";
 import {ChartType} from "../../../../domain/ChartType";
-import {DatadisEnergyStat} from "../../../../../../shared/infrastructure/services/zertipower/DTOs/EnergyStatDTO";
-import {ZertipowerService} from "../../../../../../shared/infrastructure/services/zertipower/zertipower.service";
+import {DatadisEnergyStat} from "@shared/infrastructure/services/zertipower/DTOs/EnergyStatDTO";
+import {ZertipowerService} from "@shared/infrastructure/services/zertipower/zertipower.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {
   BreakPoints,
   ScreenBreakPointsService
-} from "../../../../../../shared/infrastructure/services/screen-break-points.service";
+} from "@shared/infrastructure/services/screen-break-points.service";
+import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 
 @Component({
   selector: 'app-datadis-chart',

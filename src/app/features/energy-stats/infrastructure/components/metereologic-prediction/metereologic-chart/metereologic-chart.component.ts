@@ -1,5 +1,6 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Chart} from "chart.js";
+import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 
 @Component({
   selector: 'app-metereologic-chart',
@@ -11,6 +12,8 @@ import {Chart} from "chart.js";
 export class MetereologicChartComponent implements AfterViewInit {
   @ViewChild('chartCanvas') canvas!: ElementRef;
   chart!: Chart;
+
+  @Input() dataset: ChartDataset[] = [];
 
 
   ngAfterViewInit(): void {
@@ -38,7 +41,6 @@ export class MetereologicChartComponent implements AfterViewInit {
             beginAtZero: true
           }
         },
-
       }
     });
   }
