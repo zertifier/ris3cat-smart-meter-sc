@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {MetereologicChartComponent} from "./metereologic-chart/metereologic-chart.component";
+import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
+import {StatsColors} from "../../../domain/StatsColors";
 
 @Component({
   selector: 'app-metereologic-prediction',
@@ -11,6 +13,13 @@ import {MetereologicChartComponent} from "./metereologic-chart/metereologic-char
   styleUrl: './metereologic-prediction.component.scss'
 })
 export class MetereologicPredictionComponent {
+  datasets: ChartDataset[] = [
+    {
+      color: StatsColors.COMMUNITY_PRODUCTION,
+      label: 'Producció',
+      data: [1, 2, 3, 4, 5, 6, 7],
+    }
+  ];
   elements: {
     label: string
     image: string

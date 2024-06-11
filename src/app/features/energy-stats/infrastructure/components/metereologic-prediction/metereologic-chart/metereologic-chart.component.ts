@@ -11,28 +11,28 @@ import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 })
 export class MetereologicChartComponent implements AfterViewInit {
   @ViewChild('chartCanvas') canvas!: ElementRef;
-  chart!: Chart;
+  chart!: Chart<"bar", unknown[], string>;
 
   @Input() dataset: ChartDataset[] = [];
+  @Input() labels: string[] = ['Dillluns', "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte", "Diumenge"];
 
 
   ngAfterViewInit(): void {
     this.chart = new Chart(this.canvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: ['', '', '', '', '', '', ''],
-        datasets: [
-          {
-            label: 'Consum',
-            data: [12, 19, 3, 5, 2, 3, 6],
-            borderWidth: 1
-          },
-          {
-            label: 'Producció',
-            data: [3, 5, 2, 3, 6, 12, 19].map(d => d * Math.random() + 1),
-            borderWidth: 1
+        labels: this.labels,
+        datasets: this.dataset.map(d => {
+          return {
+            data: d.data,
+            label: d.label,
+            backgroundColor: d.color,
+            order: d.order,
+            stack: d.stack,
+            borderRadius: 10,
+            borderWidth: 1,
           }
-        ]
+        })
       },
       options: {
         aspectRatio: 4,
@@ -41,9 +41,12 @@ export class MetereologicChartComponent implements AfterViewInit {
             beginAtZero: true
           }
         },
+        plugins: {
+          legend: {
+            display: false,
+          }
+        }
       }
     });
   }
-
-
 }
