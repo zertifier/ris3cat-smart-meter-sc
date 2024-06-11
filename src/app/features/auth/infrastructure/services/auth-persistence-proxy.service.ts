@@ -19,6 +19,7 @@ export class AuthPersistenceProxyService {
 
     if (!refreshToken) {
       this.authStore.removeTokens();
+      this.authStore.removeOauthCode()
       return;
     }
 
