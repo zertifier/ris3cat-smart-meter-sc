@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
 import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
-import {JsonRpcProvider, Wallet} from "ethers";
+import {BaseContract, Contract, ethers, getNumber, JsonRpcProvider, Wallet} from "ethers";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {firstValueFrom} from "rxjs";
 import {Router} from "@angular/router";
+import contractAbi from '../../../../assets/ethers/ERC20-abi.json';
+
 
 interface Rpc {
   id: number;
@@ -79,5 +81,19 @@ export class EthersService {
 
   updateWorkingRpc() {
     return this.httpClient.get<HttpResponse<RpcData>>(`${this.rpcsBaseUrl}/100/rpc`)
+  }
+
+  async getEkwBalance(walletAddress: string){
+    try {
+      const provider = new JsonRpcProvider(await this.getWorkingRpc())
+
+      const contract = new Contract(environment.erc20_contract, contractAbi, provider)
+
+      // @ts-ignore
+      return getNumber(await contract.balanceOf(walletAddress))
+    }catch (error){
+      console.log(error, "ERROR")
+      return 0
+    }
   }
 }
