@@ -29,7 +29,7 @@ export class DaoService {
   }
   // baseUrl = environment.zertipower_url
   baseUrl= 'http://localhost:3000'
-  rpcsBaseUrl= 'https://zertirpc.zertifier.com'
+  rpcsBaseUrl = environment.zertirpcs_url || 'https://zertirpc.zertifier.com'
 
   postDao(communityId: number, daoInfo: {daoAddress: string, daoName: string, daoSymbol: string}){
     return this.httpClient.post<HttpResponse<any>>(`${this.baseUrl}/communities/${communityId}/dao`, daoInfo)

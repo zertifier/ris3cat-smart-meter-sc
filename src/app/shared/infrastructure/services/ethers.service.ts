@@ -27,7 +27,7 @@ interface RpcData {
 })
 export class EthersService {
   private rpc: string = ''
-  rpcsBaseUrl = 'https://zertirpc.zertifier.com'
+  rpcsBaseUrl = environment.zertirpcs_url || 'https://zertirpc.zertifier.com'
 
   constructor(
     private httpClient: HttpClient,
