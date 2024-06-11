@@ -36,7 +36,12 @@ export class DaoService {
   }
 
   createContract(){
-    const contract = new ContractFactory(contractAbi, contractBytecode.bytecode)
+    const user = this.userStore.snapshotOnly(state => state.user);
+    if (!user) {
+      return
+    }
+
+    const contract = new ContractFactory(contractAbi, contractBytecode.bytecode, user.wallet)
   }
 
 

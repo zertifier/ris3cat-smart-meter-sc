@@ -6,6 +6,7 @@ import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {firstValueFrom} from "rxjs";
+import {Router} from "@angular/router";
 
 interface Rpc {
   id: number;
@@ -32,13 +33,20 @@ export class EthersService {
   constructor(
     private httpClient: HttpClient,
     private zertiauthApiService: ZertiauthApiService,
-    private authStore: AuthStoreService
+    private authStoreService: AuthStoreService,
+    private router: Router
   ) {
   }
 
 
   async getWalletFromAuthPk() {
-    const oAuthCode = this.authStore.getOauthCode()
+    const oAuthCode = this.authStoreService.getOauthCode()
+    if (!oAuthCode){
+      this.authStoreService.resetDefaults()
+      const urlTree = this.router.createUrlTree(['/auth']);
+      await this.router.navigateByUrl(urlTree);
+    }
+
     try {
       const privateKeyResponse = await firstValueFrom(this.zertiauthApiService.getPrivateKey(oAuthCode))
       const provider = new JsonRpcProvider(await this.getWorkingRpc())
@@ -63,7 +71,6 @@ export class EthersService {
           }
         },
         error: () => {
-          console.log("ERRRORRRR")
           resolve(environment.defaultRpc);
         }
       });

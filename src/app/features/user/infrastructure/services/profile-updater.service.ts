@@ -49,7 +49,6 @@ export class ProfileUpdaterService {
     let user: UserProfile = await this.findUserProfileById(userId);
     const wallet = await this.ethersService.getWalletFromAuthPk()
     user.wallet = wallet
-    console.log(user, "USERR")
     this.userStore.patchState({user});
   }
 
