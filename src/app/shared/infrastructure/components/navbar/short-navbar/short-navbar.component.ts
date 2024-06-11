@@ -42,7 +42,7 @@ import {
 export class ShortNavbarComponent {
   buttons: { label: string, route: string }[] = [
     {route: '/energy-stats/community', label: 'La meva comunitat'},
-    {route: '/energy-stats/my-cup', label: 'El meu CUPS'},
+    {route: '/energy-stats/my-cup', label: 'El meu comptador'},
     {route: '/energy-stats/share', label: 'Compartir energia'},
     // {route: '/energy-stats/governance', label: 'Governança'},
     {route: '/energy-stats/data-source-health', label: 'Status'}
