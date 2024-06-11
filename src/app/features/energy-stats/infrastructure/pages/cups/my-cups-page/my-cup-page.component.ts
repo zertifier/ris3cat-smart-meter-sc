@@ -25,6 +25,7 @@ import {getMonth} from "../../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
+import {SelectCupsService} from "../../../../actions/select-cups.service";
 
 
 @Component({
@@ -112,7 +113,8 @@ export class MyCupPageComponent implements OnInit {
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly userStore: UserStoreService,
-    private readonly monitoringStore: MonitoringStoreService
+    private readonly monitoringStore: MonitoringStoreService,
+    private readonly selectCupsAction: SelectCupsService
   ) {
   }
 
@@ -120,6 +122,9 @@ export class MyCupPageComponent implements OnInit {
     await this.monitoringService.start();
 
     this.subscriptions.push(
+      this.selectedCupsIndex$.subscribe(index => {
+        this.selectCupsAction.run(index);
+      }),
       this.monitoringService
         .getPowerFlow()
         .subscribe(value => {
