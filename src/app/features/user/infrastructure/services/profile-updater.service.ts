@@ -47,8 +47,7 @@ export class ProfileUpdaterService {
 
   private async updateUserData(userId: number) {
     let user: UserProfile = await this.findUserProfileById(userId);
-    const wallet = await this.ethersService.getWalletFromAuthPk()
-    user.wallet = wallet
+    user.wallet = await this.ethersService.getWalletFromAuthPk()
     this.userStore.patchState({user});
   }
 

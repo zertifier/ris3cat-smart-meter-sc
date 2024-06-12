@@ -2,19 +2,14 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "defaultAdmin",
-        "type": "address"
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
       },
       {
-        "internalType": "address",
-        "name": "pauser",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -554,7 +549,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "value",
+        "name": "amount",
         "type": "uint256"
       }
     ],

@@ -29,7 +29,7 @@ type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' | '
   templateUrl: './proposals-page.component.html',
   styleUrl: './proposals-page.component.scss'
 })
-export class ProposalsPageComponent implements OnDestroy{
+export class ProposalsPageComponent implements OnDestroy {
 
   proposals: Proposal[] = []
   proposalType: ProposalType = 'all'
@@ -38,6 +38,7 @@ export class ProposalsPageComponent implements OnDestroy{
   filterText!: string
 
   subscriptions: Subscription[] = [];
+
   constructor(
     private proposalsService: ProposalsService,
     private userStore: UserStoreService,
@@ -103,42 +104,46 @@ export class ProposalsPageComponent implements OnDestroy{
     return this.proposalsService.statusTranslation(status)
   }
 
-  createDao(){
-   /* this.ethersService.getWorkingRpc().subscribe({
-      next: (response) => {
-        console.log(response, "RESPONSE")
+  async createDao() {
+    const name = 'DAO CCE Montolivet'
+    const symbol = 'CCE1'
+    const contractAddress = await this.daoService.createContract(name, symbol)
+    if (contractAddress) {
+      this.saveDaoToDb(contractAddress.toString(), name, symbol)
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Hi ha hagut un error creant la DAO'
+      })
+    }
+  }
 
-        if (response.data){
-          response.data['100'].find((element) => element.working = true)
-        }
-        Swal.fire({
-          icon: 'success',
-          title: 'DAO creada correctament'
-        })
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Hi ha hagut un error creant la DAO'
-        })
-      }
-    })*/
+  saveDaoToDb(daoAddress: string, daoName: string, daoSymbol: string) {
+    this.subscriptions.push(
+      this.daoService.postDao(this.communityId, {
+        daoAddress,
+        daoName,
+        daoSymbol
+      })
+        .subscribe({
+          next: (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'DAO creada correctament'
+            })
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Hi ha hagut un error guardant la DAO'
+            })
+          }
+        }))
+  }
 
-
-    // this.daoService.postDao(this.communityId, {daoAddress: '0x', daoName: 'DAO CCE Montolivet', daoSymbol: 'CCE1'}).subscribe({
-    //   next: (response) => {
-    //     Swal.fire({
-    //       icon: 'success',
-    //       title: 'DAO creada correctament'
-    //     })
-    //   },
-    //   error: (error) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Hi ha hagut un error creant la DAO'
-    //     })
-    //   }
-    // })
+  async mintTokens(){
+    const mintTx = await this.ethersService.mintTokens('0xF677cc5290a206d85DA400279C7548C8002D721B', 17000)
+    console.log(mintTx)
   }
 
   ngOnDestroy(): void {

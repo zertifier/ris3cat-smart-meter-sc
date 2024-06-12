@@ -1,13 +1,15 @@
 import {Injectable} from '@angular/core';
 import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
 import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
-import {BaseContract, Contract, ethers, getNumber, JsonRpcProvider, Wallet} from "ethers";
+import {BaseContract, Contract, ethers, formatEther, getNumber, JsonRpcProvider, Wallet} from "ethers";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {firstValueFrom} from "rxjs";
 import {Router} from "@angular/router";
-import contractAbi from '../../../../assets/ethers/ERC20-abi.json';
+import erc20ContractAbi from '../../../../assets/ethers/ERC20-abi.json';
+import daoContractAbi from '../../../../assets/ethers/DAO-abi.json';
+import {UserStoreService} from "../../../features/user/infrastructure/services/user-store.service";
 
 
 interface Rpc {
@@ -29,21 +31,22 @@ interface RpcData {
   providedIn: 'root'
 })
 export class EthersService {
-  private rpc: string = ''
+  private rpc: string = environment.defaultRpc
   rpcsBaseUrl = environment.zertirpcs_url || 'https://zertirpc.zertifier.com'
 
   constructor(
     private httpClient: HttpClient,
     private zertiauthApiService: ZertiauthApiService,
     private authStoreService: AuthStoreService,
-    private router: Router
+    private router: Router,
+    private userStore: UserStoreService,
   ) {
   }
 
 
   async getWalletFromAuthPk() {
     const oAuthCode = this.authStoreService.getOauthCode()
-    if (!oAuthCode){
+    if (!oAuthCode) {
       this.authStoreService.resetDefaults()
       const urlTree = this.router.createUrlTree(['/auth']);
       await this.router.navigateByUrl(urlTree);
@@ -54,9 +57,12 @@ export class EthersService {
       const provider = new JsonRpcProvider(await this.getWorkingRpc())
 
       return new Wallet(privateKeyResponse.privateKey, provider)
-    }catch (error){
+    } catch (error) {
       console.log(error)
-      return undefined
+      this.authStoreService.resetDefaults()
+      const urlTree = this.router.createUrlTree(['/auth']);
+      await this.router.navigateByUrl(urlTree);
+      return
     }
 
   }
@@ -67,7 +73,8 @@ export class EthersService {
         next: (rpc) => {
           if (rpc.data) {
             const workingRpc = rpc.data['100'].find((element) => element.working === true);
-            resolve(workingRpc?.rpc || environment.defaultRpc);
+            this.rpc = workingRpc?.rpc || environment.defaultRpc
+            resolve(this.rpc);
           } else {
             resolve(environment.defaultRpc);
           }
@@ -83,17 +90,53 @@ export class EthersService {
     return this.httpClient.get<HttpResponse<RpcData>>(`${this.rpcsBaseUrl}/100/rpc`)
   }
 
-  async getEkwBalance(walletAddress: string){
-    try {
-      const provider = new JsonRpcProvider(await this.getWorkingRpc())
+  getCurrentRpc(){
+    return this.rpc
+  }
 
-      const contract = new Contract(environment.erc20_contract, contractAbi, provider)
+  async getEKWBalance(walletAddress: string) {
+    try {
+      const provider = new JsonRpcProvider(this.rpc)
+
+      const contract = new Contract(environment.erc20_contract, erc20ContractAbi, provider)
 
       // @ts-ignore
       return getNumber(await contract.balanceOf(walletAddress))
-    }catch (error){
+    } catch (error) {
       console.log(error, "ERROR")
       return 0
     }
+  }
+
+  async getChainBalance(walletAddress: string) {
+    try {
+      const provider = new JsonRpcProvider(this.rpc)
+      return parseFloat(formatEther(await provider.getBalance(walletAddress)))
+    } catch (error) {
+      console.log(error, "ERROR")
+      return 0
+    }
+  }
+
+  async mintTokens(walletTo: string, amount: number) {
+    try {
+      const user = this.userStore.snapshotOnly(state => state.user);
+      if (!user) {
+        return
+      }
+
+
+      const provider = new JsonRpcProvider(this.rpc)
+      const contract = new Contract('0x7D33eC4451E4035988d9638b30b18681dE6B0dc6', daoContractAbi, user.wallet)
+
+      // @ts-ignore
+      let tx = await contract.mint(walletTo, amount)
+      tx = await tx.wait()
+      return tx
+    }catch (e){
+      console.log(e)
+      return
+    }
+
   }
 }
