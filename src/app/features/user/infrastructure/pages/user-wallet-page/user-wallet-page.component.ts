@@ -10,6 +10,9 @@ import {Subscription} from "rxjs";
 import {VotesService} from "../../../../governance/infrastructure/services/votes.service";
 import Swal from "sweetalert2";
 import {DaoService} from "../../../../governance/infrastructure/services/dao.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {TransferModalComponent} from "./transfer-modal/transfer-modal.component";
+import {NoRoundDecimalPipe} from "../../../../../shared/infrastructure/pipes/no-round-decimal.pipe";
 
 @Component({
   selector: 'app-user-wallet-page',
@@ -18,7 +21,8 @@ import {DaoService} from "../../../../governance/infrastructure/services/dao.ser
     AsyncPipe,
     FormsModule,
     QuestionBadgeComponent,
-    DecimalPipe
+    DecimalPipe,
+    NoRoundDecimalPipe
   ],
   templateUrl: './user-wallet-page.component.html',
   styleUrl: './user-wallet-page.component.scss'
@@ -39,16 +43,9 @@ export class UserWalletPageComponent implements OnDestroy {
   constructor(
     private userStore: UserStoreService,
     private ethersService: EthersService,
-    private votesService: VotesService,
-    private daoService: DaoService
+    private daoService: DaoService,
+    private modalService: NgbModal
   ) {
-    /*this.subscriptions.push(
-      this.wallet$.subscribe((wallet) => {
-        if (wallet)
-          this.getAllBalances(wallet)
-      })
-    )*/
-
     this.subscriptions.push(
       this.userStore$.subscribe((store) => {
         if (store && store.cups[0] && store.user?.wallet_address){
@@ -73,6 +70,11 @@ export class UserWalletPageComponent implements OnDestroy {
 
   }
 
+  openTransferModal(type: 'DAO' | 'XDAI' | 'EKW', currentAmount: number){
+    const modalRef = this.modalService.open(TransferModalComponent, {size: 'lg'})
+    modalRef.componentInstance.type = type
+    modalRef.componentInstance.currentAmount = currentAmount
+  }
 
   swalErrorDisplay(message: string) {
     return Swal.fire({

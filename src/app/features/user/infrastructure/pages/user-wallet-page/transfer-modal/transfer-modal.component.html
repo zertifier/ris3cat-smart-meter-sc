@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h4 class="modal-title">Transferència</h4>
+  <button type="button" class="btn-close shadow-none" aria-label="Close"
+          (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body">
+
+  <div>
+    <label class="form-label">
+      Saldo
+    </label>
+    <div class="d-block d-lg-flex">
+      <div class="input-group form-div-width">
+        <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none"
+               [ngModel]="currentAmount| noRoundDecimal: 4" >
+        <button class="btn btn-tertiary rounded-end-3 form-button" type="button">{{ type }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3">
+    <label class="form-label">
+      Destinatari
+    </label>
+    <div class="d-block">
+      <input type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none"
+             placeholder="exemple@correu.com / 0xA" [(ngModel)]="toDirection">
+    </div>
+    <small>Escriu el correu o número d'identitat del destinatari</small>
+  </div>
+
+  <div>
+    <label class="form-label">
+      Quantitat
+    </label>
+    <div class="d-block d-lg-flex">
+      <div class="input-group form-div-width">
+        <input type="number" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none" placeholder="000"
+               [ngModel]="amountToTransfer">
+        <button class="btn btn-tertiary rounded-end-3 form-button" type="button">MAX</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

@@ -10,10 +10,10 @@
           </div>
         </app-question-badge>
       </label>
-      <input readonly id="wallet" type="text" class="form-control form-control-lg bg-white border-secondary border-2" [value]="wallet$ | async">
+      <input readonly id="wallet" type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none" [value]="wallet$ | async">
     </div>
 
-    <hr class="my-3 border-tertiary border-2" style="max-width: 1040px;">
+    <hr class="my-4 border-tertiary border-2" style="max-width: 1040px;">
     <p class="mb-5">Per a relatizar una transferència, tria que vols traspassar</p>
 
     <div class="my-3">
@@ -28,12 +28,14 @@
       </label>
       <div class="d-block d-lg-flex">
         <div class="input-group form-div-width">
-          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2" placeholder=""
-                 [ngModel]="ekwBalance | number:'1.0-3'">
+          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none" placeholder=""
+                 [ngModel]="ekwBalance | noRoundDecimal: 4">
           <button class="btn btn-tertiary rounded-end-3 form-button" type="button">EKW</button>
 
         </div>
-        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button">Transferir saldo</button>
+        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button" (click)="openTransferModal('EKW', ekwBalance)">
+          Transferir saldo
+        </button>
       </div>
 
     </div>
@@ -50,12 +52,14 @@
       </label>
       <div class="d-block d-lg-flex">
         <div class="input-group form-div-width">
-          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2" placeholder=""
-                 [ngModel]="chainBalance | number:'1.0-3'">
+          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none" placeholder=""
+                 [ngModel]="chainBalance | noRoundDecimal: 4">
           <button class="btn btn-tertiary rounded-end-3 form-button" type="button">XDAI</button>
 
         </div>
-        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button">Transferir XDAI</button>
+        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button" (click)="openTransferModal('XDAI', chainBalance)">
+          Transferir XDAI
+        </button>
 
       </div>
 
@@ -73,10 +77,12 @@
       </label>
       <div class="d-block d-lg-flex">
         <div class="input-group form-div-width">
-          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2" placeholder="" [ngModel]="voteWeight">
+          <input readonly type="text" class="form-control form-control-lg bg-white border-secondary border-2 shadow-none" placeholder="" [ngModel]="voteWeight">
           <button class="btn btn-tertiary rounded-end-3 form-button" type="button">DAO</button>
         </div>
-        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button">Transferir participacions</button>
+        <button class="btn btn-secondary bg-primary ms-0 ms-lg-3 mt-2 mt-lg-0 rounded-3" type="button" (click)="openTransferModal('DAO', voteWeight)">
+          Transferir participacions
+        </button>
       </div>
 
     </div>
