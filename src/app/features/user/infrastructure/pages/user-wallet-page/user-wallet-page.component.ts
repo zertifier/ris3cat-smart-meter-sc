@@ -36,9 +36,11 @@ export class UserWalletPageComponent implements OnDestroy {
   ekwBalance: number = 0
   chainBalance: number = 0
   voteWeight: number = 0
-  subscriptions: Subscription[] = [];
   communityId!: number
   customerId!: number
+  walletAddress!: string;
+
+  subscriptions: Subscription[] = [];
 
   constructor(
     private userStore: UserStoreService,
@@ -48,10 +50,11 @@ export class UserWalletPageComponent implements OnDestroy {
   ) {
     this.subscriptions.push(
       this.userStore$.subscribe((store) => {
-        if (store && store.cups[0] && store.user?.wallet_address){
+        if (store && store.cups[0] && store.user?.wallet_address) {
           this.communityId = store.cups[0].communityId
           this.customerId = store.user?.customer_id!
-          this.getAllBalances(store.user?.wallet_address)
+          this.walletAddress = store.user?.wallet_address
+          this.getAllBalances(this.walletAddress)
         }
       })
     )
@@ -70,10 +73,19 @@ export class UserWalletPageComponent implements OnDestroy {
 
   }
 
-  openTransferModal(type: 'DAO' | 'XDAI' | 'EKW', currentAmount: number){
+  openTransferModal(type: 'DAO' | 'XDAI' | 'EKW', currentAmount: number) {
     const modalRef = this.modalService.open(TransferModalComponent, {size: 'lg'})
     modalRef.componentInstance.type = type
     modalRef.componentInstance.currentAmount = currentAmount
+    modalRef.componentInstance.communityId = this.communityId
+
+    this.subscriptions.push(
+      modalRef.closed.subscribe({
+        next: () => {
+          this.getAllBalances(this.walletAddress)
+        }
+      })
+    )
   }
 
   swalErrorDisplay(message: string) {

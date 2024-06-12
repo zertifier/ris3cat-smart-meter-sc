@@ -1,7 +1,17 @@
 import {Injectable} from '@angular/core';
 import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
 import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
-import {BaseContract, Contract, ethers, formatEther, getNumber, JsonRpcProvider, Wallet} from "ethers";
+import {
+  BaseContract,
+  Contract,
+  ethers,
+  formatEther,
+  getNumber,
+  JsonRpcProvider,
+  parseEther,
+  toNumber, Transaction,
+  Wallet
+} from "ethers";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
@@ -118,6 +128,17 @@ export class EthersService {
     }
   }
 
+  async getCurrentGasPrice(){
+    try {
+      const provider = new JsonRpcProvider(this.rpc)
+
+      return parseFloat(formatEther((await provider.getFeeData()).gasPrice!)) || 0 ;
+    }catch (e){
+      return 0
+    }
+
+  }
+
   async mintTokens(walletTo: string, amount: number) {
     try {
       const user = this.userStore.snapshotOnly(state => state.user);
@@ -125,8 +146,6 @@ export class EthersService {
         return
       }
 
-
-      const provider = new JsonRpcProvider(this.rpc)
       const contract = new Contract('0x7D33eC4451E4035988d9638b30b18681dE6B0dc6', daoContractAbi, user.wallet)
 
       // @ts-ignore
@@ -137,6 +156,35 @@ export class EthersService {
       console.log(e)
       return
     }
+  }
 
+  async transferFromCurrentWallet(to: string, amount: number, type: 'DAO' | 'XDAI' | 'EKW', contractAddress = environment.erc20_contract){
+    try {
+      const user = this.userStore.snapshotOnly(state => state.user);
+      if (!user) {
+        return
+      }
+
+      const abi = type == 'DAO' ? daoContractAbi : erc20ContractAbi
+
+      let tx: any;
+      if (type == 'XDAI'){
+        tx = {
+          to: to,
+          value: ethers.parseUnits(amount.toString(), "ether"),
+        };
+        tx = await user.wallet?.sendTransaction(tx)
+      }else{
+        const contract = new Contract(contractAddress, abi, user.wallet)
+        // @ts-ignore
+        tx = await contract.transfer(to, amount)
+      }
+
+      tx = await tx.wait()
+      return tx
+    }catch (e){
+      console.log(e)
+      return
+    }
   }
 }

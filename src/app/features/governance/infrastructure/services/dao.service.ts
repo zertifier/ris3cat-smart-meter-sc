@@ -7,6 +7,7 @@ import {UserStoreService} from "../../../user/infrastructure/services/user-store
 import contractAbi from '../../../../../assets/ethers/DAO-abi.json';
 import contractBytecode from '../../../../../assets/ethers/DAO-bytecode.json';
 import {EthersService} from "../../../../shared/infrastructure/services/ethers.service";
+import {ApiService} from "../../../../shared/infrastructure/services/api.service";
 
 
 
@@ -20,6 +21,7 @@ export class DaoService {
     private httpClient: HttpClient,
     private userStore: UserStoreService,
     private ethersService: EthersService,
+    private apiService: ApiService
   ) {
 
     const user = this.userStore.snapshotOnly(state => state);
@@ -57,9 +59,8 @@ export class DaoService {
 
         const provider = new JsonRpcProvider(this.ethersService.getCurrentRpc())
 
-        this.httpClient.get<HttpResponse<any>>(`${this.baseUrl}/communities/${communityId}`).subscribe({
+        this.apiService.getCommunityById(communityId).subscribe({
           next: async (community) => {
-            console.log(community)
             const contract = new Contract(community.data.daoAddress, contractAbi, provider)
 
             // @ts-ignore
@@ -78,6 +79,7 @@ export class DaoService {
     })
 
   }
+
 
 
 
