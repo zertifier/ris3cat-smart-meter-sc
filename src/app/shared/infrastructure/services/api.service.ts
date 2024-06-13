@@ -15,8 +15,8 @@ export class ApiService {
 
   ) {}
 
-  // baseUrl = environment.zertipower_url
-  baseUrl = 'http://localhost:3000'
+  baseUrl = environment.zertipower_url
+  // baseUrl = 'http://localhost:3000'
 
 
   getCommunityById(communityId: number){

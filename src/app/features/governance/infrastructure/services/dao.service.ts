@@ -29,8 +29,8 @@ export class DaoService {
 
   }
 
-  // baseUrl = environment.zertipower_url
-  baseUrl = 'http://localhost:3000'
+  baseUrl = environment.zertipower_url
+  // baseUrl = 'http://localhost:3000'
 
   postDao(communityId: number, daoInfo: { daoAddress: string, daoName: string, daoSymbol: string }) {
     return this.httpClient.post<HttpResponse<any>>(`${this.baseUrl}/communities/${communityId}/dao`, daoInfo)
