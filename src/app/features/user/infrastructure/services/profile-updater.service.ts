@@ -1,11 +1,14 @@
 import {Injectable} from '@angular/core';
 import {AuthStoreService} from "../../../auth/infrastructure/services/auth-store.service";
-import {UserStoreService} from "./user-store.service";
+import {UserProfile, UserStoreService} from "./user-store.service";
 import {ZertipowerService} from "../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import {EventBus} from "../../../../shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../../auth/domain/UserLoggedInEvent";
 import {UserProfileChangedEvent} from "../../../auth/domain/UserProfileChangedEvent";
 import {UpdateUserCupsAction} from "../../actions/update-user-cups-action.service";
+import {ZertiauthApiService} from "../../../auth/infrastructure/services/zertiauth-api.service";
+import {Wallet} from "ethers";
+import {EthersService} from "../../../../shared/infrastructure/services/ethers.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +19,7 @@ export class ProfileUpdaterService {
     private authStore: AuthStoreService,
     private userStore: UserStoreService,
     private zertipower: ZertipowerService,
+    private ethersService: EthersService,
     private eventBus: EventBus,
     private updateCups: UpdateUserCupsAction
   ) {
@@ -42,7 +46,8 @@ export class ProfileUpdaterService {
   }
 
   private async updateUserData(userId: number) {
-    const user = await this.findUserProfileById(userId);
+    let user: UserProfile = await this.findUserProfileById(userId);
+    user.wallet = await this.ethersService.getWalletFromAuthPk()
     this.userStore.patchState({user});
   }
 

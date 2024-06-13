@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {RxStore} from "@zertifier/rx-store";
+import {Wallet} from "ethers";
 
 export interface UserProfile {
   id: number,
@@ -10,6 +11,7 @@ export interface UserProfile {
   lastname: string,
   wallet_address: string,
   customer_id?: number,
+  wallet?: Wallet
 }
 
 export interface UserStore {
