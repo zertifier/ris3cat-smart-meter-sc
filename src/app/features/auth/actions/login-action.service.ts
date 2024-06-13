@@ -27,6 +27,7 @@ export class LoginActionService {
   async run(oauthCode: string): Promise<boolean> {
     this.authStore.patchState({loginTry: true});
     const response = await firstValueFrom(this.zertiauthApiService.getPrivateKey(oauthCode));
+
     const wallet = new ethers.Wallet(response.privateKey as string);
 
     // login
@@ -40,8 +41,10 @@ export class LoginActionService {
       await this.router.navigate(['/auth/register']);
       return false;
     }
+
     const tokens = await this.apiService.auth.login(wallet.address, wallet.privateKey, response.email);
     this.authStore.setTokens({refreshToken: tokens.refreshToken, accessToken: tokens.accessToken});
+    this.authStore.saveOauthCode(oauthCode)
     await this.eventBus.publishEvents(new UserLoggedInEvent());
     this.authStore.patchState({loginTry: false});
     return true;
