@@ -56,7 +56,7 @@ export class TransferModalComponent implements OnDestroy{
     }
   }
 
-  send() {
+  async send() {
     this.loading = true
     const verification = this.verifyDestinationInput()
 
@@ -67,22 +67,21 @@ export class TransferModalComponent implements OnDestroy{
       return
     }
 
+    let contractAddress = this.type == 'DAO' ? await this.daoService.getCommunityContract(this.communityId) : undefined
     switch (verification) {
       case "email":
-        this.sendFromEmail()
+        this.sendFromEmail(contractAddress)
         break;
       case "wallet":
-        this.sendFromWallet()
+        this.sendFromWallet(contractAddress)
         break;
       default:
-        this.sendFromWallet();
+        this.sendFromWallet(contractAddress);
     }
-
-
   }
 
-  async sendFromWallet() {
-    const tx = await this.ethersService.transferFromCurrentWallet(this.toDirection!, this.amountToTransfer || 0, this.type)
+  async sendFromWallet(contractAddress?: string) {
+    const tx = await this.ethersService.transferFromCurrentWallet(this.toDirection!, this.amountToTransfer || 0, this.type, contractAddress)
     if (tx) {
       this.displaySuccessTransfer().then(() => {
         this.loading = false
@@ -94,7 +93,7 @@ export class TransferModalComponent implements OnDestroy{
     }
   }
 
-  sendFromEmail() {
+  sendFromEmail(contractAddress?: string) {
     this.subscriptions.push(
       this.apiService.getWalletByEmail(this.toDirection!).subscribe({
           next: async (walletResponse) => {
@@ -105,7 +104,7 @@ export class TransferModalComponent implements OnDestroy{
               return
             }
 
-            const tx = await this.ethersService.transferFromCurrentWallet(walletAddress, this.amountToTransfer || 0, this.type)
+            const tx = await this.ethersService.transferFromCurrentWallet(walletAddress, this.amountToTransfer || 0, this.type, contractAddress)
             if (tx) {
               this.displaySuccessTransfer().then(() => {
                 this.loading = false

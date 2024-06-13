@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {Contract, ContractFactory, ethers, getNumber, JsonRpcProvider} from "ethers";
+import {Injectable} from '@angular/core';
+import {Contract, ContractFactory, ethers, formatEther, getNumber, JsonRpcProvider} from "ethers";
 import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
@@ -8,8 +8,6 @@ import contractAbi from '../../../../../assets/ethers/DAO-abi.json';
 import contractBytecode from '../../../../../assets/ethers/DAO-bytecode.json';
 import {EthersService} from "../../../../shared/infrastructure/services/ethers.service";
 import {ApiService} from "../../../../shared/infrastructure/services/api.service";
-
-
 
 
 @Injectable({
@@ -30,14 +28,15 @@ export class DaoService {
     }
 
   }
-  // baseUrl = environment.zertipower_url
-  baseUrl= 'http://localhost:3000'
 
-  postDao(communityId: number, daoInfo: {daoAddress: string, daoName: string, daoSymbol: string}){
+  // baseUrl = environment.zertipower_url
+  baseUrl = 'http://localhost:3000'
+
+  postDao(communityId: number, daoInfo: { daoAddress: string, daoName: string, daoSymbol: string }) {
     return this.httpClient.post<HttpResponse<any>>(`${this.baseUrl}/communities/${communityId}/dao`, daoInfo)
   }
 
-  async createContract(name: string, symbol: string){
+  async createContract(name: string, symbol: string) {
     const user = this.userStore.snapshotOnly(state => state.user);
     if (!user) {
       return
@@ -47,40 +46,48 @@ export class DaoService {
       let contractFactory = new ContractFactory(contractAbi, contractBytecode.bytecode, user.wallet)
       let contract = await (await contractFactory.deploy(name, symbol)).waitForDeployment()
       return contract.target
-    }catch (error){
+    } catch (error) {
       return
     }
 
   }
 
-  async getDaoBalance(walletAddress: string, communityId: number){
-    return new Promise<number>(resolve => {
-      try {
+  async getDaoBalance(walletAddress: string, communityId: number) {
+    try {
 
-        const provider = new JsonRpcProvider(this.ethersService.getCurrentRpc())
+      const provider = new JsonRpcProvider(this.ethersService.getCurrentRpc())
 
-        this.apiService.getCommunityById(communityId).subscribe({
-          next: async (community) => {
-            const contract = new Contract(community.data.daoAddress, contractAbi, provider)
+      const communityContractAddress = await this.getCommunityContract(communityId)
 
-            // @ts-ignore
-            resolve(getNumber(await contract.balanceOf(walletAddress)))
-          },
-          error: (error) => {
-            resolve(0)
-          }
-        })
+      if (!communityContractAddress) return 0
+
+      const contract = new Contract(communityContractAddress, contractAbi, provider)
+
+      // @ts-ignore
+      const balance = formatEther(await contract.balanceOf(walletAddress)).toString()
+      return parseFloat(balance)
 
 
-      } catch (error) {
-        console.log(error, "ERROR")
-        resolve(0)
-      }
-    })
-
+    } catch (error) {
+      console.log(error, "ERROR")
+      return 0
+    }
   }
 
 
+  getCommunityContract(communityId: number) {
+    return new Promise<string>(resolve => {
+      this.apiService.getCommunityById(communityId).subscribe({
+        next: async (community) => {
+
+          resolve(community.data.daoAddress)
+        },
+        error: (error) => {
+          resolve('')
+        }
+      })
+    })
+  }
 
 
 }

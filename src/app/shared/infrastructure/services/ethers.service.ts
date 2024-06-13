@@ -8,7 +8,7 @@ import {
   formatEther,
   getNumber,
   JsonRpcProvider,
-  parseEther,
+  parseEther, parseUnits,
   toNumber, Transaction,
   Wallet
 } from "ethers";
@@ -111,7 +111,11 @@ export class EthersService {
       const contract = new Contract(environment.erc20_contract, erc20ContractAbi, provider)
 
       // @ts-ignore
-      return getNumber(await contract.balanceOf(walletAddress))
+      const balance = formatEther(await contract.balanceOf(walletAddress)).toString()
+
+      // @ts-ignore
+      // return getNumber(await contract.balanceOf(walletAddress))
+      return parseFloat(balance)
     } catch (error) {
       console.log(error, "ERROR")
       return 0
@@ -121,7 +125,8 @@ export class EthersService {
   async getChainBalance(walletAddress: string) {
     try {
       const provider = new JsonRpcProvider(this.rpc)
-      return parseFloat(formatEther(await provider.getBalance(walletAddress)))
+      const balance = formatEther(await provider.getBalance(walletAddress)).toString()
+      return parseFloat(balance)
     } catch (error) {
       console.log(error, "ERROR")
       return 0
@@ -149,7 +154,7 @@ export class EthersService {
       const contract = new Contract('0x7D33eC4451E4035988d9638b30b18681dE6B0dc6', daoContractAbi, user.wallet)
 
       // @ts-ignore
-      let tx = await contract.mint(walletTo, amount)
+      let tx = await contract.mint(walletTo, parseUnits(amount.toString(), "ether"))
       tx = await tx.wait()
       return tx
     }catch (e){
@@ -157,7 +162,6 @@ export class EthersService {
       return
     }
   }
-
   async transferFromCurrentWallet(to: string, amount: number, type: 'DAO' | 'XDAI' | 'EKW', contractAddress = environment.erc20_contract){
     try {
       const user = this.userStore.snapshotOnly(state => state.user);
@@ -177,7 +181,7 @@ export class EthersService {
       }else{
         const contract = new Contract(contractAddress, abi, user.wallet)
         // @ts-ignore
-        tx = await contract.transfer(to, amount)
+        tx = await contract.transfer(to, parseUnits(amount.toString(), "ether"))
       }
 
       tx = await tx.wait()

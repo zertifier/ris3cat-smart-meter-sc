@@ -51,6 +51,7 @@ export class UserWalletPageComponent implements OnDestroy {
     this.subscriptions.push(
       this.userStore$.subscribe((store) => {
         if (store && store.cups[0] && store.user?.wallet_address) {
+          console.log(store, "store")
           this.communityId = store.cups[0].communityId
           this.customerId = store.user?.customer_id!
           this.walletAddress = store.user?.wallet_address
