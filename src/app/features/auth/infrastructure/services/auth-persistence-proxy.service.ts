@@ -34,13 +34,17 @@ export class AuthPersistenceProxyService {
   private restoreSession() {
     const accessToken = localStorage.getItem(ACCESS_TOKEN) || '';
     const refreshToken = localStorage.getItem(REFRESH_TOKEN) || '';
+    const oauthCode = localStorage.getItem(OAUTH_CODE) || '';
 
     if (!refreshToken) {
       this.authStore.removeTokens();
+      this.authStore.removeOauthCode()
       return;
     }
 
     this.authStore.setTokens({accessToken, refreshToken});
+    this.authStore.saveOauthCode(oauthCode)
+
     this.eventBus.publishEvents(new UserLoggedInEvent());
   }
 }

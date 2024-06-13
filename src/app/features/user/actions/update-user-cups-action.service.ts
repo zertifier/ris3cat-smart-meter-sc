@@ -34,7 +34,7 @@ export class UpdateUserCupsAction {
         })
       })
     }catch (err){
-      this.authStoreService.removeTokens()
+      this.authStoreService.resetDefaults()
       const urlTree = this.router.createUrlTree(['/auth']);
       await this.router.navigateByUrl(urlTree);
     }
