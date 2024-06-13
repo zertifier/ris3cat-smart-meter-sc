@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, firstValueFrom, map, tap} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
+import {HttpResponse} from "@shared/infrastructure/services/HttpResponse";
 import {MonitoringStoreService} from "./monitoring-store.service";
 
 export interface EnergyStat {
@@ -36,7 +36,7 @@ export class MonitoringService {
     if (this.interval) {
       return;
     }
-    this.updatePowerFlow().then(() => console.log('first powerflow updated'));
+    // this.updatePowerFlow().then(() => console.log('first powerflow updated'));
 
     this.interval = setInterval(async () => {
       await this.updatePowerFlow()

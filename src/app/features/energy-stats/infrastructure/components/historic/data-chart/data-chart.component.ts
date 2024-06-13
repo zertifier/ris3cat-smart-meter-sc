@@ -19,17 +19,9 @@ import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
 
 import zoomPlugin, {resetZoom} from 'chartjs-plugin-zoom';
+import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 
 Chart.register(zoomPlugin);
-
-export interface ChartDataset {
-  label: string,
-  color: string,
-  order?: number,
-  stack?: string,
-  data: unknown[],
-  tooltipText?: string,
-}
 
 @Component({
   selector: 'app-data-chart',
@@ -98,16 +90,16 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     },
     plugins: {
       zoom: {
-        zoom: {
-          enabled: false,
-          // wheel: {
-          //   enabled: false,
-          // },
-          // pinch: {
-          //   enabled: true,
-          // },
-          // mode: 'xy',
-        }
+        // zoom: {
+        //   enabled: false,
+        //   // wheel: {
+        //   //   enabled: false,
+        //   // },
+        //   // pinch: {
+        //   //   enabled: true,
+        //   // },
+        //   // mode: 'xy',
+        // }
       },
       legend: {
         display: false
