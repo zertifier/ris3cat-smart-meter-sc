@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ACCESS_TOKEN, AuthStoreService, REFRESH_TOKEN} from "./auth-store.service";
+import {ACCESS_TOKEN, AuthStoreService, OAUTH_CODE, REFRESH_TOKEN} from "./auth-store.service";
 import {EventBus} from "@shared/domain/EventBus";
 import {UserLoggedInEvent} from "../../domain/UserLoggedInEvent";
 
