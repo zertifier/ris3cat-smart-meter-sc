@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {Chart} from "chart.js";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 
@@ -9,20 +9,37 @@ import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
   templateUrl: './metereologic-chart.component.html',
   styleUrl: './metereologic-chart.component.scss'
 })
-export class MetereologicChartComponent implements AfterViewInit {
+export class MetereologicChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') canvas!: ElementRef;
   chart!: Chart<"bar", unknown[], string>;
 
   @Input() dataset: ChartDataset[] = [];
-  @Input() labels: string[] = ['Dillluns', "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte", "Diumenge"];
+  @Input({required: true}) labels!: string[];
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (changes['labels']) {
+      this.labels = changes['labels'].currentValue as string[];
+    }
+    if (changes['dataset']) {
+      this.dataset = changes['dataset'].currentValue as ChartDataset[];
+    }
 
-  ngAfterViewInit(): void {
+    this.initChart(this.labels, this.dataset);
+  }
+
+  initChart(labels: string[], dataset: ChartDataset[]) {
+    if (!this.canvas) {
+      return;
+    }
+    if (this.chart) {
+      this.chart.destroy()
+    }
     this.chart = new Chart(this.canvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.labels,
-        datasets: this.dataset.map(d => {
+        labels: labels,
+        datasets: dataset.map(d => {
           return {
             data: d.data,
             label: d.label,
@@ -48,5 +65,9 @@ export class MetereologicChartComponent implements AfterViewInit {
         }
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initChart(this.labels, this.dataset);
   }
 }

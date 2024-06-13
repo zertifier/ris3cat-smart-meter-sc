@@ -1,10 +1,10 @@
-<app-metereologic-chart [dataset]="datasets"/>
+<app-metereologic-chart [dataset]="datasets" [labels]="labels"/>
 
 <div class="w-100 d-flex justify-content-around" style="padding-left: 1.5%">
   @for (element of elements; track $index) {
     <div class="d-flex flex-column gap-2" style="width: 10.18%">
       <span class="text-center">{{element.label}}</span>
-      <img [src]="element.image" [alt]="element.label" style="width: 80%" class="m-auto">
+      <img [src]="element.image" [alt]="element.label" style="width: 80%; filter: contrast(90%)" class="m-auto">
     </div>
   }
 </div>
