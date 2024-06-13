@@ -30,7 +30,7 @@ export class TransferModalComponent implements OnDestroy{
 
   @Input() type: 'EKW' | 'XDAI' | 'DAO' = 'XDAI';
   @Input() currentAmount: number = 0
-  @Input() communityId!: number;
+  @Input() communityId?: number;
 
   toDirection?: string
   amountToTransfer?: number
@@ -67,7 +67,7 @@ export class TransferModalComponent implements OnDestroy{
       return
     }
 
-    let contractAddress = this.type == 'DAO' ? await this.daoService.getCommunityContract(this.communityId) : undefined
+    let contractAddress = this.type == 'DAO' ? await this.daoService.getCommunityContract(this.communityId!) : undefined
     switch (verification) {
       case "email":
         this.sendFromEmail(contractAddress)

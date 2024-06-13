@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {AsyncPipe, DecimalPipe} from "@angular/common";
+import {AsyncPipe, DecimalPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../services/user-store.service";
 import {EthersService} from "../../../../../shared/infrastructure/services/ethers.service";
 import {FormsModule} from "@angular/forms";
@@ -22,7 +22,8 @@ import {NoRoundDecimalPipe} from "../../../../../shared/infrastructure/pipes/no-
     FormsModule,
     QuestionBadgeComponent,
     DecimalPipe,
-    NoRoundDecimalPipe
+    NoRoundDecimalPipe,
+    NgIf
   ],
   templateUrl: './user-wallet-page.component.html',
   styleUrl: './user-wallet-page.component.scss'
@@ -36,7 +37,7 @@ export class UserWalletPageComponent implements OnDestroy {
   ekwBalance: number = 0
   chainBalance: number = 0
   voteWeight: number = 0
-  communityId!: number
+  communityId?: number
   customerId!: number
   walletAddress!: string;
 
@@ -50,9 +51,8 @@ export class UserWalletPageComponent implements OnDestroy {
   ) {
     this.subscriptions.push(
       this.userStore$.subscribe((store) => {
-        if (store && store.cups[0] && store.user?.wallet_address) {
-          console.log(store, "store")
-          this.communityId = store.cups[0].communityId
+        if (store && store.user?.wallet_address) {
+          this.communityId = store.cups.length ? store.cups[0].communityId : undefined
           this.customerId = store.user?.customer_id!
           this.walletAddress = store.user?.wallet_address
           this.getAllBalances(this.walletAddress)
@@ -68,9 +68,11 @@ export class UserWalletPageComponent implements OnDestroy {
     this.ethersService.getChainBalance(wallet).then((balance) => {
       this.chainBalance = balance
     })
-    this.daoService.getDaoBalance(wallet, this.communityId).then((balance) => {
-      this.voteWeight = balance
-    })
+
+    if (this.communityId)
+      this.daoService.getDaoBalance(wallet, this.communityId).then((balance) => {
+        this.voteWeight = balance
+      })
 
   }
 
