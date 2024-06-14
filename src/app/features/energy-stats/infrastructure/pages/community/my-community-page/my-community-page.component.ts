@@ -36,6 +36,7 @@ import {
 dayjs.extend(utc);
 
 import {isDevMode} from '@angular/core';
+import {environment} from "../../../../../../../environments/environment";
 
 @Component({
   selector: 'app-my-community-page',
@@ -161,4 +162,5 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   }
 
   isDevMode = isDevMode;
+  protected readonly environment = environment;
 }
