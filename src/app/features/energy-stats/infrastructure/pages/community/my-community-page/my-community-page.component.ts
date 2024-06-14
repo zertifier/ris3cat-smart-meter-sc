@@ -20,10 +20,10 @@ import {
 } from "../../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../../components/historic/historic-chart/historic-chart.component";
 import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
-import {NavbarComponent} from "../../../../../../shared/infrastructure/components/navbar/navbar.component";
-import {FooterComponent} from "../../../../../../shared/infrastructure/components/footer/footer.component";
+import {NavbarComponent} from "@shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "@shared/infrastructure/components/footer/footer.component";
 import {MonitoringStoreService} from "../../../services/monitoring-store.service";
-import {getMonth} from "../../../../../../shared/utils/DatesUtils";
+import {getMonth} from "@shared/utils/DatesUtils";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 import {
@@ -34,6 +34,8 @@ import {
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
 
 dayjs.extend(utc);
+
+import {isDevMode} from '@angular/core';
 
 @Component({
   selector: 'app-my-community-page',
@@ -157,4 +159,6 @@ export class MyCommunityPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe())
   }
+
+  isDevMode = isDevMode;
 }
