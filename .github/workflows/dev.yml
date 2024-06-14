@@ -8,7 +8,7 @@ jobs:
   detect-changes:
     runs-on: self-hosted
     outputs:
-      smart-meter-dev-ris3cat_changed: ${{ steps.check_smart-meter-dev-ris3cat.outputs.changed }}
+      smart-meter-dev_changed: ${{ steps.check_smart-meter-dev.outputs.changed }}
     steps:
       - name: Pull changes
         run: |
@@ -17,7 +17,7 @@ jobs:
           git pull --rebase
 
       - name: Detect changes in smart-meter-dev-ris3cat
-        id: check_smart-meter-dev-ris3cat
+        id: check_smart-meter-dev
         run: |
           cd /home/megatro/apps/dockers/Ris3Cat/dev-ris3cat-smart-meter
           echo "Getting smart-meter-dev-ris3cat diff"
@@ -36,7 +36,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Deploy smart-meter-dev-ris3cat if changed
-        if: needs.detect-changes.outputs.smart-meter-dev-ris3cat_changed == 'true'
+        if: needs.detect-changes.outputs.smart-meter-dev_changed == 'true'
         run: |
           echo "Deploying smart-meter-dev-ris3cat"
           cd /home/megatro/apps/dockers/Ris3Cat/dev-ris3cat-smart-meter
