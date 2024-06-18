@@ -3,5 +3,6 @@ export const environment = {
   zertipower_url: "https://api-dev-ris3cat.zertifier.com",
   zertirpcs_url: "https://zertirpc.zertifier.com",
   defaultRpc: 'https://rpc.ankr.com/gnosis',
-  erc20_contract: "0x354F8703d5755BF063FC9018D073c1cFc069Ec46"
+  erc20_contract: "0x354F8703d5755BF063FC9018D073c1cFc069Ec46",
+  production: true,
 };
