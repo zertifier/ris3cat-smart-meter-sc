@@ -232,6 +232,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
         this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
+
       }
       // this.latestFetchedStats = data;
       return data;
