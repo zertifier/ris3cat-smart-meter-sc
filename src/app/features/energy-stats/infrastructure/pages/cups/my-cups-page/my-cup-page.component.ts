@@ -145,8 +145,14 @@ export class MyCupPageComponent implements OnInit {
 
 
   openEditModal(){
-    const modalRef = this.ngbModal.open(CupsModalComponent)
-    modalRef.componentInstance.cups = 'A'
+    const modalRef = this.ngbModal.open(CupsModalComponent, {size: 'lg'})
+
+    const selectedCupsIndex = this.userStore.snapshotOnly((state) => state.selectedCupsIndex)
+    this.cups$.subscribe((cups) => {
+      console.log(cups[selectedCupsIndex])
+      modalRef.componentInstance.cups = cups[selectedCupsIndex]
+
+    })
 
   }
 
