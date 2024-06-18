@@ -25,6 +25,8 @@ import {getMonth} from "../../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {CupsModalComponent} from "./cups-modal/cups-modal.component";
 
 
 @Component({
@@ -112,7 +114,8 @@ export class MyCupPageComponent implements OnInit {
   constructor(
     private readonly monitoringService: MonitoringService,
     private readonly userStore: UserStoreService,
-    private readonly monitoringStore: MonitoringStoreService
+    private readonly monitoringStore: MonitoringStoreService,
+    private readonly ngbModal: NgbModal,
   ) {
   }
 
@@ -138,6 +141,13 @@ export class MyCupPageComponent implements OnInit {
   selectCups(event: any) {
     const value: number = event.target.value;
     this.userStore.patchState({selectedCupsIndex: value});
+  }
+
+
+  openEditModal(){
+    const modalRef = this.ngbModal.open(CupsModalComponent)
+    modalRef.componentInstance.cups = 'A'
+
   }
 
 }
