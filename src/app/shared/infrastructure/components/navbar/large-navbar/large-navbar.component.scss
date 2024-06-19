@@ -45,3 +45,18 @@ button.nav-item {
   font-weight: bold;
 }
 
+
+.custom-dropdown {
+  background-color: $primary;
+}
+
+
+
+.custom-dropdown .dropdown-item:hover {
+  color: $primary !important;
+  background: $white;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
