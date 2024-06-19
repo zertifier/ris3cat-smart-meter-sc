@@ -41,7 +41,8 @@ export class LargeNavbarComponent {
       case BreakPoints.XL:
         return '10rem';
       case BreakPoints.XXL:
-        return '15rem';
+        // return '15rem';
+        return '270px';
       default:
         return '';
     }
