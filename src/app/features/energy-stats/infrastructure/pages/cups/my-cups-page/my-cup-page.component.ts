@@ -27,6 +27,7 @@ import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {CupsModalComponent} from "./cups-modal/cups-modal.component";
+import {UpdateUserCupsAction} from "../../../../../user/actions/update-user-cups-action.service";
 
 
 @Component({
@@ -116,6 +117,7 @@ export class MyCupPageComponent implements OnInit {
     private readonly userStore: UserStoreService,
     private readonly monitoringStore: MonitoringStoreService,
     private readonly ngbModal: NgbModal,
+    private updateCups: UpdateUserCupsAction
   ) {
   }
 
@@ -149,11 +151,23 @@ export class MyCupPageComponent implements OnInit {
 
     const selectedCupsIndex = this.userStore.snapshotOnly((state) => state.selectedCupsIndex)
     this.cups$.subscribe((cups) => {
-      console.log(cups[selectedCupsIndex])
       modalRef.componentInstance.cups = cups[selectedCupsIndex]
 
+      modalRef.closed.subscribe(async () => {
+        const user = this.userStore.snapshotOnly(state => state.user);
+        await this.updateCups.run(user?.id!);
+      })
     })
 
+  }
+
+  getSelectedCupsCode(){
+    return this.cups$.pipe(
+      map(cups => {
+        const selectedCupsIndex = this.userStore.snapshotOnly(state => state.selectedCupsIndex);
+        return cups[selectedCupsIndex]?.cupsCode || '-';
+      })
+    );
   }
 
 }

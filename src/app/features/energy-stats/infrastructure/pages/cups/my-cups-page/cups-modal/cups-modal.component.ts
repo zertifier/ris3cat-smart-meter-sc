@@ -7,6 +7,7 @@ import {
   ZertipowerCupsService
 } from "../../../../../../../shared/infrastructure/services/zertipower/cups/ZertipowerCupsService";
 import {ZertipowerService} from "../../../../../../../shared/infrastructure/services/zertipower/zertipower.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-cups-modal',
@@ -38,11 +39,36 @@ export class CupsModalComponent implements AfterViewInit{
   async save(){
     this.loading = true
     if (this.cups){
-      const response = await this.zertipower.cups.updateCupsReference(this.cups.id, this.reference)
+      try {
+        const response = await this.zertipower.cups.updateCupsReference(this.cups.id, this.reference)
 
-      console.log(response)
-      this.loading = false
+        this.displaySuccessAlert().then(() => {
+          this.loading = false
+          this.activeModal.close()
+        })
+      }catch (e){
+        this.displayErrorAlert().then(() => {
+          this.loading = false
+        })
+
+      }
     }
   }
 
+  displaySuccessAlert(){
+    return Swal.fire({
+      icon: 'success',
+      title: "Les dades s'han guardat amb èxit",
+      confirmButtonText: "D'acord"
+    })
+  }
+
+  displayErrorAlert(){
+    return Swal.fire({
+      icon: 'error',
+      title: "Les dades no s'han pogut guardar.",
+      text: "Torna-ho a intentar d'aqui uns minuts",
+      confirmButtonText: "D'acord"
+    })
+  }
 }
