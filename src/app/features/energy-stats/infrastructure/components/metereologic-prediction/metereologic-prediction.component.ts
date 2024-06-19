@@ -3,6 +3,8 @@ import {MetereologicChartComponent} from "./metereologic-chart/metereologic-char
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {WeatherPredictionService} from "../../services/weather-prediction.service";
+import {EnergyPredictionService} from "../../services/energy-prediction.service";
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-metereologic-prediction',
@@ -27,6 +29,7 @@ export class MetereologicPredictionComponent implements OnInit {
     image: string
   }[] = [];
   labels: string [] = [];
+  energyPredictionService = inject(EnergyPredictionService);
 
   async ngOnInit() {
     const prediction = await this.weatherPredictionService.getPrediction();
@@ -38,5 +41,22 @@ export class MetereologicPredictionComponent implements OnInit {
       });
       this.labels = [...this.labels, ''];
     }
+
+    const productionPrediction = await this.energyPredictionService.getPrediction();
+    const dailyPrediction: Map<string, number> = new Map();
+    for (const predictionEntry of productionPrediction) {
+      const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD 00:00");
+      const value = dailyPrediction.get(parsedDate) || 0;
+      dailyPrediction.set(parsedDate, value + predictionEntry.value);
+    }
+
+    this.datasets = [
+      {
+        color: StatsColors.COMMUNITY_PRODUCTION,
+        label: 'Producció',
+        data: Array.from(dailyPrediction.values()),
+      }
+    ];
+    this.labels = Array.from(dailyPrediction.keys());
   }
 }
