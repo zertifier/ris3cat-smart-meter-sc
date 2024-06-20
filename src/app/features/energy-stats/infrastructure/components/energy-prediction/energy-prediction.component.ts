@@ -33,7 +33,7 @@ export class EnergyPredictionComponent implements OnInit {
     const productionPrediction = await this.energyPredictionService.getPrediction();
     const dailyPrediction: Map<string, number> = new Map();
     for (const predictionEntry of productionPrediction) {
-      const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD 00:00");
+      const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
       const value = dailyPrediction.get(parsedDate) || 0;
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
     }
