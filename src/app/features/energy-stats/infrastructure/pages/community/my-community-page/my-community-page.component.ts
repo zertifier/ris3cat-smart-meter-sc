@@ -27,8 +27,8 @@ import {getMonth} from "@shared/utils/DatesUtils";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 import {
-  MetereologicChartComponent
-} from "../../../components/metereologic-prediction/metereologic-chart/metereologic-chart.component";
+  EnergyPredictionChartComponent
+} from "../../../components/metereologic-prediction/metereologic-chart/energy-prediction-chart.component";
 import {
   MetereologicPredictionComponent
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
@@ -65,7 +65,7 @@ import {EnergyPredictionComponent} from "../../../components/energy-prediction/e
     KnobModule,
     FormsModule,
     PowerflowGausComponent,
-    MetereologicChartComponent,
+    EnergyPredictionChartComponent,
     MetereologicPredictionComponent,
     EnergyPredictionComponent
   ],
