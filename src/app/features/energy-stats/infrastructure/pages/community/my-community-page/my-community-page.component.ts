@@ -37,6 +37,7 @@ dayjs.extend(utc);
 
 import {isDevMode} from '@angular/core';
 import {environment} from "../../../../../../../environments/environment";
+import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
 
 @Component({
   selector: 'app-my-community-page',
@@ -65,7 +66,8 @@ import {environment} from "../../../../../../../environments/environment";
     FormsModule,
     PowerflowGausComponent,
     MetereologicChartComponent,
-    MetereologicPredictionComponent
+    MetereologicPredictionComponent,
+    EnergyPredictionComponent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
