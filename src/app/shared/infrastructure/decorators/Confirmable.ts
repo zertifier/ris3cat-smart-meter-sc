@@ -18,7 +18,7 @@ export function Confirmable(message: string, properties?: { confirmButton?: stri
     const originalFunction = descriptor.value;
     descriptor.value = function (...args: any[]) {
       Swal.fire({
-        title: message,
+        text: message,
         icon: 'question',
         confirmButtonText: confirmMessage,
         cancelButtonText: cancelMessage,
