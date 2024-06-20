@@ -27,8 +27,8 @@ import {getMonth} from "@shared/utils/DatesUtils";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 import {
-  MetereologicChartComponent
-} from "../../../components/metereologic-prediction/metereologic-chart/metereologic-chart.component";
+  EnergyPredictionChartComponent
+} from "../../../components/metereologic-prediction/metereologic-chart/energy-prediction-chart.component";
 import {
   MetereologicPredictionComponent
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
@@ -37,6 +37,7 @@ dayjs.extend(utc);
 
 import {isDevMode} from '@angular/core';
 import {environment} from "../../../../../../../environments/environment";
+import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
 
 @Component({
   selector: 'app-my-community-page',
@@ -64,8 +65,9 @@ import {environment} from "../../../../../../../environments/environment";
     KnobModule,
     FormsModule,
     PowerflowGausComponent,
-    MetereologicChartComponent,
-    MetereologicPredictionComponent
+    EnergyPredictionChartComponent,
+    MetereologicPredictionComponent,
+    EnergyPredictionComponent
   ],
   templateUrl: './my-community-page.component.html',
   styleUrl: './my-community-page.component.scss'
