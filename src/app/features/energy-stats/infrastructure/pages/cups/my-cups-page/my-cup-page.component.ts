@@ -29,6 +29,11 @@ import {UpdateUserCupsAction} from "../../../../../user/actions/update-user-cups
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SelectCupsService} from "../../../../actions/select-cups.service";
 import {CupsModalComponent} from "./cups-modal/cups-modal.component";
+import {environment} from "@environments/environment";
+import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
+import {
+  MetereologicPredictionComponent
+} from "../../../components/metereologic-prediction/metereologic-prediction.component";
 
 
 @Component({
@@ -51,7 +56,9 @@ import {CupsModalComponent} from "./cups-modal/cups-modal.component";
     KnobModule,
     NgStyle,
     FormsModule,
-    PowerflowGausComponent
+    PowerflowGausComponent,
+    EnergyPredictionComponent,
+    MetereologicPredictionComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
@@ -175,4 +182,5 @@ export class MyCupPageComponent implements OnInit {
     );
   }
 
+    protected readonly environment = environment;
 }
