@@ -3,7 +3,8 @@ import {EnergyPredictionChartComponent} from "../metereologic-prediction/metereo
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {EnergyPredictionService} from "../../services/energy-prediction.service";
-import dayjs from "@shared/utils/dayjs";
+import dayjs from "dayjs";
+import 'dayjs/locale/ca';
 
 @Component({
   selector: 'app-energy-prediction',
@@ -30,10 +31,13 @@ export class EnergyPredictionComponent implements OnInit {
   energyPredictionService = inject(EnergyPredictionService);
 
   async ngOnInit() {
+    dayjs.locale('ca');
     const productionPrediction = await this.energyPredictionService.getPrediction();
     const dailyPrediction: Map<string, number> = new Map();
     for (const predictionEntry of productionPrediction) {
-      const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
+      // const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
+      const parsedDate = dayjs(predictionEntry.time).format("dddd DD");
+
       const value = dailyPrediction.get(parsedDate) || 0;
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
     }
