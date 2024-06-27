@@ -6,13 +6,13 @@ import {CalendarModule} from "primeng/calendar";
 import {DatePipe, DecimalPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {
   QuestionBadgeComponent
-} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {UserVote, VotesService, VotesWithQty} from "../../../services/votes.service";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {Subscription} from "rxjs";
 

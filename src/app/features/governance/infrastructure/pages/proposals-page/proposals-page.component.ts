@@ -4,13 +4,12 @@ import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
+import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 import {htmlToText} from "html-to-text";
 import {Subscription} from "rxjs";
-import {state} from "@angular/animations";
 import {DaoService} from "../../services/dao.service";
 import Swal from "sweetalert2";
-import {EthersService} from "../../../../../shared/infrastructure/services/ethers.service";
+import {EthersService} from "@shared/infrastructure/services/ethers.service";
 
 type ProposalType = 'active' | 'pending' | 'expired' | 'executed' | 'denied' | 'all';
 
@@ -110,7 +109,7 @@ export class ProposalsPageComponent implements OnDestroy {
     if (contractAddress) {
       this.saveDaoToDb(contractAddress.toString(), name, symbol)
     } else {
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: 'Hi ha hagut un error creant la DAO'
       })
@@ -125,17 +124,17 @@ export class ProposalsPageComponent implements OnDestroy {
         daoSymbol
       })
         .subscribe({
-          next: (response) => {
+          next: () => {
             Swal.fire({
               icon: 'success',
               title: 'DAO creada correctament'
-            })
+            }).then()
           },
-          error: (error) => {
+          error: () => {
             Swal.fire({
               icon: 'error',
               title: 'Hi ha hagut un error guardant la DAO'
-            })
+            }).then()
           }
         }))
   }
