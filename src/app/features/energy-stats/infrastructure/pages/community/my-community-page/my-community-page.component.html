@@ -88,7 +88,15 @@
   <app-historic-chart/>
 
   @if (!environment.production) {
-    <app-energy-prediction/>
-    <app-metereologic-prediction/>
+    <div class="row">
+      <div class="col-md-6">
+        <app-energy-prediction/>
+
+      </div>
+      <div class="col-md-6">
+        <app-metereologic-prediction/>
+
+      </div>
+    </div>
   }
 </div>

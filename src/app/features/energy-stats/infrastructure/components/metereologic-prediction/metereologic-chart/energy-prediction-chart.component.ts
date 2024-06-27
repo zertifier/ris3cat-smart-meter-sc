@@ -51,10 +51,10 @@ export class EnergyPredictionChartComponent implements AfterViewInit, OnChanges 
         })
       },
       options: {
-        aspectRatio: 4,
+        aspectRatio: 1,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
           }
         },
         plugins: {
