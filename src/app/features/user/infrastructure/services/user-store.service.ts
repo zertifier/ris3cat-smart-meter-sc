@@ -44,7 +44,7 @@ const defaultValues: UserStore = {
 })
 export class UserStoreService extends RxStore<UserStore> {
   $ = {
-    cupId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
+    cupsId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
     communityId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.communityId,
     cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.cupsCode,
     profileLoaded: (state: UserStore) => state.selectedCupsIndex !== -1,
