@@ -2,7 +2,6 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {ChartLegendComponent, DataLabel} from "../chart-legend/chart-legend.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
-import dayjs from "dayjs";
 import {combineLatest, Subscription} from "rxjs";
 import {StatsColors} from "../../../../domain/StatsColors";
 import {ChartStoreService} from "../../../services/chart-store.service";
@@ -19,8 +18,7 @@ import {
   ScreenBreakPointsService
 } from "@shared/infrastructure/services/screen-break-points.service";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
+import dayjs from '@shared/utils/dayjs';
 
 @Component({
   selector: 'app-datadis-chart',

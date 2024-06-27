@@ -1,6 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
 import {PaginatorModule} from "primeng/paginator";
-import {ProposalStatus} from "../../../domain/ProposalStatus";
 import {Subscription} from "rxjs";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Participant, ParticipantsService, ParticipantStatus} from "../../services/participants.service";

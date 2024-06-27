@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Contract, ContractFactory, ethers, formatEther, getNumber, JsonRpcProvider} from "ethers";
-import {environment} from "../../../../../environments/environment";
+import {Contract, ContractFactory, formatEther, JsonRpcProvider} from "ethers";
+import {environment} from "@environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {HttpResponse} from "../../../../shared/infrastructure/services/HttpResponse";
 import {UserStoreService} from "../../../user/infrastructure/services/user-store.service";

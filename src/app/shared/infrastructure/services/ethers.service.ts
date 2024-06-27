@@ -2,14 +2,11 @@ import {Injectable} from '@angular/core';
 import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
 import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
 import {
-  BaseContract,
   Contract,
   ethers,
   formatEther,
-  getNumber,
   JsonRpcProvider,
-  parseEther, parseUnits,
-  toNumber, Transaction,
+  parseUnits,
   Wallet
 } from "ethers";
 import {HttpResponse} from "./HttpResponse";

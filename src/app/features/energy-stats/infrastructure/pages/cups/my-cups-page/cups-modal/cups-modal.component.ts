@@ -3,9 +3,6 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {NgIf} from "@angular/common";
 import {UserCups} from "../../../../../../user/infrastructure/services/user-store.service";
 import {FormsModule} from "@angular/forms";
-import {
-  ZertipowerCupsService
-} from "../../../../../../../shared/infrastructure/services/zertipower/cups/ZertipowerCupsService";
 import {ZertipowerService} from "../../../../../../../shared/infrastructure/services/zertipower/zertipower.service";
 import Swal from "sweetalert2";
 

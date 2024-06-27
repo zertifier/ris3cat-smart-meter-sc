@@ -9,7 +9,9 @@
     "baseUrl": "./",
     "paths": {
       "@shared/*": ["./src/app/shared/*"],
-      "@environments/*": ["./src/environments/*"]
+      "@environments/*": ["./src/environments/*"],
+      "@features/*": ["./src/app/features/*"],
+      "@core/*": ["./src/app/core/*"]
     }
   },
   "files": [

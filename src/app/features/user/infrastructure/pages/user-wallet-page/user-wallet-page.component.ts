@@ -1,18 +1,17 @@
 import {Component, OnDestroy} from '@angular/core';
 import {AsyncPipe, DecimalPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../services/user-store.service";
-import {EthersService} from "../../../../../shared/infrastructure/services/ethers.service";
+import {EthersService} from "@shared/infrastructure/services/ethers.service";
 import {FormsModule} from "@angular/forms";
 import {
   QuestionBadgeComponent
-} from "../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {Subscription} from "rxjs";
-import {VotesService} from "../../../../governance/infrastructure/services/votes.service";
 import Swal from "sweetalert2";
-import {DaoService} from "../../../../governance/infrastructure/services/dao.service";
+import {DaoService} from "@features/governance/infrastructure/services/dao.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TransferModalComponent} from "./transfer-modal/transfer-modal.component";
-import {NoRoundDecimalPipe} from "../../../../../shared/infrastructure/pipes/no-round-decimal.pipe";
+import {NoRoundDecimalPipe} from "@shared/infrastructure/pipes/no-round-decimal.pipe";
 
 @Component({
   selector: 'app-user-wallet-page',
