@@ -82,7 +82,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
           }]) => {
             // Every time that params change, fetch data and update chart
             // Fetching data
-            const cupId = this.userStore.snapshotOnly(this.userStore.$.cupId);
+            const cupId = this.userStore.snapshotOnly(this.userStore.$.cupsId);
             const communityId = this.userStore.snapshotOnly(this.userStore.$.communityId);
             const data = await this.fetchEnergyStats(date, dateRange, cupId, communityId);
             this.chartStoreService.patchState({lastFetchedStats: data});
