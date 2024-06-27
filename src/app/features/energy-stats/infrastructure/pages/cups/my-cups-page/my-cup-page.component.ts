@@ -25,7 +25,15 @@ import {getMonth} from "../../../../../../shared/utils/DatesUtils";
 import dayjs from "dayjs";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
+import {UpdateUserCupsAction} from "../../../../../user/actions/update-user-cups-action.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SelectCupsService} from "../../../../actions/select-cups.service";
+import {CupsModalComponent} from "./cups-modal/cups-modal.component";
+import {environment} from "@environments/environment";
+import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
+import {
+  MetereologicPredictionComponent
+} from "../../../components/metereologic-prediction/metereologic-prediction.component";
 
 
 @Component({
@@ -48,7 +56,9 @@ import {SelectCupsService} from "../../../../actions/select-cups.service";
     KnobModule,
     NgStyle,
     FormsModule,
-    PowerflowGausComponent
+    PowerflowGausComponent,
+    EnergyPredictionComponent,
+    MetereologicPredictionComponent
   ],
   templateUrl: './my-cup-page.component.html',
   styleUrl: './my-cup-page.component.scss'
@@ -114,6 +124,8 @@ export class MyCupPageComponent implements OnInit {
     private readonly monitoringService: MonitoringService,
     private readonly userStore: UserStoreService,
     private readonly monitoringStore: MonitoringStoreService,
+    private readonly ngbModal: NgbModal,
+    private updateCups: UpdateUserCupsAction,
     private readonly selectCupsAction: SelectCupsService
   ) {
   }
@@ -145,4 +157,30 @@ export class MyCupPageComponent implements OnInit {
     this.userStore.patchState({selectedCupsIndex: value});
   }
 
+
+  openEditModal(){
+    const modalRef = this.ngbModal.open(CupsModalComponent, {size: 'lg'})
+
+    const selectedCupsIndex = this.userStore.snapshotOnly((state) => state.selectedCupsIndex)
+    this.cups$.subscribe((cups) => {
+      modalRef.componentInstance.cups = cups[selectedCupsIndex]
+
+      modalRef.closed.subscribe(async () => {
+        const user = this.userStore.snapshotOnly(state => state.user);
+        await this.updateCups.run(user?.id!);
+      })
+    })
+
+  }
+
+  getSelectedCupsCode(){
+    return this.cups$.pipe(
+      map(cups => {
+        const selectedCupsIndex = this.userStore.snapshotOnly(state => state.selectedCupsIndex);
+        return cups[selectedCupsIndex]?.cupsCode || '-';
+      })
+    );
+  }
+
+    protected readonly environment = environment;
 }

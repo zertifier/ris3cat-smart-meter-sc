@@ -87,7 +87,16 @@
   <h5 style="margin: 7rem 0 5rem 0;" class="fw-bold">Històric consum/excedent</h5>
   <app-historic-chart/>
 
-  @if (isDevMode()) {
-    <app-metereologic-prediction/>
+  @if (!environment.production) {
+    <div class="row">
+      <div class="col-md-6">
+        <app-energy-prediction/>
+
+      </div>
+      <div class="col-md-6">
+        <app-metereologic-prediction/>
+
+      </div>
+    </div>
   }
 </div>

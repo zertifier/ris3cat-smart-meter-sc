@@ -4,6 +4,16 @@ import dayjs from "dayjs";
 import {HttpResponse} from "../../HttpResponse";
 import {EnergyStatDTO} from "../DTOs/EnergyStatDTO";
 import {ChartEntity} from "../../../../../features/energy-stats/domain/ChartEntity";
+import {LocationInterface} from "../location/ZertipowerLocationService";
+
+export interface CommunityResponse{
+  id: number,
+  name: string,
+  test: boolean,
+  energyPrice: number,
+  createdAt: string,
+  updatedAt: string
+}
 
 export class ZertipowerCommunitiesService {
   constructor(private readonly axios: Axios) {
@@ -12,6 +22,11 @@ export class ZertipowerCommunitiesService {
   async getActiveMembers(id: number): Promise<number> {
     const response = await this.getEnergyStats(ChartEntity.COMMUNITIES, id, 'datadis', new Date(), DateRange.DAY);
     return response.totalActiveMembers;
+  }
+
+  async getByLocationId(id: number){
+    const response = await this.axios.get<HttpResponse<CommunityResponse[]>>(`${ChartEntity.COMMUNITIES}/locations/${id}`);
+    return response.data.data
   }
 
   private async getEnergyStats(resource: ChartEntity, resourceId: number, source: string, date: Date, dateRange: DateRange) {

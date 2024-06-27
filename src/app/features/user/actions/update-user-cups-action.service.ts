@@ -28,8 +28,9 @@ export class UpdateUserCupsAction {
           return {
             id: c.id,
             communityId: c.community_id,
-            reference: c.cups,
+            cupsCode: c.cups,
             surplusDistribution: parseFloat(c.surplus_distribution),
+            reference: c.reference || ''
           }
         })
       })

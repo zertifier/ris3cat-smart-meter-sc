@@ -74,12 +74,12 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
       combineLatest([chartParametrs$, selectedCups$])
         .subscribe(
           async ([{
-                   date,
-                   dateRange,
-                   selectedChartResource,
-                   selectedChartEntity,
-                   chartType,
-                 }]) => {
+            date,
+            dateRange,
+            selectedChartResource,
+            selectedChartEntity,
+            chartType,
+          }]) => {
             // Every time that params change, fetch data and update chart
             // Fetching data
             const cupId = this.userStore.snapshotOnly(this.userStore.$.cupId);
@@ -107,20 +107,6 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
 
             // Create data sets
             const datasets: ChartDataset[] = [
-              {
-                label: community ? 'Consum actius' : 'Consum',
-                data: mappedData.map(d => {
-                  if (community) {
-                    return d.consumption;
-                  }
-
-                  return d.consumption - d.gridConsumption
-                }),
-                tooltipText: community ? 'Consum dels participants actius' : 'Quantitat d\'energia que gastem',
-                stack: 'Consumption',
-                order: 0,
-                color: StatsColors.CONSUMPTION
-              }
             ];
 
             if (cce) {
@@ -164,6 +150,16 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
                     return d.production - d.productionActives;
                   }),
                   stack: 'Excedent',
+                },
+                {
+                  label: 'Consum del a xarxa actius',
+                  data: mappedData.map(d => {
+                    return d.consumption;
+                  }),
+                  tooltipText: community ? 'Consum dels participants actius' : 'Quantitat d\'energia que gastem',
+                  stack: 'Consumption',
+                  order: 0,
+                  color: StatsColors.SELF_CONSUMPTION
                 },
               )
             } else {
@@ -233,6 +229,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
         this.userStore.patchState({activeMembers: response.totalActiveMembers || 0});
         this.userStore.patchState({totalMembers: response.totalMembers || 0});
         data = response.stats;
+
       }
       // this.latestFetchedStats = data;
       return data;

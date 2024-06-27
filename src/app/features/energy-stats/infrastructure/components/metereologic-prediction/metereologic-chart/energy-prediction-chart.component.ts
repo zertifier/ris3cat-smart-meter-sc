@@ -3,13 +3,13 @@ import {Chart} from "chart.js";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 
 @Component({
-  selector: 'app-metereologic-chart',
+  selector: 'app-energy-prediction-chart',
   standalone: true,
   imports: [],
-  templateUrl: './metereologic-chart.component.html',
-  styleUrl: './metereologic-chart.component.scss'
+  templateUrl: './energy-prediction-chart.component.html',
+  styleUrl: './energy-prediction-chart.component.scss'
 })
-export class MetereologicChartComponent implements AfterViewInit, OnChanges {
+export class EnergyPredictionChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') canvas!: ElementRef;
   chart!: Chart<"bar", unknown[], string>;
 
@@ -17,7 +17,6 @@ export class MetereologicChartComponent implements AfterViewInit, OnChanges {
   @Input({required: true}) labels!: string[];
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (changes['labels']) {
       this.labels = changes['labels'].currentValue as string[];
     }
@@ -52,10 +51,10 @@ export class MetereologicChartComponent implements AfterViewInit, OnChanges {
         })
       },
       options: {
-        aspectRatio: 4,
+        aspectRatio: 1,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
           }
         },
         plugins: {

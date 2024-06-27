@@ -130,11 +130,15 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
             if (chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const stat = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
-
               if (context.dataset.label === "Excedent actius") {
                 labels.push(`Membres actius: ${stat.activeMembers}`);
                 labels.push(`----------------`);
+
               } else if (context.dataset.label === "Producció") {
+                for (const cups of stat.communitiesCups) {
+                  if (cups.kwhOut > 0)
+                    labels.push(`${cups.reference || cups.cups} : ${cups.kwhOut || 0} KWh`)
+                }
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
                 // labels.push(`----------------`);

@@ -15,17 +15,20 @@ export interface UserProfile {
 }
 
 export interface UserStore {
-  cups: {
-    id: number;
-    reference: string;
-    communityId: number;
-    surplusDistribution: number;
-  }[],
+  cups: UserCups[],
   selectedCupsIndex: number;
   activeMembers: number;
   totalMembers: number;
   surplusDistribution: number;
   user?: UserProfile;
+}
+
+export interface UserCups{
+  id: number;
+  cupsCode: string;
+  communityId: number;
+  surplusDistribution: number;
+  reference?: string;
 }
 
 const defaultValues: UserStore = {
@@ -43,7 +46,7 @@ export class UserStoreService extends RxStore<UserStore> {
   $ = {
     cupId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
     communityId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.communityId,
-    cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.reference,
+    cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.cupsCode,
     profileLoaded: (state: UserStore) => state.selectedCupsIndex !== -1,
   }
 

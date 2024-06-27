@@ -114,7 +114,7 @@ export class ParticipantsComponent implements OnDestroy{
       title: "Acceptar aquest participant?",
       icon: "question",
       input: "number",
-      inputLabel: "Poder de vot",
+      inputLabel: "Beta",
       inputPlaceholder: "p.e.: 5000",
       showCancelButton: true,
       confirmButtonText: "Acceptar",
