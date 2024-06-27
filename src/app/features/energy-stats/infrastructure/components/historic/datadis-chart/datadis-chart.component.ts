@@ -19,6 +19,8 @@ import {
   ScreenBreakPointsService
 } from "@shared/infrastructure/services/screen-break-points.service";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 @Component({
   selector: 'app-datadis-chart',
@@ -91,11 +93,11 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             let labels: string[] = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
             if (dateRange === DateRange.MONTH) {
               labels = data.map(d => {
-                return dayjs(d.infoDt).format('DD');
+                return dayjs.utc(d.infoDt).format('DD');
               });
             } else if (dateRange === DateRange.DAY) {
               labels = data.map(d => {
-                return dayjs(d.infoDt).format('HH');
+                return dayjs.utc(d.infoDt).format('HH');
               })
             }
 
@@ -106,8 +108,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
             const mappedData = this.mapData(data, chartType, selectedChartResource);
 
             // Create data sets
-            const datasets: ChartDataset[] = [
-            ];
+            const datasets: ChartDataset[] = [];
 
             if (cce) {
               datasets.push({
@@ -238,9 +239,16 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
     }
   }
 
-  mapData(data: DatadisEnergyStat[], chartType: ChartType, chartResource: ChartResource) {
+  mapData(data: DatadisEnergyStat[], chartType: ChartType, chartResource: ChartResource): {
+    consumption: number,
+    surplus: number,
+    virtualSurplus: number,
+    production: number,
+    productionActives: number,
+    gridConsumption: number,
+  }[] {
     const showEnergy = chartResource === ChartResource.ENERGY;
-    const cce = chartType === ChartType.CCE;
+    // const cce = chartType === ChartType.CCE;
     return data.map(d => {
       const consumption = showEnergy ? d.kwhIn : +(d.kwhInPrice * d.kwhIn).toFixed(2);
       const surplus = showEnergy ? d.kwhOut : +(d.kwhOutPrice * d.kwhOut).toFixed(2);
