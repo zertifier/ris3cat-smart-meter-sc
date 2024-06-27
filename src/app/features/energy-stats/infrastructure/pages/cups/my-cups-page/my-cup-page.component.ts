@@ -15,14 +15,14 @@ import {
 } from "../../../components/realtime/consumption-items/consumption-items.component";
 import {HistoricChartComponent} from "../../../components/historic/historic-chart/historic-chart.component";
 import {map, Subscription} from "rxjs";
-import {NavbarComponent} from "../../../../../../shared/infrastructure/components/navbar/navbar.component";
-import {FooterComponent} from "../../../../../../shared/infrastructure/components/footer/footer.component";
+import {NavbarComponent} from "@shared/infrastructure/components/navbar/navbar.component";
+import {FooterComponent} from "@shared/infrastructure/components/footer/footer.component";
 import {
   QuestionBadgeComponent
-} from "../../../../../../shared/infrastructure/components/question-badge/question-badge.component";
+} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {MonitoringStoreService} from "../../../services/monitoring-store.service";
-import {getMonth} from "../../../../../../shared/utils/DatesUtils";
-import dayjs from "dayjs";
+import {getMonth} from "@shared/utils/DatesUtils";
+import dayjs from "@shared/utils/dayjs";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
 import {UpdateUserCupsAction} from "../../../../../user/actions/update-user-cups-action.service";

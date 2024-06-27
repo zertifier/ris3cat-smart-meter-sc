@@ -8,8 +8,7 @@ import {NgbNav, NgbNavContent, NgbNavItem, NgbNavLinkButton, NgbNavOutlet} from 
 
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc';
+import dayjs from "@shared/utils/dayjs";
 import {AuthStoreService} from "../../../../../auth/infrastructure/services/auth-store.service";
 import {StatDisplayComponent} from "../../../components/realtime/stat-display/stat-display.component";
 import {ChartLegendComponent} from "../../../components/historic/chart-legend/chart-legend.component";
@@ -33,10 +32,8 @@ import {
   MetereologicPredictionComponent
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
 
-dayjs.extend(utc);
-
 import {isDevMode} from '@angular/core';
-import {environment} from "../../../../../../../environments/environment";
+import {environment} from "@environments/environment";
 import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
 
 @Component({

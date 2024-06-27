@@ -3,7 +3,7 @@ import {EnergyPredictionChartComponent} from "../metereologic-prediction/metereo
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {EnergyPredictionService} from "../../services/energy-prediction.service";
-import dayjs from "dayjs";
+import dayjs from "@shared/utils/dayjs";
 
 @Component({
   selector: 'app-energy-prediction',

@@ -1,10 +1,9 @@
 import {Axios} from "axios";
-import {DateRange} from "../../../../../features/energy-stats/domain/DateRange";
-import dayjs from "dayjs";
+import {DateRange} from "@features/energy-stats/domain/DateRange";
+import dayjs from "@shared/utils/dayjs";
 import {HttpResponse} from "../../HttpResponse";
 import {EnergyStatDTO} from "../DTOs/EnergyStatDTO";
-import {ChartEntity} from "../../../../../features/energy-stats/domain/ChartEntity";
-import {LocationInterface} from "../location/ZertipowerLocationService";
+import {ChartEntity} from "@features/energy-stats/domain/ChartEntity";
 
 export interface CommunityResponse{
   id: number,
