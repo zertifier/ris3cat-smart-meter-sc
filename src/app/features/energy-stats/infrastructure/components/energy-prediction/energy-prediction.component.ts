@@ -1,12 +1,13 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {EnergyPredictionChartComponent} from "../metereologic-prediction/metereologic-chart/energy-prediction-chart.component";
+import {
+  EnergyPredictionChartComponent
+} from "../metereologic-prediction/metereologic-chart/energy-prediction-chart.component";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {EnergyPredictionService} from "../../services/energy-prediction.service";
 import dayjs from "dayjs";
 import 'dayjs/locale/ca';
 import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
-import {AuthStoreService} from "@features/auth/infrastructure/services/auth-store.service";
 
 @Component({
   selector: 'app-energy-prediction',

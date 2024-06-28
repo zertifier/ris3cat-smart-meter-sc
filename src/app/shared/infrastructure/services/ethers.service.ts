@@ -1,14 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
 import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
-import {
-  Contract,
-  ethers,
-  formatEther,
-  JsonRpcProvider,
-  parseUnits,
-  Wallet
-} from "ethers";
+import {Contract, ethers, formatEther, JsonRpcProvider, parseUnits, Wallet} from "ethers";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CupsModalComponent } from './cups-modal.component';
+import {CupsModalComponent} from './cups-modal.component';
 
 describe('CupsModalComponent', () => {
   let component: CupsModalComponent;
@@ -11,7 +11,7 @@ describe('CupsModalComponent', () => {
       imports: [CupsModalComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CupsModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

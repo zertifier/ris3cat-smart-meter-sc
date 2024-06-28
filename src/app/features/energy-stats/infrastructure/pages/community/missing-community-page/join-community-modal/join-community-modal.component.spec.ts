@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { JoinCommunityModalComponent } from './join-community-modal.component';
+import {JoinCommunityModalComponent} from './join-community-modal.component';
 
 describe('JoinCommunityModalComponent', () => {
   let component: JoinCommunityModalComponent;
@@ -11,7 +11,7 @@ describe('JoinCommunityModalComponent', () => {
       imports: [JoinCommunityModalComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(JoinCommunityModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
