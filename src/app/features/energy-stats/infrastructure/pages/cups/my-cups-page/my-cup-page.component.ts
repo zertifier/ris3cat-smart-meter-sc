@@ -17,9 +17,7 @@ import {HistoricChartComponent} from "../../../components/historic/historic-char
 import {map, Subscription} from "rxjs";
 import {NavbarComponent} from "@shared/infrastructure/components/navbar/navbar.component";
 import {FooterComponent} from "@shared/infrastructure/components/footer/footer.component";
-import {
-  QuestionBadgeComponent
-} from "@shared/infrastructure/components/question-badge/question-badge.component";
+import {QuestionBadgeComponent} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {MonitoringStoreService} from "../../../services/monitoring-store.service";
 import {getMonth} from "@shared/utils/DatesUtils";
 import dayjs from "@shared/utils/dayjs";

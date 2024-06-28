@@ -3,9 +3,7 @@ import {AsyncPipe, DecimalPipe, NgIf} from "@angular/common";
 import {UserStoreService} from "../../services/user-store.service";
 import {EthersService} from "@shared/infrastructure/services/ethers.service";
 import {FormsModule} from "@angular/forms";
-import {
-  QuestionBadgeComponent
-} from "@shared/infrastructure/components/question-badge/question-badge.component";
+import {QuestionBadgeComponent} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {Subscription} from "rxjs";
 import Swal from "sweetalert2";
 import {DaoService} from "@features/governance/infrastructure/services/dao.service";

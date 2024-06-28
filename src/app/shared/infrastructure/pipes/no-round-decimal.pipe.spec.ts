@@ -1,4 +1,4 @@
-import { NoRoundDecimalPipe } from './no-round-decimal.pipe';
+import {NoRoundDecimalPipe} from './no-round-decimal.pipe';
 
 describe('NoRoundDecimalPipe', () => {
   it('create an instance', () => {

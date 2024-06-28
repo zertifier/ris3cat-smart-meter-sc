@@ -10,9 +10,7 @@ import dayjs from "@shared/utils/dayjs";
 import {ProposalStatus} from "../../../../domain/ProposalStatus";
 import {ProposalTypes} from "../../../../domain/ProposalTypes";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import {
-  QuestionBadgeComponent
-} from "@shared/infrastructure/components/question-badge/question-badge.component";
+import {QuestionBadgeComponent} from "@shared/infrastructure/components/question-badge/question-badge.component";
 import {EditorComponent, TINYMCE_SCRIPT_SRC} from "@tinymce/tinymce-angular";
 import {Editor} from "tinymce";
 import {Subscription} from "rxjs";

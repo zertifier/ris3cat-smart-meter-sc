@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {UserStoreService} from "../../user/infrastructure/services/user-store.service";
 
 @Injectable({

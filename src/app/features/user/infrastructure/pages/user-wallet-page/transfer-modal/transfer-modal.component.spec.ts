@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TransferModalComponent } from './transfer-modal.component';
+import {TransferModalComponent} from './transfer-modal.component';
 
 describe('TransferModalComponent', () => {
   let component: TransferModalComponent;
@@ -11,7 +11,7 @@ describe('TransferModalComponent', () => {
       imports: [TransferModalComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(TransferModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
