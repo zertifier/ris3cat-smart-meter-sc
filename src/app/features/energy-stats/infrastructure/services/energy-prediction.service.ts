@@ -12,11 +12,20 @@ export class EnergyPredictionService {
   constructor(private httpClient: HttpClient) {
   }
 
-  async getPrediction(): Promise<{value: number, time: string}[]> {
+  async getCommunityPrediction(communityId: number): Promise<{value: number, time: string}[]> {
     const response = this.httpClient.get<HttpResponse<{
       value: number,
       time: string
-    }[]>>(`${environment.zertipower_url}/energy-prediction`).pipe(map(r => r.data));
+    }[]>>(`${environment.zertipower_url}/energy-prediction?community=${communityId}`).pipe(map(r => r.data));
+
+    return firstValueFrom(response);
+  }
+
+  async getCupsPrediction(cupsId: number): Promise<{value: number, time: string}[]> {
+    const response = this.httpClient.get<HttpResponse<{
+      value: number,
+      time: string
+    }[]>>(`${environment.zertipower_url}/energy-prediction?cups=${cupsId}`).pipe(map(r => r.data));
 
     return firstValueFrom(response);
   }
