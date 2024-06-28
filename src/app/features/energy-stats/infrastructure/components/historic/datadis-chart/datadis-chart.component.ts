@@ -13,10 +13,7 @@ import {ChartType} from "../../../../domain/ChartType";
 import {DatadisEnergyStat} from "@shared/infrastructure/services/zertipower/DTOs/EnergyStatDTO";
 import {ZertipowerService} from "@shared/infrastructure/services/zertipower/zertipower.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {
-  BreakPoints,
-  ScreenBreakPointsService
-} from "@shared/infrastructure/services/screen-break-points.service";
+import {BreakPoints, ScreenBreakPointsService} from "@shared/infrastructure/services/screen-break-points.service";
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import dayjs from '@shared/utils/dayjs';
 

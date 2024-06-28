@@ -4,8 +4,11 @@ import {
 } from "../../../../../features/user/infrastructure/components/user-profile/user-profile-selector/user-profile-selector.component";
 import {
   NgbAccordionBody,
-  NgbAccordionButton, NgbAccordionCollapse,
-  NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem,
+  NgbAccordionButton,
+  NgbAccordionCollapse,
+  NgbAccordionDirective,
+  NgbAccordionHeader,
+  NgbAccordionItem,
   NgbDropdown,
   NgbDropdownItem,
   NgbDropdownMenu,

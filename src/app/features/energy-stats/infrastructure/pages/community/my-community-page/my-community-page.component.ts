@@ -1,4 +1,4 @@
-import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, isDevMode, OnDestroy, OnInit, signal} from '@angular/core';
 import {ChartModule} from "primeng/chart";
 import {MonitoringService, PowerStats} from "../../../services/monitoring.service";
 import {map, Subscription} from "rxjs";
@@ -31,8 +31,6 @@ import {
 import {
   MetereologicPredictionComponent
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
-
-import {isDevMode} from '@angular/core';
 import {environment} from "@environments/environment";
 import {EnergyPredictionComponent} from "../../../components/energy-prediction/energy-prediction.component";
 
