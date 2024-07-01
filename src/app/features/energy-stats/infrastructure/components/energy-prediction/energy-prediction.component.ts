@@ -5,7 +5,7 @@ import {
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {EnergyPredictionService} from "../../services/energy-prediction.service";
-import dayjs from "@shared/utils/dayjs";
+import dayjs from "dayjs";
 import 'dayjs/locale/ca';
 import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 
@@ -49,14 +49,11 @@ export class EnergyPredictionComponent implements OnInit {
     const dailyPrediction: Map<string, number> = new Map();
     for (const predictionEntry of productionPrediction) {
       // const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
-      const parsedDate = dayjs.utc(predictionEntry.time).format("dddd DD");
-      console.log({time: predictionEntry.time, parsedDate});
+      const parsedDate = dayjs(predictionEntry.time).format("dddd DD");
 
       const value = dailyPrediction.get(parsedDate) || 0;
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
     }
-
-    console.log(dailyPrediction)
 
     this.datasets = [
       {
