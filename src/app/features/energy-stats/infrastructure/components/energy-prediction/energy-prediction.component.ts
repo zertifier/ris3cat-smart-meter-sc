@@ -50,6 +50,7 @@ export class EnergyPredictionComponent implements OnInit {
     for (const predictionEntry of productionPrediction) {
       // const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
       const parsedDate = dayjs(predictionEntry.time).format("dddd DD");
+      console.log({time: predictionEntry.time, parsedDate});
 
       const value = dailyPrediction.get(parsedDate) || 0;
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
