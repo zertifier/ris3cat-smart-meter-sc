@@ -55,6 +55,8 @@ export class EnergyPredictionComponent implements OnInit {
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
     }
 
+    console.log(dailyPrediction)
+
     this.datasets = [
       {
         color: StatsColors.COMMUNITY_PRODUCTION,
