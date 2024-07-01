@@ -48,6 +48,7 @@ export class ShortNavbarComponent {
     {route: '/energy-stats/community', label: 'La meva comunitat'},
     {route: '/energy-stats/my-cup', label: 'El meu comptador'},
     {route: '/energy-stats/share', label: 'Compartir energia'},
+    {route: '/energy-stats/stats', label: 'Estadístiques'},
     // {route: '/energy-stats/governance', label: 'Governança'},
     {route: '/energy-stats/data-source-health', label: 'Status'}
   ]
