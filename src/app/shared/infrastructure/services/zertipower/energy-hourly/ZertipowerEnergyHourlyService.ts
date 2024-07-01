@@ -17,8 +17,12 @@ export class ZertipowerEnergyHourlyService {
   }
 
   async getRankingConsumption(communityId: number | string, dateByMonth: string){
-    console.log(`/energy-hourly/ranking/consumption/${communityId}/${dateByMonth}`, "`/energy-hourly/ranking/consumption/${communityId}/${dateByMonth}`")
     const response = await this.axios.get<HttpResponse<RankingConsumption[]>>(`/energy-hourly/ranking/consumption/${communityId}/${dateByMonth}`);
+
+    return response.data.data
+  }
+  async getRankingSurplus(communityId: number | string, dateByMonth: string){
+    const response = await this.axios.get<HttpResponse<RankingSurplus[]>>(`/energy-hourly/ranking/surplus/${communityId}/${dateByMonth}`);
 
     return response.data.data
   }

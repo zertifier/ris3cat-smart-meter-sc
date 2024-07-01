@@ -8,18 +8,20 @@
       <label class="form-label">
         Trïa el mes que vols veure
       </label>
-<!--      <input class="form-control bg-white border-secondary" placeholder="10/2024">-->
-      <p-calendar [(ngModel)]="date"  iconDisplay="input" [showIcon]="true" view="month"
-                  [maxDate]="maxDate" [dateFormat]="'mm-yy'" styleClass="w-100 rounded-3 border-secondary"/>
+      <p-calendar [(ngModel)]="date"  iconDisplay="input" [showIcon]="true" view="month" (onClose)="getData(dataType)"
+                  [maxDate]="maxDate" [dateFormat]="'mm-yy'" styleClass="w-100"/>
     </div>
     <div class="col-12 col-md-6">
       <label class="form-label">
         Quines dades vols veure?
       </label>
-      <input class="form-control bg-white border-secondary" placeholder="10/2024">
+      <select class="form-select bg-white shadow-none border-secondary" [(ngModel)]="dataType" (change)="getData(dataType)">
+        <option selected [value]="'surplus'">Usuaris que tenen més excedent</option>
+        <option [value]="'consumption'">Usuaris que tenen menys consum</option>
+      </select>
     </div>
   </div>
-  <div *ngIf="!loading && data.length != 0" class="overflow-y-scroll" style="max-height: 440px">
+  <div *ngIf="!loading && rankingData.length != 0" class="overflow-y-scroll" style="max-height: 440px">
     <div >
       <table class="table table-striped align-middle">
         <thead>
@@ -30,18 +32,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let dataObject of data; index as i" [ngClass]="dataObject.customerId == customerId ? 'fw-bold': ''" >
+        <tr *ngFor="let dataObject of rankingData; index as i" [ngClass]="dataObject.customerId == customerId ? 'fw-bold': ''" >
           <td >{{ i + 1 }}</td>
           <td>
             {{ (dataObject.walletAddress || '' | TextShorter:6:4) || 'Anònim' }}
             <span *ngIf="dataObject.customerId == customerId && userName">({{ userName || 'Tú' }})</span>
           </td>
-          <td>{{ dataObject.consumption }} KWH</td>
+          <td>{{ dataObject.consumption ? dataObject.consumption : dataObject.surplus }} KWH</td>
         </tr>
         </tbody>
       </table>
 
     </div>
 
+  </div>
+  <div class="mt-5" *ngIf="!loading && rankingData.length == 0">
+    <h3 class="text-center"> No hi ha cap registre</h3>
   </div>
 </div>

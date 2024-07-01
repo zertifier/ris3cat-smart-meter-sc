@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ZertipowerService} from "@shared/infrastructure/services/zertipower/zertipower.service";
 import {
-  RankingConsumption
+  RankingConsumption, RankingSurplus
 } from "@shared/infrastructure/services/zertipower/energy-hourly/ZertipowerEnergyHourlyService";
 import {UserStoreService} from "../../../../user/infrastructure/services/user-store.service";
 import dayjs from "dayjs";
@@ -27,11 +27,12 @@ import {FormsModule} from "@angular/forms";
 })
 export class StatsComponent implements OnDestroy{
 
-  data!: RankingConsumption[]
+  rankingData!: RankingConsumption[] | RankingSurplus[] | any
   communityId!: number;
   customerId!: number;
   userName: string = ''
   loading = true
+  dataType: 'consumption' | 'surplus' = "surplus"
 
   date: Date = dayjs().toDate();
   maxDate: Date = dayjs().toDate();
@@ -47,12 +48,11 @@ export class StatsComponent implements OnDestroy{
       this.userStore.selectOnly(this.userStore.$.communityId).subscribe((community) => {
         this.communityId = community
         if (this.communityId)
-          this.getConsumptionData()
+          this.getData(this.dataType)
       }),
       this.userStore
         .selectOnly(state => state).subscribe((data) => {
         if (data.user) {
-          console.log(data.user)
           this.userName = (data.user.firstname + " " + data.user.lastname)
           this.customerId = data.user.customer_id!;
         }
@@ -61,11 +61,26 @@ export class StatsComponent implements OnDestroy{
   }
 
 
+  getData(dataType: 'consumption' | 'surplus'){
+    switch (dataType){
+      case "consumption": this.getConsumptionData()
+        break
+      case "surplus": this.getSurplusData()
+        break
+      default: this.getSurplusData()
+    }
+  }
+
   async getConsumptionData(){
-    const currentDateMonth = dayjs().format('YYYY-MM')
-    this.data = await this.zertipower.energyHourly.getRankingConsumption(this.communityId, '2024-06')
+    const currentDateMonth = dayjs(this.date).format('YYYY-MM')
+    this.rankingData = await this.zertipower.energyHourly.getRankingConsumption(this.communityId, currentDateMonth)
     this.loading = false
-    console.log(this.data)
+  }
+
+  async getSurplusData(){
+    const currentDateMonth = dayjs(this.date).format('YYYY-MM')
+    this.rankingData = await this.zertipower.energyHourly.getRankingSurplus(this.communityId, currentDateMonth)
+    this.loading = false
   }
 
   ngOnDestroy(): void {
