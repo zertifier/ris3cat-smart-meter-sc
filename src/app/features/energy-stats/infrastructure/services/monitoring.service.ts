@@ -36,7 +36,7 @@ export class MonitoringService {
     if (this.interval) {
       return;
     }
-    this.updatePowerFlow().then(() => console.log('first powerflow updated'));
+    // this.updatePowerFlow().then(() => console.log('first powerflow updated'));
 
     this.interval = setInterval(async () => {
       await this.updatePowerFlow()
@@ -44,7 +44,8 @@ export class MonitoringService {
   }
 
   getPowerFlow() {
-    return this.powerFlow.asObservable().pipe(tap(() => {}));
+    return this.powerFlow.asObservable().pipe(tap(() => {
+    }));
   }
 
   async getEnergyStats(date: string, dateRange: number) {
@@ -65,10 +66,10 @@ export class MonitoringService {
       const stats: PowerStats = {buy: 0, sell: 0, inHouse: 0, production: 0}
       stats.production = data.production
       if (data.consumption > data.production) {
-        // stats.inHouse = data.production;
+        stats.inHouse = data.production;
         stats.buy = data.consumption - data.production
       } else {
-        // stats.inHouse = data.consumption;
+        stats.inHouse = data.consumption;
         stats.sell = data.production - data.consumption
       }
       this.powerFlow.next(stats);
@@ -77,7 +78,7 @@ export class MonitoringService {
     }
   }
 
-  private async fetchPowerFlow(): Promise<{production: number, consumption: number, grid: number}> {
+  private async fetchPowerFlow() {
     const response = await firstValueFrom(this.httpClient.get<HttpResponse<{
       production: number,
       consumption: number,
