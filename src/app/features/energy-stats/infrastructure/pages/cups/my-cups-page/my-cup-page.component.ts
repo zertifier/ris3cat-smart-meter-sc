@@ -5,7 +5,7 @@ import {MonitoringService, PowerStats} from "../../../services/monitoring.servic
 import {StatsColors} from "../../../../domain/StatsColors";
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {UserStoreService} from "../../../../../user/infrastructure/services/user-store.service";
+import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 import {ChartLegendComponent} from "../../../components/historic/chart-legend/chart-legend.component";
 import {DataChartComponent} from "../../../components/historic/data-chart/data-chart.component";
 import {StatDisplayComponent} from "../../../components/realtime/stat-display/stat-display.component";
@@ -23,7 +23,7 @@ import {getMonth} from "@shared/utils/DatesUtils";
 import dayjs from "@shared/utils/dayjs";
 import {KnobModule} from "primeng/knob";
 import {PowerflowGausComponent} from "../../../components/powerflow-gaus/powerflow-gaus.component";
-import {UpdateUserCupsAction} from "../../../../../user/actions/update-user-cups-action.service";
+import {UpdateUserCupsAction} from "@features/user/actions/update-user-cups-action.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SelectCupsService} from "../../../../actions/select-cups.service";
 import {CupsModalComponent} from "./cups-modal/cups-modal.component";
