@@ -6,8 +6,10 @@ import {from} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * This service abstracts the interaction between the client and [Zertiauth](https://github.com/zertifier/zertiauth)
+ */
 export class ZertiauthApiService {
-  baseUrl: string = "https://auth.zertifier.com";
   app = new App("0ba3f4b3-55fa-499f-8782-23c81a2b4652");
   redirectUrl: string = `${window.location.origin}/auth/oauth-callback`;
   constructor(
@@ -19,9 +21,7 @@ export class ZertiauthApiService {
     const {baseCode, codeChallenge} = this.app.generateCodeChallenge();
     localStorage.setItem('baseCodeChallenge', baseCode);
 
-    const url = this.app.getAuthUrl(this.redirectUrl, platform, codeChallenge);
-
-    return url
+    return this.app.getAuthUrl(this.redirectUrl, platform, codeChallenge)
   }
 
   getPrivateKey(code: string) {

@@ -45,6 +45,6 @@ export class AuthPersistenceProxyService {
     this.authStore.setTokens({accessToken, refreshToken});
     this.authStore.saveOauthCode(oauthCode)
 
-    this.eventBus.publishEvents(new UserLoggedInEvent());
+    this.eventBus.publishEvents(new UserLoggedInEvent()).then(() => {});
   }
 }
