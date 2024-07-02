@@ -6,7 +6,6 @@ import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
 import {StatsColors} from "../../../domain/StatsColors";
 import {EnergyPredictionService} from "../../services/energy-prediction.service";
 import dayjs from "@shared/utils/dayjs";
-import 'dayjs/locale/ca';
 import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 
 @Component({
@@ -36,7 +35,6 @@ export class EnergyPredictionComponent implements OnInit {
   userStoreService = inject(UserStoreService);
 
   async ngOnInit() {
-    dayjs.locale('ca');
     let productionPrediction;
     // Based on community property the way that production prediction is obtained differs
     // the api has a parameter that specifies what prediction is needed: community or cups.
