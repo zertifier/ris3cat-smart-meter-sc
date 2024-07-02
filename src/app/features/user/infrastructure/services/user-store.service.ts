@@ -42,6 +42,9 @@ const defaultValues: UserStore = {
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Saves the user data like user profile, their cups, the active members and total members of their community, etc.
+ */
 export class UserStoreService extends RxStore<UserStore> {
   $ = {
     cupsId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
