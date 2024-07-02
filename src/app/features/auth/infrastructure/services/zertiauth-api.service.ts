@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {App} from '@zertifier/zertiauthjs';
-import {from} from "rxjs";
 
 
 @Injectable({
@@ -24,12 +23,11 @@ export class ZertiauthApiService {
     return this.app.getAuthUrl(this.redirectUrl, platform, codeChallenge)
   }
 
-  getPrivateKey(code: string) {
+  getPrivateKey(code: string): Promise<{privateKey: string, email: string}> {
     const baseCode = localStorage.getItem('baseCodeChallenge');
     if (!baseCode) {
       throw new Error('Base code not saved on local storage')
     }
-    const response: Promise<{privateKey: string, email: string}> = this.app.getCredentials(code, baseCode);
-    return from(response)
+    return this.app.getCredentials(code, baseCode);
   }
 }
