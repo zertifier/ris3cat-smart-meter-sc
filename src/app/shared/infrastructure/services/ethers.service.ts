@@ -1,15 +1,14 @@
 import {Injectable} from '@angular/core';
-import {ZertiauthApiService} from "../../../features/auth/infrastructure/services/zertiauth-api.service";
-import {AuthStoreService} from "../../../features/auth/infrastructure/services/auth-store.service";
+import {ZertiauthApiService} from "@features/auth/infrastructure/services/zertiauth-api.service";
+import {AuthStoreService} from "@features/auth/infrastructure/services/auth-store.service";
 import {Contract, ethers, formatEther, JsonRpcProvider, parseUnits, Wallet} from "ethers";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../environments/environment";
-import {firstValueFrom} from "rxjs";
+import {environment} from "@environments/environment";
 import {Router} from "@angular/router";
 import erc20ContractAbi from '../../../../assets/ethers/ERC20-abi.json';
 import daoContractAbi from '../../../../assets/ethers/DAO-abi.json';
-import {UserStoreService} from "../../../features/user/infrastructure/services/user-store.service";
+import {UserStoreService} from "@features/user/infrastructure/services/user-store.service";
 
 
 interface Rpc {
@@ -53,7 +52,7 @@ export class EthersService {
     }
 
     try {
-      const privateKeyResponse = await firstValueFrom(this.zertiauthApiService.getPrivateKey(oAuthCode))
+      const privateKeyResponse = await this.zertiauthApiService.getPrivateKey(oAuthCode)
       const provider = new JsonRpcProvider(await this.getWorkingRpc())
 
       return new Wallet(privateKeyResponse.privateKey, provider)
@@ -68,7 +67,7 @@ export class EthersService {
   }
 
   getWorkingRpc(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve) => {
       this.updateWorkingRpc().subscribe({
         next: (rpc) => {
           if (rpc.data) {
@@ -100,10 +99,8 @@ export class EthersService {
 
       const contract = new Contract(environment.erc20_contract, erc20ContractAbi, provider)
 
-      // @ts-ignore
-      const balance = formatEther(await contract.balanceOf(walletAddress)).toString()
+      const balance = formatEther(await contract['balanceOf'](walletAddress)).toString()
 
-      // @ts-ignore
       // return getNumber(await contract.balanceOf(walletAddress))
       return parseFloat(balance)
     } catch (error) {
@@ -143,8 +140,7 @@ export class EthersService {
 
       const contract = new Contract('0x7D33eC4451E4035988d9638b30b18681dE6B0dc6', daoContractAbi, user.wallet)
 
-      // @ts-ignore
-      let tx = await contract.mint(walletTo, parseUnits(amount.toString(), "ether"))
+      let tx = await contract['mint'](walletTo, parseUnits(amount.toString(), "ether"))
       tx = await tx.wait()
       return tx
     }catch (e){
@@ -170,8 +166,7 @@ export class EthersService {
         tx = await user.wallet?.sendTransaction(tx)
       }else{
         const contract = new Contract(contractAddress, abi, user.wallet)
-        // @ts-ignore
-        tx = await contract.transfer(to, parseUnits(amount.toString(), "ether"))
+        tx = await contract['transfer'](to, parseUnits(amount.toString(), "ether"))
       }
 
       tx = await tx.wait()
