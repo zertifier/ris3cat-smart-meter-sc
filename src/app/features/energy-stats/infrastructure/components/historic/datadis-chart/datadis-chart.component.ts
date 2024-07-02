@@ -170,7 +170,7 @@ export class DatadisChartComponent implements OnInit, OnDestroy {
               })
               datasets.unshift({
                 label: 'Producció',
-                tooltipText: 'Producció proporcional comunitaria',
+                tooltipText: 'Producció proporcional comunitària',
                 color: StatsColors.COMMUNITY_PRODUCTION,
                 data: mappedData.map(d => d.production),
                 stack: 'Production',

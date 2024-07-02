@@ -89,16 +89,6 @@
     <app-consumption-items [items]="consumptionItems"/>
   </div>
 
-<!--  <p class="mt-5">-->
-<!--    Aquest gràfic mostra la teva despesa actual segons els electrodomèstics endollats. Per a optimitzar el consum, el-->
-<!--    percentatge indica si pots afegir més electrodomèstics o treure.-->
-<!--    <span style="color: #5F7187;">-->
-<!--    Per exemple, si es mes alt vol dir que pots afegir més aparells perquè has acumulat energia per a consumir.-->
-<!--  </span>-->
-<!--  </p>-->
-
-<!--  <app-powerflow-gaus [production]="powerFlow().production" [sell]="powerFlow().sell"/>-->
-
   <hr>
 
   <h5 style="margin: 10rem 0 5rem 0;" class="fw-bold">Històric consum/excedent</h5>
@@ -106,10 +96,12 @@
 
     <div class="row">
       <div class="col-md-6">
+        <h5 style="margin: 7rem 0 5rem 0;" class="fw-bold text-center">Predicció metereologica</h5>
         <app-metereologic-prediction/>
       </div>
 
       <div class="col-md-6">
+        <h5 style="margin: 7rem 0 5rem 0;" class="fw-bold text-center">Predicció d'energia comunitària</h5>
         <app-energy-prediction [community]="false"/>
       </div>
     </div>

@@ -38,6 +38,8 @@ export class EnergyPredictionComponent implements OnInit {
   async ngOnInit() {
     dayjs.locale('ca');
     let productionPrediction;
+    // Based on community property the way that production prediction is obtained differs
+    // the api has a parameter that specifies what prediction is needed: community or cups.
     if (this.community) {
       const communityId = this.userStoreService.snapshotOnly(this.userStoreService.$.communityId);
       productionPrediction = await this.energyPredictionService.getCommunityPrediction(communityId);
@@ -46,10 +48,11 @@ export class EnergyPredictionComponent implements OnInit {
       productionPrediction = await this.energyPredictionService.getCupsPrediction(cupsId);
     }
 
+    // Here the prediction data is grouped by days
     const dailyPrediction: Map<string, number> = new Map();
     for (const predictionEntry of productionPrediction) {
       // const parsedDate = dayjs(predictionEntry.time).format("YYYY-MM-DD");
-      const parsedDate = dayjs(predictionEntry.time).format("dddd DD");
+      const parsedDate = dayjs.utc(predictionEntry.time).format("dddd DD");
 
       const value = dailyPrediction.get(parsedDate) || 0;
       dailyPrediction.set(parsedDate, value + predictionEntry.value);
