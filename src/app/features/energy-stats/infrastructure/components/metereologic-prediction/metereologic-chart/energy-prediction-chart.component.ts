@@ -57,7 +57,7 @@ export class EnergyPredictionChartComponent implements AfterViewInit, OnChanges 
             beginAtZero: true,
             ticks: {
               callback: (tickValue) => {
-                return `${tickValue} KW/H`
+                return `${tickValue} kW/H`
               }
             }
           }
