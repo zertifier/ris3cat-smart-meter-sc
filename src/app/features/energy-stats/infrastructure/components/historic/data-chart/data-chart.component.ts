@@ -94,9 +94,21 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
             let {formattedValue} = context;
             const chartEntity = this.chartStoreService.snapshotOnly(state => state);
 
+            // To show the bars on the same stack and overlying them (like a z-index) some adjustments need to be made
+            // chartjs don't allow to make something similar to z-index. When two bars are on the same stack there
+            // are one above the other. The values are "summed" the top bar don't start at 0 start at the end of the
+            // previous bar this can confuse the user. To solve this the end bar value is calculated by this way:
+            // take the original value and rest the previous bar value. When the bars are displayed they seem to be one
+            // after the another. ej.
+            //
+            // production = production - productionActives.
+            //
+            // The problem comes when it's necessary to display the tooltip. It has to show the correct values.
             if (context.dataset.label === "Producció" && chartEntity.selectedChartEntity === ChartEntity.COMMUNITIES) {
               const value = context.raw;
               const register = this.chartStoreService.snapshot().lastFetchedStats[context.dataIndex];
+              // Here the correct production es being calculated to show the correct value on tooltip
+              // production = production + productionActives
               const total = parseFloat(register.productionActives + '') + value;
               formattedValue = total.toLocaleString();
             }
@@ -124,7 +136,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
                 }
                 // Todo: change 31 to the real number
                 labels.push(`Total membres: 31`);
-                // labels.push(`----------------`);
               }
             }
             return labels;
