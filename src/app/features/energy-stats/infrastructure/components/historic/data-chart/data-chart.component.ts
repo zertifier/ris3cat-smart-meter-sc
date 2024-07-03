@@ -17,11 +17,7 @@ import {ChartLegendComponent} from "../chart-legend/chart-legend.component";
 import {Chart} from "chart.js";
 import {ChartEntity} from "../../../../domain/ChartEntity";
 import {AsyncPipe, NgIf} from "@angular/common";
-
-import zoomPlugin, {resetZoom} from 'chartjs-plugin-zoom';
 import {ChartDataset} from "@shared/infrastructure/interfaces/ChartDataset";
-
-Chart.register(zoomPlugin);
 
 @Component({
   selector: 'app-data-chart',
@@ -44,7 +40,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input({required: true}) labels: string[] = [];
   @ViewChild('chart') chartElement!: ElementRef;
   private chart!: Chart;
-  // legendLabels: DataLabel[] = [];
   private subscriptions: Subscription[] = [];
 
   private textColorSecondary = 'rgba(0, 0, 0, 0.54)';
@@ -89,18 +84,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       mode: 'index',
     },
     plugins: {
-      zoom: {
-        // zoom: {
-        //   enabled: false,
-        //   // wheel: {
-        //   //   enabled: false,
-        //   // },
-        //   // pinch: {
-        //   //   enabled: true,
-        //   // },
-        //   // mode: 'xy',
-        // }
-      },
       legend: {
         display: false
       },
@@ -179,13 +162,6 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     } else {
       this.changeToDesktop();
     }
-  }
-
-  public resetChartZoom() {
-    if (!this.chart) {
-      return;
-    }
-    resetZoom(this.chart);
   }
 
   public toggleDataset(index: number) {
@@ -326,12 +302,14 @@ export class DataChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       datasets,
     }
 
-    this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
-      if (window.innerWidth <= 990) {
-        this.changeToMobile();
-      } else {
-        this.changeToDesktop();
-      }
-    });
+    this.subscriptions.push(
+      this.chartStoreService.selectOnly(this.chartStoreService.$.params).subscribe(() => {
+        if (window.innerWidth <= 990) {
+          this.changeToMobile();
+        } else {
+          this.changeToDesktop();
+        }
+      })
+    );
   }
 }
