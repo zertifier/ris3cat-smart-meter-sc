@@ -8,6 +8,12 @@ import {Axios} from "axios";
 export class ZertipowerEnergyStats {
   constructor(private readonly axios: Axios) {
   }
+
+  public async getTotalStats(cups: string){
+    const response = await this.axios.get<HttpResponse<any[]>>(`/blockchain-energy-data/meter/${cups}`);
+    return response.data;
+  }
+
   public async getCupEnergyStats(cupId: number, source: string, date: Date, dateRange: DateRange) {
     return this.getEnergyStats(ChartEntity.CUPS, cupId, source, date, dateRange);
   }

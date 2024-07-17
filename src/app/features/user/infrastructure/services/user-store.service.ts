@@ -29,6 +29,10 @@ export interface UserCups{
   communityId: number;
   surplusDistribution: number;
   reference?: string;
+  totalEnergy: {
+    surplus: number,
+    consumption: number
+  };
 }
 
 const defaultValues: UserStore = {
@@ -47,7 +51,9 @@ const defaultValues: UserStore = {
  */
 export class UserStoreService extends RxStore<UserStore> {
   $ = {
+    selectedCups: (state: UserStore) => state.cups[state.selectedCupsIndex],
     cupsId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.id,
+    selectedCupsCode: (state: UserStore) => state.cups[state.selectedCupsIndex].cupsCode,
     communityId: (state: UserStore) => state.cups[state.selectedCupsIndex]?.communityId,
     cupsReference: (state: UserStore) => state.cups[state.selectedCupsIndex]?.cupsCode,
     profileLoaded: (state: UserStore) => state.selectedCupsIndex !== -1,

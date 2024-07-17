@@ -32,6 +32,8 @@ import {EnergyPredictionComponent} from "../../../components/energy-prediction/e
 import {
   MetereologicPredictionComponent
 } from "../../../components/metereologic-prediction/metereologic-prediction.component";
+import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { ZertipowerService } from '../../../../../../shared/infrastructure/services/zertipower/zertipower.service';
 
 
 @Component({
@@ -117,6 +119,7 @@ export class MyCupPageComponent implements OnInit {
   selectedCupsIndex$ = this.userStore.selectOnly(state => state.selectedCupsIndex);
   surplusDistribution$ = this.userStore.selectOnly(state => state.surplusDistribution);
   subscriptions: Subscription[] = [];
+  totalEnergy:{surplus:number,consumption:number}={surplus:0,consumption:0}
 
   constructor(
     private readonly monitoringService: MonitoringService,
@@ -124,7 +127,8 @@ export class MyCupPageComponent implements OnInit {
     private readonly monitoringStore: MonitoringStoreService,
     private readonly ngbModal: NgbModal,
     private updateCups: UpdateUserCupsAction,
-    private readonly selectCupsAction: SelectCupsService
+    private readonly selectCupsAction: SelectCupsService,
+    private zertipowerService:ZertipowerService
   ) {
   }
 
@@ -148,6 +152,15 @@ export class MyCupPageComponent implements OnInit {
           })
         })
     )
+
+    const cupsCode = this.userStore.snapshotOnly(this.userStore.$.selectedCups).cupsCode;
+    this.cups$.subscribe(cups=>{
+      this.selectedCupsIndex$.subscribe(selectedCups=>{
+        console.log(cups[Number(selectedCups)])
+        let totalEnergy = cups[Number(selectedCups)].totalEnergy
+        
+      })
+    })
   }
 
   selectCups(event: any) {

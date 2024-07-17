@@ -6,13 +6,6 @@
     "types": [
       "@angular/localize"
     ],
-    "baseUrl": "./",
-    "paths": {
-      "@shared/*": ["./src/app/shared/*"],
-      "@environments/*": ["./src/environments/*"],
-      "@features/*": ["./src/app/features/*"],
-      "@core/*": ["./src/app/core/*"]
-    }
   },
   "files": [
     "src/main.ts"
